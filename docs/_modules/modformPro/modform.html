@@ -1,0 +1,420 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>modformPro.modform &mdash; modformPro 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="modformPro 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> modformPro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Appendix.html">Appendix</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">modformPro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>modformPro.modform</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for modformPro.modform</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pulp</span>
+
+
+<div class="viewcode-block" id="Modform"><a class="viewcode-back" href="../../modformPro.html#modformPro.modform.Modform">[docs]</a><span class="k">class</span> <span class="nc">Modform</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;This class defines modform, its variable name, representation and other methods to operate on the data-structures of this class.</span>
+<span class="sd">    </span>
+<span class="sd">    Demo representations:</span>
+<span class="sd">    </span>
+<span class="sd">    ``a1:  [(&#39;0&#39;, &#39;UNMOD&#39;)]``</span>
+<span class="sd">    </span>
+<span class="sd">    ``a11: [(&#39;T11&#39;, &#39;P&#39;), (&#39;S30&#39;, &#39;P&#39;), (&#39;S55&#39;, &#39;Ac&#39;)]``</span>
+<span class="sd">    </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var_name : str</span>
+<span class="sd">      Modform variable name</span>
+<span class="sd">    </span>
+<span class="sd">    D_protein_sites_modifications : dict</span>
+<span class="sd">      Python dictionary storing aa residues mapped to modifications on the residues.</span>
+
+<span class="sd">    percentage_abundance : str or float</span>
+<span class="sd">      Percentage abundance of this modform</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">percentage_abundance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_var_name</span>              <span class="o">=</span> <span class="n">var_name</span>
+
+        <span class="c1"># modform variable in PuLP format, pulp.LpVariable instance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_PuLP_var</span>              <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">LpVariable</span><span class="p">(</span><span class="n">var_name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        
+        <span class="c1"># Dictionary of sites and associated modifications for this modform instance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_protein_sites_modifications</span> <span class="o">=</span> <span class="n">D_protein_sites_modifications</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_percentage_abundance</span>  <span class="o">=</span> <span class="n">percentage_abundance</span>
+
+    
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * printable representation of the object</span>
+<span class="sd">        * E.g.,</span>
+<span class="sd">        </span>
+<span class="sd">        ``a1:  [(&#39;0&#39;, &#39;UNMOD&#39;)]``</span>
+<span class="sd">        </span>
+<span class="sd">        ``a11: [(&#39;T11&#39;, &#39;P&#39;), (&#39;S30&#39;, &#39;P&#39;), (&#39;S55&#39;, &#39;MM&#39;)]``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_protein_sites_modifications</span><span class="o">==</span><span class="p">{</span><span class="s1">&#39;0&#39;</span><span class="p">:</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">}:</span>
+            <span class="k">return</span> <span class="p">((</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_protein_sites_modifications</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">L_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D_protein_sites_modifications</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:]))</span>
+            
+            <span class="k">return</span> <span class="p">((</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_name</span><span class="p">,</span> <span class="n">L_sorted</span><span class="p">))</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">var_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        Variable name for the modform</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_var_name</span><span class="p">)</span>
+    
+    <span class="nd">@var_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">var_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var_name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_var_name</span> <span class="o">=</span> <span class="n">var_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">PuLP_var</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        * modform variable in PuLP format</span>
+<span class="sd">        * E.g., ``LpVariable(&#39;a1&#39;)``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_PuLP_var</span>
+
+    <span class="nd">@PuLP_var</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">PuLP_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">PuLP_var</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_PuLP_var</span> <span class="o">=</span> <span class="n">PuLP_var</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">D_protein_sites_modifications</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        Python dictionary with aa residues mapped to a list of possible modifications on the residues</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#L_sorted = sorted(self._D_protein_sites_modifications, key=lambda x: int(x[0]))</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D_protein_sites_modifications</span><span class="p">)</span>
+
+    <span class="nd">@D_protein_sites_modifications</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">D_protein_sites_modifications</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_protein_sites_modifications</span> <span class="o">=</span> <span class="n">D_protein_sites_modifications</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">percentage_abundance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        Percentage abundance of a modform</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_percentage_abundance</span><span class="p">)</span>
+    
+    <span class="nd">@percentage_abundance</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">percentage_abundance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">percentage_abundance</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_percentage_abundance</span> <span class="o">=</span> <span class="n">percentage_abundance</span>
+    
+    
+<div class="viewcode-block" id="Modform.get_modifications_frequency_map"><a class="viewcode-back" href="../../modformPro.html#modformPro.modform.Modform.get_modifications_frequency_map">[docs]</a>    <span class="k">def</span> <span class="nf">get_modifications_frequency_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * It returns a dictionary of modifications and their frequency in the modform OR &#39;UNMOD&#39; in case of unmodified modform</span>
+<span class="sd">        * E.g., </span>
+<span class="sd">          </span>
+<span class="sd">          For ``a1: [&#39;0&#39;:&#39;UNMOD&#39;]``, the method returns ``{&#39;UNMOD&#39;:&#39;0&#39;}``. </span>
+<span class="sd">          For ``a11: [(&#39;S11&#39;,&#39;P&#39;),(&#39;S30&#39;,&#39;P&#39;),(&#39;S55&#39;,&#39;Ac&#39;)]``, the method returns, ``{&#39;P&#39;: &#39;2&#39;, &#39;Ac&#39;: &#39;1&#39;}``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_protein_sites_modifications</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="o">==</span><span class="p">[(</span><span class="s1">&#39;0&#39;</span><span class="p">,</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">)]:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">:</span><span class="s1">&#39;0&#39;</span><span class="p">}</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+                        
+            <span class="n">D_protein_mod_frequency</span> <span class="o">=</span> <span class="p">{}</span>
+            
+            <span class="k">for</span> <span class="n">site</span><span class="p">,</span> <span class="n">mod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_protein_sites_modifications</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">D_protein_mod_frequency</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">freq</span> <span class="o">=</span>  <span class="nb">int</span><span class="p">(</span><span class="n">D_protein_mod_frequency</span><span class="p">[</span><span class="n">mod</span><span class="p">])</span>
+                    <span class="n">D_protein_mod_frequency</span><span class="p">[</span><span class="n">mod</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">freq</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                    
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">D_protein_mod_frequency</span><span class="p">[</span><span class="n">mod</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+                    
+            <span class="k">return</span> <span class="n">D_protein_mod_frequency</span></div>
+
+    
+<div class="viewcode-block" id="Modform.whether_modified_peptide_present_in_modform"><a class="viewcode-back" href="../../modformPro.html#modformPro.modform.Modform.whether_modified_peptide_present_in_modform">[docs]</a>    <span class="k">def</span> <span class="nf">whether_modified_peptide_present_in_modform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N_loc</span><span class="p">,</span> <span class="n">C_loc</span><span class="p">,</span> <span class="n">D_peptide_mod_frequency</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * Boolean method return True or False</span>
+<span class="sd">        * peptide range is defined by N_loc, C_loc</span>
+<span class="sd">        * modification state of peptide: D_peptide_mod_frequency</span>
+<span class="sd">        * UNMOD modform can only generate UNMOD peptides</span>
+<span class="sd">        * UNMOD peptides could also come from other modforms too</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        N_loc : str or int</span>
+<span class="sd">          Position of the first residue of a peptide in the protein sequence</span>
+<span class="sd">        </span>
+<span class="sd">        C_loc : str or int</span>
+<span class="sd">          Position of the last residue of a peptide in the protein sequence</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_protein_sites_modifications</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="o">==</span><span class="p">[(</span><span class="s1">&#39;0&#39;</span><span class="p">,</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">)]:</span>
+            <span class="k">if</span> <span class="n">D_peptide_mod_frequency</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="o">==</span><span class="p">[(</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">,</span><span class="s1">&#39;0&#39;</span><span class="p">)]:</span> <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="kc">False</span>
+            <span class="c1">#end if-else</span>
+                
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">L_mod_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D_protein_sites_modifications</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:]))</span>
+            
+            <span class="c1">#list of modifications in the peptide in this modform</span>
+            <span class="n">peptide_modifications</span> <span class="o">=</span> <span class="p">[]</span>
+            
+            <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">L_mod_sorted</span><span class="p">:</span>
+                
+                <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span> <span class="o">&lt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">N_loc</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">C_loc</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">peptide_modifications</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="c1">#end if-else</span>
+            <span class="c1">#end for pair in L_mod_sorted</span>
+            
+            <span class="n">total_freq</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">D_peptide_mod_frequency</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>            
+            <span class="k">if</span> <span class="n">D_peptide_mod_frequency</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="o">==</span><span class="p">[(</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">,</span><span class="s1">&#39;0&#39;</span><span class="p">)]</span> <span class="ow">or</span> <span class="n">total_freq</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="c1">#print &quot;N_loc, C_loc, D_pep_mod_freq, mform: &quot;, N_loc, C_loc, D_peptide_mod_frequency, self._D_protein_sites_modifications</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peptide_modifications</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1"># len(peptide_modifications)&gt;0</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+                <span class="c1">#end if-else len(peptide_modifications)==0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># list of True,False upon cross-verification</span>
+                <span class="n">L_bin</span> <span class="o">=</span> <span class="p">[</span><span class="n">peptide_modifications</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">==</span><span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">D_peptide_mod_frequency</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+                        
+                <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">L_bin</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span></div></div>
+                <span class="c1">#end if-else all(L_bin)</span>
+            <span class="c1">#end if-else D_peptide_mod_frequency.items()==[(&#39;UNMOD&#39;,&#39;0&#39;)] or total_freq==0</span>
+        <span class="c1">#end if-else self._D_protein_sites_modifications.items()==[(&#39;0&#39;,&#39;UNMOD&#39;)]</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Deepesh Agarwal &amp; Jeremy Gunawardena.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

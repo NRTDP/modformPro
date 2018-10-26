@@ -1,0 +1,527 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tutorial &mdash; modformPro 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="modformPro 1.0.0 documentation" href="index.html"/>
+        <link rel="next" title="Appendix" href="Appendix.html"/>
+        <link rel="prev" title="modformPro Package" href="README.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> modformPro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">modformPro Package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-execution">Command line execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specification-file">Specification file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fields-in-the-specification-file">Fields in the Specification file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-files-in-the-specification-file">Input files (In the Specification file)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Appendix.html">Appendix</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">modformPro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Tutorial</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Tutorial.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This is short tutorial to demonstrate usage of modformPro package.</p>
+</div>
+<div class="section" id="command-line-execution">
+<h2>Command line execution<a class="headerlink" href="#command-line-execution" title="Permalink to this headline">¶</a></h2>
+<p>Make sure that required dependencies &#8211; <a class="reference external" href="https://pythonhosted.org/PuLP/main/installing_pulp_at_home.html">pulp</a> and <a class="reference external" href="https://matplotlib.org/users/installing.html">matplotlib</a> are installed prior to the command line run.</p>
+<p>Run main.py file from the command line</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">python</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="n">modformPro_spec</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="specification-file">
+<h2>Specification file<a class="headerlink" href="#specification-file" title="Permalink to this headline">¶</a></h2>
+<p>modformPro_spec.txt</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#Specifications</span>
+
+<span class="c1">####################################################################</span>
+<span class="c1">####File with amino acid positions and possible modifications (Information could be</span>
+<span class="c1">####available from bottom-up MS analysis)</span>
+<span class="c1"># - Mandatory</span>
+<span class="c1">#####################################################################</span>
+
+<span class="n">FILE_MODIFICATIONS</span><span class="p">:</span> <span class="n">site</span><span class="o">-</span><span class="n">modifications</span><span class="o">-</span><span class="n">p53</span><span class="o">-</span><span class="n">human</span><span class="o">.</span><span class="n">txt</span>
+
+
+<span class="c1">#################################################</span>
+<span class="c1">####File with amino acid sequence in FASTA format</span>
+<span class="c1"># - Mandatory</span>
+<span class="c1">################################################</span>
+
+<span class="n">FILE_FASTA</span><span class="p">:</span> <span class="n">p53_human</span><span class="o">.</span><span class="n">fasta</span>
+
+<span class="c1">###############################################################</span>
+<span class="c1">####set DATA_MODE to be either &quot;simulation&quot; or &quot;real&quot;</span>
+<span class="c1"># - &quot;simulation&quot; is to simulate the modform distribution followed by modform region estimation</span>
+<span class="c1"># - &quot;real&quot; is for modform estimation from real MS data acquisition</span>
+<span class="c1">################################################################</span>
+
+<span class="n">DATA_MODE</span><span class="p">:</span> <span class="n">simulation</span>
+
+<span class="c1">##################################################################################</span>
+<span class="c1">####Provide the names of the files</span>
+<span class="c1"># In &quot;simulation&quot; mode simulated areas are printed in the file names provided</span>
+<span class="c1"># In &quot;real&quot; mode peak areas must be provided</span>
+<span class="c1"># Leave the option empty if either the data is not available or it is to be ignored</span>
+<span class="c1">###################################################################################</span>
+
+<span class="n">FILE_TDMS_DATA</span><span class="p">:</span>   <span class="n">TDMS</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">FILE_BUMS_MRM_DATA</span><span class="p">:</span> <span class="n">BUMS</span><span class="o">-</span><span class="n">MRM</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">txt</span>
+
+<span class="c1">#####################################################################</span>
+<span class="c1">####set the following if DATA_MODE is &quot;simulation&quot;</span>
+<span class="c1"># - Modes (bimodal, trimodal etc) here refer to the isobaric modforms</span>
+<span class="c1"># - Each mode is separated by semi-colon, and within each mode modifications and their</span>
+<span class="c1">#   frequency are separated by a comma</span>
+<span class="c1">#   e.g. P=2, Ac=1; P=3</span>
+<span class="c1"># - For unmodified, preferred use is UNMOD=0 but P=0 or Ac=0 would also work</span>
+<span class="c1"># - Noise added from the Normal distribution, N(mean=0,stdev)</span>
+<span class="c1"># - We set NOISE_STDEV=1 (default) as empirically peak area measurement is about 1-2%</span>
+<span class="c1"># - Sample size refers to sampling from the distribution, and computing the bounds for</span>
+<span class="c1">#   certain number of times to get the statistics</span>
+
+<span class="c1"># - Trypsin or GluC are binary variables which could set to be &#39;True&#39; OR &#39;False&#39; for</span>
+<span class="c1">#   simulating the BUMS data</span>
+<span class="c1"># - Trypsin is set to be True by default which can be changed</span>
+<span class="c1">#####################################################################</span>
+
+<span class="n">NUMBER_MODES</span><span class="p">:</span> <span class="mi">4</span>
+<span class="n">MODES</span><span class="p">:</span> <span class="n">UNMOD</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">P</span><span class="o">=</span><span class="mi">3</span><span class="p">;</span> <span class="n">P</span><span class="o">=</span><span class="mi">5</span> <span class="p">;</span> <span class="n">P</span><span class="o">=</span><span class="mi">6</span>
+
+<span class="n">NOISE_STDEV</span><span class="p">:</span> <span class="mi">1</span>
+<span class="n">SAMPLE_SIZE</span><span class="p">:</span> <span class="mi">30</span>
+
+<span class="n">Trypsin</span><span class="p">:</span> <span class="kc">True</span>
+<span class="n">GluC</span><span class="p">:</span>   <span class="kc">False</span>
+
+<span class="c1">###################################################</span>
+<span class="c1">####Name of the output directory; Default is Output</span>
+<span class="c1">###################################################</span>
+
+<span class="n">OUTPUT_DIRECTORY</span><span class="p">:</span> <span class="n">Output</span>
+
+<span class="n">TEX_OUTPUT_FILE</span><span class="p">:</span> <span class="n">modformPro</span><span class="o">.</span><span class="n">tex</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fields-in-the-specification-file">
+<h2>Fields in the Specification file<a class="headerlink" href="#fields-in-the-specification-file" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="17%" />
+<col width="47%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Field</th>
+<th class="head">option</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">FILE_MODIFICATIONS</span></code></td>
+<td>File name</td>
+<td>File containing modifications</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">FILE_FASTA</span></code></td>
+<td>File name</td>
+<td>File containing fasta sequence</td>
+</tr>
+<tr class="row-even"><td rowspan="3"><code class="docutils literal"><span class="pre">DATA_MODE</span></code></td>
+<td rowspan="3"><p class="first">real</p>
+<p class="last">simulation</p>
+</td>
+<td rowspan="3"><p class="first">Estimation from real data</p>
+<p class="last">Estimation from simulated
+data</p>
+</td>
+</tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td rowspan="3"><code class="docutils literal"><span class="pre">FILE_TDMS_DATA</span></code></td>
+<td rowspan="3">File
+name</td>
+<td rowspan="3"><p class="first">File containing peak areas
+from TDMS data.</p>
+<p class="last">Leave it blank if it is not
+available or to be ignored.</p>
+</td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"><td rowspan="3"><code class="docutils literal"><span class="pre">FILE_BUMS_MRM_DATA</span></code></td>
+<td rowspan="3">File
+name</td>
+<td rowspan="3"><p class="first">File containing peak areas
+from BUMS/MRM data.</p>
+<p class="last">Leave it blank if it is not
+available or to be ignored.</p>
+</td>
+</tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td rowspan="11"><p class="first"><em>Simulation parameters</em></p>
+<blockquote class="last">
+<div><p><code class="docutils literal"><span class="pre">NUMBER_MODES</span></code></p>
+<p><code class="docutils literal"><span class="pre">MODES</span></code></p>
+<p><code class="docutils literal"><span class="pre">NOISE_STDEV</span></code></p>
+<p><code class="docutils literal"><span class="pre">SAMPLE_SIZE</span></code></p>
+<p><code class="docutils literal"><span class="pre">Trypsin</span></code></p>
+<p><code class="docutils literal"><span class="pre">GluC</span></code></p>
+</div></blockquote>
+</td>
+<td rowspan="11"><p class="first">Positive
+integer</p>
+<p>Modes</p>
+<p>Float</p>
+<p>Integer</p>
+<p>True/False</p>
+<p class="last">True/False</p>
+</td>
+<td rowspan="11"><p class="first">Number of isomeric modform
+modes to be simulated.</p>
+<p>Isomeric modform modes to be
+simulated(see example above)</p>
+<p>Noise in peak area
+measurements is sampled from
+N(mean=0, stdev).</p>
+<p>Number of times noise is
+sampled. This is analogous to
+number of injections in MS.</p>
+<p>For Trypsin digestion</p>
+<p class="last">For GluC digestion</p>
+</td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"><td rowspan="4"><p class="first"><code class="docutils literal"><span class="pre">OUTPUT_DIRECTORY</span></code></p>
+<p class="last"><code class="docutils literal"><span class="pre">TEX_OUTPUT_FILE</span></code></p>
+</td>
+<td rowspan="4"><p class="first">Director
+name</p>
+<p class="last">Tex file
+name</p>
+</td>
+<td rowspan="4"><p class="first">Name of the output directory.
+Default - Output</p>
+<p class="last">Name of a file with .tex
+extension.</p>
+</td>
+</tr>
+<tr class="row-odd"></tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="input-files-in-the-specification-file">
+<h2>Input files (In the Specification file)<a class="headerlink" href="#input-files-in-the-specification-file" title="Permalink to this headline">¶</a></h2>
+<p>Fasta file (<code class="docutils literal"><span class="pre">FILE_FASTA</span></code>), e.g.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="n">sp</span><span class="o">|</span><span class="n">P04637</span><span class="o">|</span><span class="n">P53_HUMAN</span> <span class="n">Cellular</span> <span class="n">tumor</span> <span class="n">antigen</span> <span class="n">p53</span> <span class="n">OS</span><span class="o">=</span><span class="n">Homo</span> <span class="n">sapiens</span> <span class="n">GN</span><span class="o">=</span><span class="n">TP53</span> <span class="n">PE</span><span class="o">=</span><span class="mi">1</span> <span class="n">SV</span><span class="o">=</span><span class="mi">4</span>
+<span class="n">MEEPQSDPSVEPPLSQETFSDLWKLLPENNVLSPLPSQAMDDLMLSPDDIEQWFTEDPGP</span>
+<span class="n">DEAPRMPEAAPPVAPAPAAPTPAAPAPAPSWPLSSSVPSQKTYQGSYGFRLGFLHSGTAK</span>
+<span class="n">SVTCTYSPALNKMFCQLAKTCPVQLWVDSTPPPGTRVRAMAIYKQSQHMTEVVRRCPHHE</span>
+<span class="n">RCSDSDGLAPPQHLIRVEGNLRVEYLDDRNTFRHSVVVPYEPPEVGSDCTTIHYNYMCNS</span>
+<span class="n">SCMGGMNRRPILTIITLEDSSGNLLGRNSFEVRVCACPGRDRRTEEENLRKKGEPHHELP</span>
+<span class="n">PGSTKRALPNNTSSSPQPKKKPLDGEYFTLQIRGRERFEMFRELNEALELKDAQAGKEPG</span>
+<span class="n">GSRAHSSHLKSKKGQSTSRHKKLMFKTEGPDSD</span>
+</pre></div>
+</div>
+<p>Modification specifications file (<code class="docutils literal"><span class="pre">FILE_MODIFICATIONS</span></code>), e.g.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NSITESBEGIN</span>
+<span class="mi">7</span>
+<span class="n">NSITESEND</span>
+
+<span class="c1">#### Comment lines will not be read</span>
+<span class="c1">#P: 15,20,55,183,315,376,378</span>
+<span class="c1">#Ac: 376, 378</span>
+<span class="c1">####################################</span>
+
+<span class="n">MODSITESBEGIN</span>
+<span class="mi">15</span><span class="p">:</span>  <span class="n">P</span>
+<span class="mi">20</span><span class="p">:</span>  <span class="n">P</span>
+<span class="mi">55</span><span class="p">:</span>  <span class="n">P</span>
+<span class="mi">183</span><span class="p">:</span> <span class="n">P</span>
+<span class="mi">315</span><span class="p">:</span> <span class="n">P</span>
+<span class="mi">376</span><span class="p">:</span> <span class="n">P</span>
+<span class="mi">378</span><span class="p">:</span> <span class="n">P</span>
+<span class="mi">376</span><span class="p">:</span> <span class="n">Ac</span>
+<span class="mi">378</span><span class="p">:</span> <span class="n">Ac</span>
+<span class="n">MODSITESEND</span>
+</pre></div>
+</div>
+<p>File containing Intact mass spectrometry data (<code class="docutils literal"><span class="pre">FILE_TDMS_DATA</span></code>), e.g.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#Isobaric forms and their relative peak areas</span>
+<span class="c1"># Convention for writing this file --</span>
+
+<span class="c1"># - Write data between START and END tags</span>
+<span class="c1"># - Comment lines start with &#39;#&#39; character. They are only meant for annotating the</span>
+<span class="c1">#   file. They will be skipped while reading the file and storing the content</span>
+<span class="c1"># - E.g., line: IsobaricAbundance: P=2 Ac=1 25</span>
+<span class="c1">#   modtype1=frequency1 modtype2=frequency2; last column is reserved for percentage abundance</span>
+<span class="c1">#   for percentage abundance for these isobaric modforms</span>
+<span class="c1"># - Note, UNMOD=0, refers to unmodified modforms, &#39;0&#39; signifies modification frequency=0</span>
+
+<span class="n">START</span>
+<span class="n">IsomericModformsPeakArea</span><span class="p">:</span> <span class="n">UNMOD</span><span class="o">=</span><span class="mi">0</span> <span class="mf">20.000</span>
+<span class="n">IsomericModformsPeakArea</span><span class="p">:</span> <span class="n">P</span><span class="o">=</span><span class="mi">1</span> <span class="mf">15.000</span>
+<span class="n">IsomericModformsPeakArea</span><span class="p">:</span> <span class="n">P</span><span class="o">=</span><span class="mi">2</span> <span class="n">Ac</span><span class="o">=</span><span class="mi">1</span> <span class="mf">25.000</span>
+<span class="n">IsomericModformsPeakArea</span><span class="p">:</span> <span class="n">P</span><span class="o">=</span><span class="mi">3</span> <span class="mf">10.000</span>
+<span class="n">IsomericModformsPeakArea</span><span class="p">:</span> <span class="n">P</span><span class="o">=</span><span class="mi">4</span> <span class="n">Ac</span><span class="o">=</span><span class="mi">1</span> <span class="mf">30.000</span>
+<span class="n">END</span>
+</pre></div>
+</div>
+<p>File containing bottom-up data or MRM data (<code class="docutils literal"><span class="pre">FILE_BUMS_MRM_DATA</span></code>), e.g.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Peptides and relative peak areas of isomeric peptides</span>
+<span class="c1"># - Modification_type=frequency; e.g., P=2 Ac=1 MM=2</span>
+<span class="c1"># - Last column reserved for relative peake areas value</span>
+
+<span class="n">PEPSTART</span>
+<span class="n">peptide</span><span class="p">:</span> <span class="mi">15</span><span class="o">-</span><span class="mi">25</span>
+<span class="n">IsomericPeptidesPeakArea</span><span class="p">:</span> <span class="n">UNMOD</span><span class="o">=</span><span class="mi">0</span> <span class="mf">25.000</span>
+<span class="n">IsomericPeptidesPeakArea</span><span class="p">:</span> <span class="n">P</span><span class="o">=</span><span class="mi">1</span> <span class="mf">50.000</span>
+<span class="n">IsomericPeptidesPeakArea</span><span class="p">:</span> <span class="n">P</span><span class="o">=</span><span class="mi">2</span> <span class="mf">25.000</span>
+<span class="n">PEPEND</span>
+
+<span class="n">PEPSTART</span>
+<span class="n">peptide</span><span class="p">:</span> <span class="mi">50</span><span class="o">-</span><span class="mi">60</span>
+<span class="n">IsomericPeptidesPeakArea</span><span class="p">:</span> <span class="n">UNMOD</span><span class="o">=</span><span class="mi">0</span> <span class="mf">50.000</span>
+<span class="n">IsomericPeptidesPeakArea</span><span class="p">:</span> <span class="n">P</span><span class="o">=</span><span class="mi">1</span> <span class="n">Ac</span><span class="o">=</span><span class="mi">1</span> <span class="mf">30.00</span>
+<span class="n">IsomericPeptidesPeakArea</span><span class="p">:</span> <span class="n">P</span><span class="o">=</span><span class="mi">2</span> <span class="mf">20.000</span>
+<span class="n">PEPEND</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Appendix.html" class="btn btn-neutral float-right" title="Appendix" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="README.html" class="btn btn-neutral" title="modformPro Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Deepesh Agarwal &amp; Jeremy Gunawardena.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

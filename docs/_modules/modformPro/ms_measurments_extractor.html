@@ -1,0 +1,432 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>modformPro.ms_measurments_extractor &mdash; modformPro 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="modformPro 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> modformPro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Appendix.html">Appendix</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">modformPro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>modformPro.ms_measurments_extractor</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for modformPro.ms_measurments_extractor</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+
+
+
+<div class="viewcode-block" id="MSMeasurementsExtractor"><a class="viewcode-back" href="../../modformPro.html#modformPro.ms_measurments_extractor.MSMeasurementsExtractor">[docs]</a><span class="k">class</span> <span class="nc">MSMeasurementsExtractor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This class extracts measurement values (peak areas) from TDMS, BUMS and MRM data.&quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_isomeric_modforms_peak_areas</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_peptide_isomeric_peak_areas</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">L_isomeric_modforms_peak_areas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        * Python list of isomeric modforms and their percentage peak areas</span>
+<span class="sd">        * This is populated by a member method</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; # Demonstrative example of L_isomeric_modforms_peak_areas</span>
+<span class="sd">        [({&#39;UNMOD&#39;: &#39;0&#39;}, &#39;20&#39;), ({&#39;P&#39;: &#39;1&#39;}, &#39;15&#39;), ({&#39;Ac&#39;: &#39;1&#39;, &#39;P&#39;: &#39;2&#39;}, &#39;25&#39;), ({&#39;P&#39;: &#39;3&#39;}, &#39;10&#39;), ({&#39;Ac&#39;: &#39;1&#39;, &#39;P&#39;: &#39;4&#39;}, &#39;30&#39;)]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L_isomeric_modforms_peak_areas</span>
+
+    <span class="nd">@L_isomeric_modforms_peak_areas</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">L_isomeric_modforms_peak_areas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L_isomeric_modforms_peak_areas</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_isomeric_modforms_peak_areas</span> <span class="o">=</span> <span class="n">L_isomeric_modforms_peak_areas</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">D_peptide_isomeric_peak_areas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        * Python dictionary having peptide mapped to its isomeris states and their respective percentage peak areas</span>
+<span class="sd">        * This is populated by a member method</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; # Demonstrative example of D_peptide_isomeric_peak_areas</span>
+<span class="sd">        D = {&#39;15-25&#39;: [({&#39;UNMOD&#39;: &#39;0&#39;}, &#39;25&#39;), ({&#39;P&#39;: &#39;1&#39;}, &#39;50&#39;), ({&#39;P&#39;: &#39;2&#39;}, &#39;25&#39;)], &#39;50-60&#39;: [({&#39;UNMOD&#39;: &#39;0&#39;}, &#39;50&#39;), ({&#39;Ac&#39;: &#39;1&#39;, &#39;P&#39;: &#39;1&#39;}, &#39;30&#39;), ({&#39;P&#39;: &#39;2&#39;}, &#39;20&#39;)]}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_peptide_isomeric_peak_areas</span>
+    
+    <span class="nd">@D_peptide_isomeric_peak_areas</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">D_peptide_isomeric_peak_areas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_peptide_isomeric_peak_areas</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_peptide_isomeric_peak_areas</span> <span class="o">=</span> <span class="n">D_peptide_isomeric_peak_areas</span>
+    
+<div class="viewcode-block" id="MSMeasurementsExtractor.get_list_of_isomeric_modforms_peak_areas"><a class="viewcode-back" href="../../modformPro.html#modformPro.ms_measurments_extractor.MSMeasurementsExtractor.get_list_of_isomeric_modforms_peak_areas">[docs]</a>    <span class="k">def</span> <span class="nf">get_list_of_isomeric_modforms_peak_areas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fout_isomeric_modforms_peak_areas</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * It populates the instance attribute, ``L_isomeric_modforms_peak_areas``</span>
+<span class="sd">        * Note that the final list is sorted based on total frequency for isobaric modforms </span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; # Demonstrative example of  L_isomeric_modforms_peak_areas</span>
+<span class="sd">        [({&#39;UNMOD&#39;: &#39;0&#39;}, &#39;20&#39;), ({&#39;P&#39;: &#39;1&#39;}, &#39;15&#39;), ({&#39;Ac&#39;: &#39;1&#39;, &#39;P&#39;: &#39;2&#39;}, &#39;25&#39;), ({&#39;P&#39;: &#39;3&#39;}, &#39;10&#39;), ({&#39;Ac&#39;: &#39;1&#39;, &#39;P&#39;: &#39;4&#39;}, &#39;30&#39;)]``</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fout_isomeric_modforms_peak_areas : str</span>
+<span class="sd">          File containing percentage peak areas of isomeric modforms. This data typically comes from TDMS measurments.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        L_isomeric_modforms_peak_areas : list</span>
+<span class="sd">          python list of isomeric modforms and their percentage areas. This data is typically known from intact MS measurements.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">L_isomeric_modforms_peak_areas</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fin_handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fout_isomeric_modforms_peak_areas</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="s2">&quot;Provide a file containing percentage peak areas of isomeric modforms&quot;</span><span class="p">)</span>
+
+        <span class="n">block_start</span> <span class="o">=</span> <span class="kc">False</span>
+        
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fin_handle</span><span class="p">:</span>
+            
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        
+            <span class="c1"># skipping the blank line</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="k">continue</span>
+             
+            <span class="c1"># skipping the comment line</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;#&quot;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            
+            
+            <span class="k">if</span>   <span class="n">line</span><span class="o">==</span><span class="s2">&quot;START&quot;</span><span class="p">:</span> <span class="n">block_start</span><span class="o">=</span><span class="kc">True</span>
+            <span class="k">elif</span> <span class="n">line</span><span class="o">==</span><span class="s2">&quot;END&quot;</span>  <span class="p">:</span> <span class="n">block_start</span><span class="o">=</span><span class="kc">False</span>
+            
+            <span class="k">if</span> <span class="n">block_start</span> <span class="ow">and</span> <span class="n">line</span> <span class="o">!=</span> <span class="s2">&quot;START&quot;</span><span class="p">:</span>
+                
+                <span class="n">right_side</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">right_side</span> <span class="o">=</span> <span class="n">right_side</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                
+                <span class="n">L_modtypes_freq_peak_area</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">right_side</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)]</span>
+                <span class="n">percentage_peak_area</span>      <span class="o">=</span> <span class="n">L_modtypes_freq_peak_area</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># last column</span>
+                
+                <span class="n">D_modtype_freq</span> <span class="o">=</span> <span class="p">{}</span>
+                
+                <span class="c1"># running the loop so as to skip the last element</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">L_modtypes_freq_peak_area</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">mtype</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="n">freq</span>  <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="n">D_modtype_freq</span><span class="p">[</span><span class="n">mtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span>
+
+                <span class="c1">#end for</span>
+
+                <span class="n">L_isomeric_modforms_peak_areas</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">D_modtype_freq</span><span class="p">,</span> <span class="n">percentage_peak_area</span><span class="p">))</span>
+
+            <span class="k">else</span><span class="p">:</span> <span class="c1">#if block_start and line != &quot;START&quot; and line[0]!=&quot;#&quot;</span>
+                <span class="k">continue</span>
+        
+        <span class="c1">#end for line in fin_handle             </span>
+        
+        <span class="c1"># sorting the local list and storing it in a member attribute</span>
+        <span class="c1"># sorting is based on sum of frequencies for isobaric modforms</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_isomeric_modforms_peak_areas</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">L_isomeric_modforms_peak_areas</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]))</span></div>
+        
+
+    
+<div class="viewcode-block" id="MSMeasurementsExtractor.get_dictionary_of_peptides_and_isomeric_peak_areas"><a class="viewcode-back" href="../../modformPro.html#modformPro.ms_measurments_extractor.MSMeasurementsExtractor.get_dictionary_of_peptides_and_isomeric_peak_areas">[docs]</a>    <span class="k">def</span> <span class="nf">get_dictionary_of_peptides_and_isomeric_peak_areas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fout_peptides_isomeric_peak_areas</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * It populates the instance attribute, D_peptide_isomeric_peak_areas</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; # Demonstrative example of D_peptide_isomeric_peak_areas</span>
+<span class="sd">        D = {&#39;15-25&#39;: [({&#39;UNMOD&#39;: &#39;0&#39;}, &#39;25&#39;), ({&#39;P&#39;: &#39;1&#39;}, &#39;50&#39;), ({&#39;P&#39;: &#39;2&#39;}, &#39;25&#39;)], &#39;50-60&#39;: [({&#39;UNMOD&#39;: &#39;0&#39;}, &#39;50&#39;), ({&#39;Ac&#39;: &#39;1&#39;, &#39;P&#39;: &#39;1&#39;}, &#39;30&#39;), ({&#39;P&#39;: &#39;2&#39;}, &#39;20&#39;)]}</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fout_peptides_isomeric_peak_areas : str</span>
+<span class="sd">          File containing peptides, their isomeric states and respective percentage peak areas. This data typically comes from BUMS/MRM measurments.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+                
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fin_handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fout_peptides_isomeric_peak_areas</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="s2">&quot;Provide a file containing percentage peak_area of isomeric peptides&quot;</span><span class="p">)</span>
+
+        <span class="c1"># local list; this appends all lines within a block and is emptied at the end of the block</span>
+        <span class="n">L_peptide_isomeric_peak_area</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">block_start</span> <span class="o">=</span> <span class="kc">False</span><span class="p">;</span> <span class="n">pep_NC</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fin_handle</span><span class="p">:</span>
+            
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        
+            <span class="c1"># skipping the blank line</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="k">continue</span>
+            
+            <span class="c1"># skipping the comment line</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;#&quot;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            
+            
+            <span class="k">if</span>   <span class="n">line</span><span class="o">==</span><span class="s2">&quot;PEPSTART&quot;</span><span class="p">:</span> <span class="n">block_start</span><span class="o">=</span><span class="kc">True</span>
+
+            <span class="k">elif</span> <span class="n">line</span><span class="o">==</span><span class="s2">&quot;PEPEND&quot;</span>  <span class="p">:</span>
+                <span class="n">block_start</span><span class="o">=</span><span class="kc">False</span>
+                                
+            <span class="c1">#end elif</span>
+            
+            <span class="k">if</span> <span class="n">block_start</span> <span class="ow">and</span> <span class="n">line</span><span class="o">!=</span><span class="s2">&quot;PEPSTART&quot;</span><span class="p">:</span>
+                <span class="n">L</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">L</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;peptide&quot;</span><span class="p">:</span>
+                    <span class="n">pep_NC</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="c1">#e.g, &#39;15-25&#39;</span>
+
+                <span class="k">elif</span> <span class="n">L</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">==</span><span class="s2">&quot;IsomericPeptidesPeakArea&quot;</span><span class="p">:</span>
+                    <span class="n">right_side</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+                    <span class="n">L_modtypes_freq_peak_area</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">right_side</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)]</span>
+                    <span class="n">percentage_peak_area</span>      <span class="o">=</span> <span class="n">L_modtypes_freq_peak_area</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># last column</span>
+                    <span class="n">D_modtype_freq</span>            <span class="o">=</span> <span class="p">{}</span>
+
+                    <span class="c1"># running the loop so as to skip the last element</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">L_modtypes_freq_peak_area</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+                        <span class="n">mtype</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="n">freq</span>  <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="n">D_modtype_freq</span><span class="p">[</span><span class="n">mtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span>
+
+                    <span class="c1">#end for</span>
+
+                    <span class="n">L_peptide_isomeric_peak_area</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">D_modtype_freq</span><span class="p">,</span> <span class="n">percentage_peak_area</span><span class="p">))</span>
+                    
+            <span class="c1"># end if block_start and line!=&quot;PEPSTART&quot;    </span>
+
+            <span class="c1"># pushing into the dictionary after end of each block</span>
+
+            <span class="k">if</span> <span class="n">line</span><span class="o">==</span><span class="s2">&quot;PEPEND&quot;</span><span class="p">:</span>
+
+                <span class="c1"># sorting the list based on total frequency of isomeric peptides</span>
+                <span class="n">L_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">L_peptide_isomeric_peak_area</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]))</span>
+                
+                <span class="bp">self</span><span class="o">.</span><span class="n">_D_peptide_isomeric_peak_areas</span><span class="p">[</span><span class="n">pep_NC</span><span class="p">]</span> <span class="o">=</span> <span class="n">L_sorted</span>
+                
+                <span class="c1">#emptying the list for next block</span>
+                <span class="n">L_peptide_isomeric_peak_area</span> <span class="o">=</span> <span class="p">[]</span>
+                                
+                <span class="c1"># emptying the peptide N_loc, C_loc string at the end of the block</span>
+                <span class="n">pep_NC</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div></div>
+                
+    
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Deepesh Agarwal &amp; Jeremy Gunawardena.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+========
+Tutorial
+========
+
+Introduction
+============
+
+This is short tutorial to demonstrate usage of modformPro package.
+
+
+Command line execution
+======================
+Make sure that required dependencies -- pulp_ and matplotlib_ are installed prior to the command line run.
+
+.. _pulp: https://pythonhosted.org/PuLP/main/installing_pulp_at_home.html
+.. _matplotlib: https://matplotlib.org/users/installing.html
+
+Run main.py file from the command line ::
+
+ >>> python main.py -f modformPro_spec.txt
+
+Specification file
+==================
+modformPro_spec.txt ::
+  
+   #Specifications
+   
+   ####################################################################
+   ####File with amino acid positions and possible modifications (Information could be
+   ####available from bottom-up MS analysis)
+   # - Mandatory
+   #####################################################################
+   
+   FILE_MODIFICATIONS: site-modifications-p53-human.txt
+   
+   
+   #################################################
+   ####File with amino acid sequence in FASTA format
+   # - Mandatory
+   ################################################
+   
+   FILE_FASTA: p53_human.fasta
+   
+   ###############################################################
+   ####set DATA_MODE to be either "simulation" or "real"
+   # - "simulation" is to simulate the modform distribution followed by modform region estimation
+   # - "real" is for modform estimation from real MS data acquisition
+   ################################################################
+   
+   DATA_MODE: simulation
+   
+   ##################################################################################
+   ####Provide the names of the files
+   # In "simulation" mode simulated areas are printed in the file names provided
+   # In "real" mode peak areas must be provided
+   # Leave the option empty if either the data is not available or it is to be ignored
+   ###################################################################################
+   
+   FILE_TDMS_DATA:   TDMS-data.txt
+   FILE_BUMS_MRM_DATA: BUMS-MRM-data.txt
+   
+   #####################################################################
+   ####set the following if DATA_MODE is "simulation"
+   # - Modes (bimodal, trimodal etc) here refer to the isobaric modforms
+   # - Each mode is separated by semi-colon, and within each mode modifications and their
+   #   frequency are separated by a comma
+   #   e.g. P=2, Ac=1; P=3
+   # - For unmodified, preferred use is UNMOD=0 but P=0 or Ac=0 would also work
+   # - Noise added from the Normal distribution, N(mean=0,stdev)
+   # - We set NOISE_STDEV=1 (default) as empirically peak area measurement is about 1-2%
+   # - Sample size refers to sampling from the distribution, and computing the bounds for
+   #   certain number of times to get the statistics
+   
+   # - Trypsin or GluC are binary variables which could set to be 'True' OR 'False' for
+   #   simulating the BUMS data
+   # - Trypsin is set to be True by default which can be changed
+   #####################################################################
+   
+   NUMBER_MODES: 4
+   MODES: UNMOD=0; P=3; P=5 ; P=6
+   
+   NOISE_STDEV: 1
+   SAMPLE_SIZE: 30
+   
+   Trypsin: True
+   GluC:   False
+   
+   ###################################################
+   ####Name of the output directory; Default is Output
+   ###################################################
+   
+   OUTPUT_DIRECTORY: Output
+   
+   TEX_OUTPUT_FILE: modformPro.tex
+
+
+
+
+Fields in the Specification file
+================================
+
++-----------------------+-----------+------------------------------+
+|       Field           |  option   |          description         |
++=======================+===========+==============================+
+| ``FILE_MODIFICATIONS``| File name | File containing modifications|
++-----------------------+-----------+------------------------------+
+| ``FILE_FASTA``        | File name |File containing fasta sequence|
++-----------------------+-----------+------------------------------+
+|                       | real      | Estimation from real data    |
++    ``DATA_MODE``      +           +                              +
+|                       | simulation| Estimation from simulated    |
++                       +           + data                         +
+|                       |           |                              |
++-----------------------+-----------+------------------------------+
+|                       |           | File containing peak areas   |
++                       + File      + from TDMS data.              +
+| ``FILE_TDMS_DATA``    | name      |                              |
++                       +           + Leave it blank if it is not  +
+|                       |           | available or to be ignored.  |
++-----------------------+-----------+------------------------------+
+|                       |           | File containing peak areas   |
++                       + File      + from BUMS/MRM data.          +
+|``FILE_BUMS_MRM_DATA`` | name      |                              |
++                       +           + Leave it blank if it is not  +
+|                       |           | available or to be ignored.  |
++-----------------------+-----------+------------------------------+
+|*Simulation parameters*|           |                              |
++                       +           +                              +
+| ``NUMBER_MODES``      | Positive  | Number of isomeric modform   |
++                       + integer   + modes to be simulated.       +
+|                       |           |                              |
++                       +           +                              +
+| ``MODES``             | Modes     | Isomeric modform modes to be |
++                       +           + simulated(see example above) +
+|                       |           |                              |
++                       +           +                              +
+| ``NOISE_STDEV``       | Float     | Noise in peak area           |
++                       +           + measurements is sampled from +
+|                       |           | N(mean=0, stdev).            |
++                       +           +                              +
+| ``SAMPLE_SIZE``       | Integer   | Number of times noise is     |
++                       +           + sampled. This is analogous to+
+|                       |           | number of injections in MS.  |
++                       +           +                              +
+| ``Trypsin``           | True/False| For Trypsin digestion        |
++                       +           +                              +
+| ``GluC``              | True/False| For GluC digestion           |
++-----------------------+-----------+------------------------------+
+| ``OUTPUT_DIRECTORY``  | Director  | Name of the output directory.|
++                       + name      + Default - Output             +
+|                       |           |                              |
++                       +           +                              +
+| ``TEX_OUTPUT_FILE``   | Tex file  | Name of a file with .tex     |
++                       + name      + extension.                   +
+|                       |           |                              |
++-----------------------+-----------+------------------------------+
+
+
+Input files (In the Specification file)
+=======================================
+
+Fasta file (``FILE_FASTA``), e.g. ::
+
+  >sp|P04637|P53_HUMAN Cellular tumor antigen p53 OS=Homo sapiens GN=TP53 PE=1 SV=4
+  MEEPQSDPSVEPPLSQETFSDLWKLLPENNVLSPLPSQAMDDLMLSPDDIEQWFTEDPGP
+  DEAPRMPEAAPPVAPAPAAPTPAAPAPAPSWPLSSSVPSQKTYQGSYGFRLGFLHSGTAK
+  SVTCTYSPALNKMFCQLAKTCPVQLWVDSTPPPGTRVRAMAIYKQSQHMTEVVRRCPHHE
+  RCSDSDGLAPPQHLIRVEGNLRVEYLDDRNTFRHSVVVPYEPPEVGSDCTTIHYNYMCNS
+  SCMGGMNRRPILTIITLEDSSGNLLGRNSFEVRVCACPGRDRRTEEENLRKKGEPHHELP
+  PGSTKRALPNNTSSSPQPKKKPLDGEYFTLQIRGRERFEMFRELNEALELKDAQAGKEPG
+  GSRAHSSHLKSKKGQSTSRHKKLMFKTEGPDSD
+
+Modification specifications file (``FILE_MODIFICATIONS``), e.g. ::
+
+  NSITESBEGIN
+  7
+  NSITESEND
+
+  #### Comment lines will not be read
+  #P: 15,20,55,183,315,376,378
+  #Ac: 376, 378
+  ####################################
+  
+  MODSITESBEGIN
+  15:  P
+  20:  P
+  55:  P
+  183: P
+  315: P
+  376: P
+  378: P
+  376: Ac
+  378: Ac
+  MODSITESEND
+
+File containing Intact mass spectrometry data (``FILE_TDMS_DATA``), e.g. ::
+
+  #Isobaric forms and their relative peak areas
+  # Convention for writing this file --
+
+  # - Write data between START and END tags
+  # - Comment lines start with '#' character. They are only meant for annotating the
+  #   file. They will be skipped while reading the file and storing the content
+  # - E.g., line: IsobaricAbundance: P=2 Ac=1 25
+  #   modtype1=frequency1 modtype2=frequency2; last column is reserved for percentage abundance
+  #   for percentage abundance for these isobaric modforms
+  # - Note, UNMOD=0, refers to unmodified modforms, '0' signifies modification frequency=0
+
+  START
+  IsomericModformsPeakArea: UNMOD=0 20.000
+  IsomericModformsPeakArea: P=1 15.000
+  IsomericModformsPeakArea: P=2 Ac=1 25.000
+  IsomericModformsPeakArea: P=3 10.000
+  IsomericModformsPeakArea: P=4 Ac=1 30.000
+  END
+
+
+File containing bottom-up data or MRM data (``FILE_BUMS_MRM_DATA``), e.g. ::
+
+  # Peptides and relative peak areas of isomeric peptides
+  # - Modification_type=frequency; e.g., P=2 Ac=1 MM=2
+  # - Last column reserved for relative peake areas value
+
+  PEPSTART
+  peptide: 15-25
+  IsomericPeptidesPeakArea: UNMOD=0 25.000
+  IsomericPeptidesPeakArea: P=1 50.000
+  IsomericPeptidesPeakArea: P=2 25.000
+  PEPEND
+
+  PEPSTART
+  peptide: 50-60
+  IsomericPeptidesPeakArea: UNMOD=0 50.000
+  IsomericPeptidesPeakArea: P=1 Ac=1 30.00
+  IsomericPeptidesPeakArea: P=2 20.000
+  PEPEND

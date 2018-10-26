@@ -1,0 +1,79 @@
+#Specifications
+
+####################################################################
+####File with amino acid positions and possible modifications (Information could be available from bottom-up MS analysis)
+# Mandatory
+#####################################################################
+
+FILE_MODIFICATIONS: site-modifications-P28066-1.txt
+
+#################################################
+####File with amino acid sequence in FASTA format
+# Mandatory
+################################################
+
+FILE_FASTA: P28066-1.fasta
+
+
+###################################################################
+####Set this to be true for complete modform space consideration
+# E.g., For n-sites with binary modifications complete modform space# has 2^n modforms. It grows if a site can have multiple modifications
+####################################################################
+
+N_SITES_FULL_MODFORM_SPACE: True
+
+###############################################################
+####set one of them to be true
+# Read_data is chosen for MS data acquired from experiments
+# Simulated_data is when MS process is simulated
+################################################################
+
+DATA_MODE:      simulation
+
+##################################################################
+####Provide the file names for TDMS data and BUMS-MRM data
+# The linear constraints are considered for the file being provided
+###################################################################
+
+FILE_TDMS_DATA:	TDMS-data.txt
+FILE_BUMS_MRM_DATA: BUMS-MRM-data.txt
+
+####################################################################
+####This coalesces  co-existing variables in the linear constraints
+# It will only happen if BUMS data is available
+# If only TDMS data is available, there are no groups
+# Default is True
+####################################################################
+
+VARIABLES_GROUPING: False
+
+#####################################################################
+####set the following if SIMULATED_DATA is True
+# Modes (bimodal, trimodal etc) here refer to the intact protein isomeric modforms
+# Each mode is separated by semi-colon, and within each mode modifications and their frequency are separated by a comma.
+# e.g. P=2, Ac=1; P=3
+# for unmodified, preferred use is UNMOD=0 but P=0 or Ac=0 would also work
+# Noise added from the Normal distribution, N(mean=0,stdev)
+# We choose NOISE_STDEV=2 (default) as empirically peak area measurement is about 1-2%.
+# Sample size refers to sampling from the distribution, and computing the bounds for certain number of times to get the statistics
+
+# Trypsin or GluC are binary variables which could set to be 'True' OR 'False' for simulating the BUMS data.
+# Trypsin is set to be True by default which can be changed.
+#####################################################################
+
+NUMBER_MODES: 4
+MODES: Ac=1; Ac=1, P=1; Ac=1, P=2; Ac=1, P=3
+
+NOISE_STDEV: 0
+SAMPLE_SIZE: 1
+
+Trypsin: True
+GluC: False
+
+###################################################
+####Name of the output directory; Default is Output
+###################################################
+
+OUTPUT_DIRECTORY: Output
+
+TEX_OUTPUT_FILE: modformPro.tex

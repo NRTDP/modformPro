@@ -1,0 +1,39 @@
+.. modformPro documentation master file, created by
+   sphinx-quickstart on Tue Jun 20 04:15:25 2017.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+modformPro Documentation
+========================
+**modformPro** is a software application to estimate modform region of proteins containing multiple modification sites. The software requires peak area measurments from Intact mass spectrometry and/or Bottom-up mass spectrometry as essential input information. It also provides options to simulate the modform distribution and subsequently the mass spectrometry measurement process to estimate modform region.
+
+The software can handle multiple types of modifications on the same residues. The input files must comply with a certain structure and format that can be read by the software (See Tutorial for the same).
+
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+
+   README
+   Tutorial
+   Appendix
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+
+UML diagram
+===========
+
+UML diagram for modformPro package.
+
+.. uml:: .
+   :classes:
+
+
+.. doctest::
+   

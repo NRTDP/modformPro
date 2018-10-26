@@ -1,0 +1,580 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>modformPro.modform_space &mdash; modformPro 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="modformPro 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> modformPro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Appendix.html">Appendix</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">modformPro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>modformPro.modform_space</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for modformPro.modform_space</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pulp</span>
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span>
+
+<span class="kn">import</span> <span class="nn">globalfuncs</span> <span class="k">as</span> <span class="nn">gbfunc</span>
+<span class="kn">import</span> <span class="nn">modform</span>     <span class="k">as</span> <span class="nn">modform</span>
+
+
+<div class="viewcode-block" id="ModformSpace"><a class="viewcode-back" href="../../modformPro.html#modformPro.modform_space.ModformSpace">[docs]</a><span class="k">class</span> <span class="nc">ModformSpace</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;This class defines a modform space, i.e., set of modform objects.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    specifications : :class:`.ModformProSpecifications`, optional</span>
+<span class="sd">      - Instance of ModformProSpecifications object</span>
+<span class="sd">      - Contains information about the option set by the user in the specification file</span>
+<span class="sd">    </span>
+<span class="sd">    L_isomeric_modforms_modes : list, optional</span>
+<span class="sd">      - Python list of python dictionaries having modification types mapped to its frequency.</span>
+<span class="sd">      - E.g.,  ``L = [{&#39;UNMOD&#39;: &#39;0&#39;}, {&#39;P&#39;: &#39;1&#39;}, {&#39;Ac&#39;: &#39;1&#39;, &#39;P&#39;: &#39;2&#39;}]``</span>
+<span class="sd">        There are three isomeric modform modes in the list - unmodified, singly phosphorylated modforms and the last is referring to the modforms that are singly acetylated and doubly phosphorylated.</span>
+<span class="sd">                </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">specifications</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">L_isomeric_modforms_modes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_specifications</span>            <span class="o">=</span> <span class="n">specifications</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_isomeric_modforms_modes</span> <span class="o">=</span> <span class="n">L_isomeric_modforms_modes</span>
+
+                
+        <span class="c1"># Data structures to store modforms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_modforms</span>   <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_PuLP_variables</span>       <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_nmolecules</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c1"># reading and storing the apriori information - sites and modifications</span>
+        <span class="k">if</span> <span class="n">specifications</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_D_sites_modtypes</span> <span class="o">=</span> <span class="n">gbfunc</span><span class="o">.</span><span class="n">read_sites_and_modification_types_from_file</span><span class="p">(</span><span class="n">specifications</span><span class="o">.</span><span class="n">file_modifications</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">D_variables_modforms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        Python dictionary with modform variables (string format) being mapped to their respective :class:`.Modform` objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_modforms</span>
+
+    <span class="nd">@D_variables_modforms</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">D_variables_modforms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_variables_modforms</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_modforms</span> <span class="o">=</span> <span class="n">D_variables_modforms</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">D_PuLP_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        * Python dictionary having modform variables (string format) being mapped to their respective :class:`.pulp` objects.</span>
+<span class="sd">        * Note that modform variables in PuLP format are needed to perform linear programming computations with pulp library.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_PuLP_variables</span>
+
+    <span class="nd">@D_PuLP_variables</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">D_PuLP_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_PuLP_variables</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_PuLP_variables</span> <span class="o">=</span> <span class="n">D_PuLP_variables</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">D_variables_nmolecules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        * Python dictionary is populated only during simulated data mode. Infact modform_space object is created while simulating modform distribution.</span>
+<span class="sd">        * This has modform variables (in string format) being mapped to the number of molecules assigned to each modform variable. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_nmolecules</span>
+
+    <span class="nd">@D_variables_nmolecules</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">D_variables_nmolecules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_variables_nmolecules</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_nmolecules</span> <span class="o">=</span> <span class="n">D_variables_nmolecules</span>
+
+    
+    
+<div class="viewcode-block" id="ModformSpace.generate_modform_space"><a class="viewcode-back" href="../../modformPro.html#modformPro.modform_space.ModformSpace.generate_modform_space">[docs]</a>    <span class="k">def</span> <span class="nf">generate_modform_space</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * It defines the modform space (without specifying the percentage abundance of the modforms) and populate the instance object attributes ``D_variables_modforms``, ``D_PuLP_variables``.</span>
+<span class="sd">        * If ``n_sites_full_modform_space`` option is set to be ``True`` then all the possible modforms are generated for n_sites and modification types.</span>
+<span class="sd">        * This space will be restricted complying with the intact mass spectrometry data or user provides modes (for data simulation) if the option n_sites_full_modform_space is set to be False.</span>
+<span class="sd">        * This method is called during simulation of modform distribution and also needed to write linear constraints from peak area calculations.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        If the user option ``N_SITES_FULL_MODFORM_SPACE`` in the specification file is set to be ``True`` then full modform space is generated complying with the number of sites and their respective modification types. </span>
+<span class="sd">        If the above user option is set to be False, then it will generate a modform space based on the isomeric modform modes either derived from intact mass spectrometry data or in case of &quot;simulation&quot; data mode, the modes would be specified in the ``MODES`` field of the specification file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">D_variables_modforms</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">D_PuLP_variables</span>     <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specifications</span><span class="o">.</span><span class="n">n_sites_full_modform_space</span><span class="p">:</span>
+            
+            <span class="n">n_sites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D_sites_modtypes</span><span class="p">)</span>
+            <span class="n">start_index</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sites</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                
+                <span class="n">L_D_protein_mod_frequency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_list_of_modification_frequency_map</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+                
+                <span class="k">for</span> <span class="n">D_protein_mod_frequency</span> <span class="ow">in</span> <span class="n">L_D_protein_mod_frequency</span><span class="p">:</span>
+                    <span class="c1">#determining the start_index value</span>
+                    <span class="k">if</span> <span class="n">D_protein_mod_frequency</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="o">==</span><span class="p">[(</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">,</span><span class="s1">&#39;0&#39;</span><span class="p">)]</span> <span class="ow">or</span> <span class="n">m</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                        <span class="n">start_index</span><span class="o">=</span><span class="mi">1</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_modforms</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                        <span class="n">start_index</span> <span class="o">=</span> <span class="mi">2</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># last index of modform in the dictionary of variables</span>
+                        <span class="n">last_index</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_modforms</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="n">start_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">last_index</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+                    
+                    <span class="c1">#end if-elif-else D_protein_mod_frequency.items()==[(&#39;UNMOD&#39;,&#39;0&#39;)]..</span>
+                    
+                    <span class="p">(</span><span class="n">D_vars_mforms</span><span class="p">,</span> <span class="n">D_PuLP_vars</span><span class="p">)</span><span class="o">=</span> <span class="n">gbfunc</span><span class="o">.</span><span class="n">get_modforms</span><span class="p">(</span><span class="n">start_index</span><span class="p">,</span> <span class="n">D_sites_modtypes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_D_sites_modtypes</span><span class="p">,</span><span class="n">D_protein_mod_frequency</span><span class="o">=</span><span class="n">D_protein_mod_frequency</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_modforms</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">D_vars_mforms</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_D_PuLP_variables</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">D_PuLP_vars</span><span class="p">)</span>
+
+                    <span class="c1">#Assigning number of molecules for modforms for simulation</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specifications</span><span class="o">.</span><span class="n">data_mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;simulation&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L_isomeric_modforms_modes</span><span class="o">!=</span><span class="kc">None</span><span class="p">:</span>
+                        
+                        <span class="k">if</span> <span class="n">D_protein_mod_frequency</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L_isomeric_modforms_modes</span><span class="p">:</span>
+                            
+                            <span class="n">D_vars_nmols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dictionary_of_variables_molecules</span><span class="p">(</span><span class="n">D_vars_mforms</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s2">&quot;principal&quot;</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_nmolecules</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">D_vars_nmols</span><span class="p">)</span>
+                            
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">D_vars_nmols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dictionary_of_variables_molecules</span><span class="p">(</span><span class="n">D_vars_mforms</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s2">&quot;null&quot;</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_nmolecules</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">D_vars_nmols</span><span class="p">)</span>
+                        <span class="c1">#end if-else</span>
+                    <span class="c1">#end if self._specifications.data_mode..</span>
+                <span class="c1">#end for D_protein_mod_frequency in L_D_protein_mod_frequency</span>
+            <span class="c1">#end for m in range(n_sites+1)</span>
+            
+        <span class="k">else</span><span class="p">:</span> <span class="c1">#modform space is restricted to the isomeric modform modes</span>
+            <span class="nb">print</span> <span class="s2">&quot;generating restricted modform space using: &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L_isomeric_modforms_modes</span>
+            <span class="n">start_index</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L_isomeric_modforms_modes</span><span class="p">:</span>
+
+                <span class="n">total_freq</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">mode</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
+                
+                <span class="k">if</span> <span class="n">mode</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="o">==</span><span class="p">[(</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">,</span><span class="s1">&#39;0&#39;</span><span class="p">)]</span> <span class="ow">or</span> <span class="n">total_freq</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="n">start_index</span><span class="o">=</span><span class="mi">1</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_modforms</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="n">start_index</span> <span class="o">=</span> <span class="mi">2</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># last index of modform in the dictionary of variables</span>
+                    <span class="n">last_index</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_modforms</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">start_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">last_index</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+                
+                <span class="c1">#end if-elif-else mode.items()==[(&#39;UNMOD&#39;,&#39;0&#39;)]..</span>
+                
+                <span class="p">(</span><span class="n">D_vars_mforms</span><span class="p">,</span> <span class="n">D_PuLP_vars</span><span class="p">)</span><span class="o">=</span> <span class="n">gbfunc</span><span class="o">.</span><span class="n">get_modforms</span><span class="p">(</span><span class="n">start_index</span><span class="p">,</span> <span class="n">D_sites_modtypes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_D_sites_modtypes</span><span class="p">,</span><span class="n">D_protein_mod_frequency</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_modforms</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">D_vars_mforms</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_D_PuLP_variables</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">D_PuLP_vars</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specifications</span><span class="o">.</span><span class="n">data_mode</span><span class="o">==</span><span class="s2">&quot;simulation&quot;</span><span class="p">:</span>
+                    <span class="n">D_vars_nmols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dictionary_of_variables_molecules</span><span class="p">(</span><span class="n">D_vars_mforms</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s2">&quot;principal&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_nmolecules</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">D_vars_nmols</span><span class="p">)</span></div>
+                                        
+                <span class="c1">#end if self._specifications.data_mode==&quot;simulation&quot;       </span>
+            <span class="c1">#end for mode in self._L_isomeric_modforms_modes</span>
+        <span class="c1">#end if-else self._specifications.n_sites_full_modform_space</span>
+
+    
+<div class="viewcode-block" id="ModformSpace.get_isomeric_modforms"><a class="viewcode-back" href="../../modformPro.html#modformPro.modform_space.ModformSpace.get_isomeric_modforms">[docs]</a>    <span class="k">def</span> <span class="nf">get_isomeric_modforms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_protein_mod_frequency</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * It returns two python dictionaries having isomeric modforms variables (string format) mapped to modform objects and their PuLP counterparts.</span>
+<span class="sd">        * These isomeric modforms are subset of the entire modform space.</span>
+<span class="sd">        * The subset is chosen based on the isomeric modform mode which is defined by the dictionary D_protein_mod_frequency.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        D_protein_mod_frequency: dict</span>
+<span class="sd">          Python dictionary having modifications mapped to their frequency.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict, dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">D_vars_modforms_isomeric</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">D_PuLP_vars_isomeric</span>     <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="k">for</span> <span class="n">var</span><span class="p">,</span><span class="n">mform</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_variables_modforms</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+
+            <span class="n">D_mod_freq</span> <span class="o">=</span> <span class="n">mform</span><span class="o">.</span><span class="n">get_modifications_frequency_map</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">D_protein_mod_frequency</span><span class="o">==</span><span class="n">D_mod_freq</span><span class="p">:</span>
+                <span class="n">D_vars_modforms_isomeric</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">=</span><span class="n">mform</span>
+                <span class="n">D_PuLP_vars_isomeric</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_PuLP_variables</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
+                
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1">#end if-else</span>
+        <span class="c1">#end for</span>
+        
+        <span class="k">return</span> <span class="p">(</span><span class="n">D_vars_modforms_isomeric</span><span class="p">,</span> <span class="n">D_PuLP_vars_isomeric</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="ModformSpace.get_dictionary_of_variables_molecules"><a class="viewcode-back" href="../../modformPro.html#modformPro.modform_space.ModformSpace.get_dictionary_of_variables_molecules">[docs]</a>    <span class="k">def</span> <span class="nf">get_dictionary_of_variables_molecules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_variables_modforms</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s2">&quot;principal&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * It assigns number of molecules to a given set of modform variables and returns a python dictionary of the same.</span>
+<span class="sd">        * This method is only called in a member method of the class :class:`.DataSimulator`.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        D_variables_modforms : dict</span>
+<span class="sd">          Python dictionary of modforms variables (string format) mapped to the modform objects. </span>
+<span class="sd">        </span>
+<span class="sd">        state : str, &quot;principal&quot; (default) or &quot;subordinate&quot; or &quot;null&quot;</span>
+<span class="sd">          They determine number of molecules assigned to the modforms. </span>
+<span class="sd">          &quot;Null&quot; assigns 0 molecules to the modforms.</span>
+<span class="sd">          Default is &quot;principal&quot;.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        D_variables_nmolecules : dict</span>
+<span class="sd">          Python dictionary having modform variables names (str) mapped to the number of molecules assigned.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from modform import Modform</span>
+<span class="sd">        &gt;&gt;&gt; from modform_space import ModformSpace</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms = {}</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms[&#39;a1&#39;] = Modform(var_name=&#39;a1&#39;, D_protein_sites_modifications={&#39;0&#39;: &#39;UNMOD&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms[&#39;a2&#39;] = Modform(var_name=&#39;a2&#39;, D_protein_sites_modifications={&#39;S20&#39;: &#39;P&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms[&#39;a3&#39;] = Modform(var_name=&#39;a3&#39;, D_protein_sites_modifications={&#39;S15&#39;: &#39;P&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms[&#39;a4&#39;] = Modform(var_name=&#39;a4&#39;, D_protein_sites_modifications={&#39;S15&#39;: &#39;P&#39;, &#39;S20&#39;: &#39;P&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; </span>
+<span class="sd">        &gt;&gt;&gt; mform_space = ModformSpace()</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; D_nmolecules_principal = mform_space.get_dictionary_of_variables_molecules(D_variables_modforms, state=&quot;principal&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print D_nmolecules_principal</span>
+<span class="sd">        {&#39;a1&#39;: 1000, &#39;a3&#39;: 250, &#39;a2&#39;: 100, &#39;a4&#39;: 100}</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; D_nmolecules_subordinate= mform_space.get_dictionary_of_variables_molecules(D_variables_modforms, state=&quot;subordinate&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print D_nmolecules_subordinate</span>
+<span class="sd">        {&#39;a1&#39;: 250, &#39;a3&#39;: 100, &#39;a2&#39;: 100, &#39;a4&#39;: 100}</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; D_nmolecules_null = mform_space.get_dictionary_of_variables_molecules(D_variables_modforms, state=&quot;null&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print D_nmolecules_null</span>
+<span class="sd">        {&#39;a1&#39;: 0, &#39;a3&#39;: 0, &#39;a2&#39;: 0, &#39;a4&#39;: 0}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">D_variables_nmolecules</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># principal set of modforms</span>
+        <span class="k">if</span> <span class="n">state</span><span class="o">==</span><span class="s2">&quot;principal&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">D_variables_modforms</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="c1">#there is no ordering of items in the dictionary so they are assigned the number of molecules randomly</span>
+                <span class="n">nmol</span>  <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span>   <span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">nmol</span><span class="o">=</span><span class="mi">1000</span>
+                <span class="k">elif</span> <span class="n">i</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="n">nmol</span><span class="o">=</span><span class="mi">250</span>
+                <span class="k">elif</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">6</span><span class="p">:</span>  <span class="n">nmol</span><span class="o">=</span><span class="mi">100</span>
+                <span class="k">else</span><span class="p">:</span> <span class="n">nmol</span><span class="o">=</span><span class="mi">50</span>
+                
+                <span class="n">D_variables_nmolecules</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">nmol</span>
+        
+        <span class="c1"># subordinate set of modforms</span>
+        <span class="k">elif</span> <span class="n">state</span><span class="o">==</span><span class="s2">&quot;subordinate&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">mvar</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">D_variables_modforms</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="c1">#there is no ordering of items in the dictionary so they are assigned the number of molecules randomly</span>
+                <span class="n">nmol</span>  <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span>   <span class="n">j</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">nmol</span><span class="o">=</span><span class="mi">250</span>
+                <span class="k">elif</span> <span class="n">j</span><span class="o">&lt;=</span><span class="mi">6</span><span class="p">:</span> <span class="n">nmol</span><span class="o">=</span><span class="mi">100</span>
+                <span class="k">else</span><span class="p">:</span> <span class="n">nmol</span><span class="o">=</span><span class="mi">0</span>
+                
+                <span class="n">D_variables_nmolecules</span><span class="p">[</span><span class="n">mvar</span><span class="p">]</span> <span class="o">=</span> <span class="n">nmol</span>
+            <span class="c1">#end for j, mvar in enumerate(D_variables_modforms.keys())</span>
+        
+        <span class="c1"># null set of modforms</span>
+        <span class="k">elif</span> <span class="n">state</span><span class="o">==</span><span class="s2">&quot;null&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">mvar</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">D_variables_modforms</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="c1">#there is no ordering of items in the dictionary so they are assigned the number of molecules randomly</span>
+                <span class="n">nmol</span>  <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">D_variables_nmolecules</span><span class="p">[</span><span class="n">mvar</span><span class="p">]</span> <span class="o">=</span> <span class="n">nmol</span>
+                
+            <span class="c1">#end for j, mvar in enumerate(D_variables_modforms.keys())</span>
+        <span class="c1">#end if-elif state==&quot;principal&quot;</span>
+        
+        <span class="k">return</span> <span class="n">D_variables_nmolecules</span></div>
+
+    
+
+<div class="viewcode-block" id="ModformSpace.get_list_of_modification_frequency_map"><a class="viewcode-back" href="../../modformPro.html#modformPro.modform_space.ModformSpace.get_list_of_modification_frequency_map">[docs]</a>    <span class="k">def</span> <span class="nf">get_list_of_modification_frequency_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">total_mod_frequency</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * This is a subordinate method, i.e. called inside this class method.</span>
+<span class="sd">        * For a given total modification frequency, this function returns list of modifications to frequency map, L_D_protein_mod_frequency.</span>
+<span class="sd">               </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        total_mod_frequeny:  int</span>
+<span class="sd">          Total frequency of modifications or total number of sites being modified.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        L_D_protein_mod_frequency : list</span>
+<span class="sd">          Python list of python dictionary having modifications to their frequency.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; D_sites_modtypes = {&#39;15&#39;: [&#39;P&#39;], &#39;20&#39;: [&#39;P&#39;], &#39;55&#39;: [&#39;P&#39;, &#39;Ac&#39;]}</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; mform_space = ModformSpace()</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; total_mod_frequency = 0</span>
+<span class="sd">        &gt;&gt;&gt; L_D_protein_mod_frequency = mform_space.get_list_of_modification_frequency_map(total_mod_frequency)</span>
+<span class="sd">        [{&#39;UNMOD&#39;:&#39;0&#39;}]</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; total_mod_frequency = 1</span>
+<span class="sd">        [{&#39;Ac&#39;: &#39;1&#39;}, {&#39;P&#39;: &#39;1&#39;}]</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; total_mod_frequency = 2</span>
+<span class="sd">        [{&#39;P&#39;: &#39;1&#39;, &#39;Ac&#39;: &#39;1&#39;}, {&#39;P&#39;: &#39;2&#39;}]</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; total_mod_frequency = 3</span>
+<span class="sd">        [{&#39;P&#39;: &#39;2&#39;, &#39;Ac&#39;: &#39;1&#39;}]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">total_mod_frequency</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[{</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">:</span><span class="s1">&#39;0&#39;</span><span class="p">}]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">L_D_protein_mod_frequency</span> <span class="o">=</span> <span class="p">[]</span>
+        
+            <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_sites_modtypes</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">total_mod_frequency</span><span class="p">):</span>
+    
+                <span class="n">L_p</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">l</span><span class="p">))</span>
+                
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">L_p</span><span class="p">:</span>
+                    <span class="n">D_m</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">L_mod</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+                    
+                    <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">L_mod</span><span class="p">:</span>
+                        <span class="n">c</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+                        <span class="n">D_m</span><span class="p">[</span><span class="n">mod</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+                    <span class="c1">#end for mod in L_mod</span>
+                    <span class="k">if</span> <span class="n">D_m</span> <span class="ow">in</span> <span class="n">L_D_protein_mod_frequency</span><span class="p">:</span> <span class="k">continue</span>
+                    <span class="k">else</span><span class="p">:</span> <span class="n">L_D_protein_mod_frequency</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">D_m</span><span class="p">)</span>
+                <span class="c1">#end for p in L_p</span>
+            
+                
+            <span class="c1">#end for l in combinations(L, total_mod_frequency)</span>
+        
+            <span class="k">return</span> <span class="n">L_D_protein_mod_frequency</span></div></div>
+        
+        <span class="c1">#end if-else total_mod_frequency==0</span>
+        
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Deepesh Agarwal &amp; Jeremy Gunawardena.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,668 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>modformPro.linear_constraints &mdash; modformPro 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="modformPro 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> modformPro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Appendix.html">Appendix</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">modformPro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>modformPro.linear_constraints</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for modformPro.linear_constraints</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">combinations</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">pulp</span>
+
+<span class="kn">import</span> <span class="nn">modform</span>       <span class="k">as</span> <span class="nn">modform</span>
+<span class="kn">import</span> <span class="nn">globalfuncs</span>   <span class="k">as</span> <span class="nn">gbfunc</span>
+<span class="kn">import</span> <span class="nn">modform_space</span> <span class="k">as</span> <span class="nn">mform_space</span>
+
+<div class="viewcode-block" id="LinearConstraints"><a class="viewcode-back" href="../../modformPro.html#modformPro.linear_constraints.LinearConstraints">[docs]</a><span class="k">class</span> <span class="nc">LinearConstraints</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot; This class provides framework to store python list of linear constraints in string format as well in PuLP format.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    D_sites_modtypes : dict</span>
+<span class="sd">      Python dictionary containing residues mapped to the list of possible modifications. E.g., ``D = {&#39;T32&#39;: [&#39;P&#39;], &#39;S55&#39;: [&#39;Ac&#39;, &#39;P&#39;]}``</span>
+<span class="sd">    </span>
+<span class="sd">    specifications : :class:`.ModformProSpecifications`</span>
+<span class="sd">      Instance of ModformProSpecifications object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_sites_modtypes</span><span class="p">,</span> <span class="n">specifications</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_linear_constraints</span>  <span class="o">=</span> <span class="p">[]</span> <span class="c1"># da: will remove later if found futile</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_PuLP_constraints</span>    <span class="o">=</span> <span class="p">[]</span>
+                        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_sites_modtypes</span>      <span class="o">=</span> <span class="n">D_sites_modtypes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_specifications</span>        <span class="o">=</span> <span class="n">specifications</span>
+        
+        <span class="c1"># data structure for grouped variables</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_grouped_variables</span>                    <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_grouped_variables_linear_constraints</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_grouped_variables_PuLP_constraints</span>   <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># modform space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span> <span class="o">=</span> <span class="n">mform_space</span><span class="o">.</span><span class="n">ModformSpace</span><span class="p">(</span><span class="n">specifications</span><span class="p">)</span>
+      
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">L_linear_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        * Python list of linear constraints in string format</span>
+<span class="sd">        * This is populated by a member method of this class</span>
+<span class="sd">        * E.g., ``L = [(&#39;a1 + a3 + a5&#39;, &#39;30&#39;), (&#39;a2 + a4 + a6&#39;, &#39;70&#39;)]``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_L_linear_constraints</span><span class="p">)</span>
+
+    <span class="nd">@L_linear_constraints</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">L_linear_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_constraints</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_linear_constraints</span> <span class="o">=</span> <span class="n">list_constraints</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">L_PuLP_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        * Python list of linear constraints in PuLP format</span>
+<span class="sd">        * PuLP format is needed to use pulp library for linear programming.</span>
+<span class="sd">        * This is populated by a member method of this class</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; # Demo L_PuLP_constraints</span>
+<span class="sd">        [LpConstraint(LpVariable(a1) + LpVariable(a3) + LpVariable(a5), 30.00), LpConstraint(LpVariable(a2) + LpVariable(a4) + LpVariable(a6), 70.00)]``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_L_PuLP_constraints</span><span class="p">)</span>
+
+    <span class="nd">@L_PuLP_constraints</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">L_PuLP_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_PuLP_constraints</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_PuLP_constraints</span> <span class="o">=</span> <span class="n">list_PuLP_constraints</span>
+        
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">specifications</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        Instance of a :class:`.ModformProSpecifications` object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specifications</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">D_sites_modtypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        Python dictionary having aa residues mapped to the list ofpossible modifications on that residue.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_sites_modtypes</span>
+    
+    <span class="nd">@D_sites_modtypes</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">D_sites_modtypes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_sites_modtypes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_sites_modtypes</span> <span class="o">=</span> <span class="n">D_sites_modtypes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">D_grouped_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        * Python dictionary having a new coalesced variables mapped to the group of co-existing variables.</span>
+<span class="sd">        * This is populated in a member method if ``VARIABLES_GROUPING`` is ``True`` in the specification file.</span>
+<span class="sd">        * E.g., ``D = {&#39;b1&#39;: &#39;a1 + a4&#39;, &#39;b2&#39;: &#39;a3 + a5 + a6&#39;}``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_grouped_variables</span>
+
+
+    <span class="nd">@D_grouped_variables</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">D_grouped_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_grouped_variables</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_grouped_variables</span> <span class="o">=</span> <span class="n">D_grouped_variables</span>
+    
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">L_grouped_variables_linear_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        * Instance attribute</span>
+<span class="sd">        * Python list of linear constraints with new coalesced variables</span>
+<span class="sd">        * This is populated by a member method of this class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L_grouped_variables_linear_constraints</span>
+
+    <span class="nd">@L_grouped_variables_linear_constraints</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">L_grouped_variables_linear_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L_grouped_variables_linear_constraints</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_grouped_variables_linear_constraints</span> <span class="o">=</span> <span class="n">L_grouped_variables_linear_constraints</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">L_grouped_variables_PuLP_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        * Python list of linear constraints in PuLP format with new coalesced variables</span>
+<span class="sd">        * This is populated by a member method of this class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L_grouped_variables_PuLP_constraints</span>
+    
+    <span class="nd">@L_grouped_variables_PuLP_constraints</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">L_grouped_variables_PuLP_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L_grouped_variables_PuLP_constraints</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_grouped_variables_PuLP_constraints</span>   <span class="o">=</span> <span class="n">L_grouped_variables_PuLP_constraints</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">modform_space</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        * Instance of a :class:`.ModformSpace` object.</span>
+<span class="sd">        * This needs to be defined for real data.</span>
+<span class="sd">        * Predefined modform_space is used when running in simulation mode.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span>
+    
+    <span class="nd">@modform_space</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">modform_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modform_space</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span> <span class="o">=</span> <span class="n">modform_space</span>
+
+<div class="viewcode-block" id="LinearConstraints.get_grouped_variables"><a class="viewcode-back" href="../../modformPro.html#modformPro.linear_constraints.LinearConstraints.get_grouped_variables">[docs]</a>    <span class="k">def</span> <span class="nf">get_grouped_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        This function returns a python list of grouped variables.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">L_list_of_lhs_variables</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_L_linear_constraints</span><span class="p">:</span>
+            <span class="n">lhs_string</span>    <span class="o">=</span> <span class="n">constraint</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lhs_variables</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">r&#39;[+-]&#39;</span><span class="p">,</span> <span class="n">lhs_string</span><span class="p">)]</span>
+            
+            <span class="n">L_list_of_lhs_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lhs_variables</span><span class="p">)</span>
+        
+        <span class="c1">#end for constraint in self._L_linear_constraints</span>
+        
+        <span class="c1"># defining list of grouped sets of variables</span>
+        <span class="n">L_grouped_sets</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_variables_modforms</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">variable</span> <span class="o">=</span> <span class="n">variable</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            
+            <span class="n">L_set_of_colleague_variables</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">lhs_vars</span> <span class="ow">in</span> <span class="n">L_list_of_lhs_variables</span><span class="p">:</span>
+                
+                <span class="k">if</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">lhs_vars</span><span class="p">:</span> 
+                    <span class="c1">#print &quot;variable, constraint_lhs: &quot;,  variable, constraint_lhs</span>
+                    <span class="n">L_set_of_colleague_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">lhs_vars</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span> <span class="k">continue</span>
+
+            <span class="c1">#end for lhs_vars in L_list_of_lhs_variables</span>
+            
+            <span class="n">S</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">*</span><span class="n">L_set_of_colleague_variables</span><span class="p">)</span>
+            
+            <span class="c1">#grouping_all_constraints = True</span>
+            <span class="c1">#for lhs_vars in L_list_of_lhs_variables:</span>
+            <span class="c1">#    common =  S.intersection(set(lhs_vars))</span>
+            <span class="c1">#    if len(common)&gt;0 and len(common)&lt;len(S):</span>
+            <span class="c1">#        grouping_all_constraints=False</span>
+            
+            <span class="c1">#if len(S)&gt;1 and S not in L_grouped_sets and grouping_all_constraints==True:</span>
+            <span class="c1">#    L_grouped_sets.append(S)</span>
+            
+            <span class="n">list_all_size_sets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">gbfunc</span><span class="o">.</span><span class="n">powerset</span><span class="p">(</span><span class="n">S</span><span class="p">))</span>
+                        
+            <span class="k">for</span> <span class="n">sset</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">list_all_size_sets</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sset</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span> <span class="ow">or</span> <span class="n">variable</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">sset</span><span class="p">):</span> <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">grouping_all_constraints</span> <span class="o">=</span> <span class="kc">True</span><span class="p">;</span>  <span class="n">count</span><span class="o">=</span><span class="mi">0</span>
+                    <span class="k">for</span> <span class="n">lhs_vars</span> <span class="ow">in</span> <span class="n">L_list_of_lhs_variables</span><span class="p">:</span>
+                        <span class="n">common</span> <span class="o">=</span>  <span class="nb">set</span><span class="p">(</span><span class="n">sset</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">lhs_vars</span><span class="p">))</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">common</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">common</span><span class="p">)</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">sset</span><span class="p">):</span>
+                            <span class="n">grouping_all_constraints</span><span class="o">=</span><span class="kc">False</span>
+                        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">common</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                            <span class="n">count</span> <span class="o">+=</span><span class="mi">1</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">continue</span>
+                        <span class="c1">#end if-elif-else</span>
+                    <span class="c1">#end for lhs_vars in L_list_of_lhs_variables</span>
+                    
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sset</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">count</span> <span class="o">&gt;</span><span class="mi">1</span>  <span class="ow">and</span> <span class="n">grouping_all_constraints</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+                        <span class="n">L_binary</span> <span class="o">=</span> <span class="p">[</span><span class="nb">set</span><span class="p">(</span><span class="n">sset</span><span class="p">)</span><span class="o">&lt;=</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">L_grouped_sets</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">L_binary</span><span class="p">:</span> <span class="k">break</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">L_grouped_sets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sset</span><span class="p">))</span>
+                            <span class="k">break</span>
+                            
+        <span class="c1">#end for variable in self._D_variables_modforms.keys()</span>
+        
+        <span class="c1"># sorting before returning</span>
+        <span class="n">L_grouped_lists</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sorted</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">L_grouped_sets</span><span class="p">]</span>
+                
+        <span class="k">return</span> <span class="n">L_grouped_lists</span></div>
+
+    
+<div class="viewcode-block" id="LinearConstraints.get_sum_of_variables_string"><a class="viewcode-back" href="../../modformPro.html#modformPro.linear_constraints.LinearConstraints.get_sum_of_variables_string">[docs]</a>    <span class="k">def</span> <span class="nf">get_sum_of_variables_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L_variables</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+
+<span class="sd">        * This is a subordinate method, i.e., only called in a member method of the same class.</span>
+<span class="sd">        * The function returns a string of sum of variables given in the input list.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        L_variables : list</span>
+<span class="sd">          Python list of modform variables in string format.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">L_variables</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        
+        <span class="n">L_variables</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">L_variables</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">)</span>
+        
+        <span class="n">sum_string</span> <span class="o">=</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">L_variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">L_variables</span><span class="p">)):</span>
+
+            <span class="n">sum_string</span> <span class="o">+=</span> <span class="s1">&#39; + </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">L_variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            
+        <span class="c1">#end for i in range(1, len(L_variables))</span>
+        
+        <span class="k">return</span> <span class="n">sum_string</span></div>
+    
+    
+<div class="viewcode-block" id="LinearConstraints.get_linear_constraints_with_grouped_variables"><a class="viewcode-back" href="../../modformPro.html#modformPro.linear_constraints.LinearConstraints.get_linear_constraints_with_grouped_variables">[docs]</a>    <span class="k">def</span> <span class="nf">get_linear_constraints_with_grouped_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L_grouped_lists</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * This method creates List of linear constraints with grouped variables both in string as well as PuLP format thereby, populating the instance attributes, ``L_grouped_variables_linear_constraints``, ``L_grouped_variables_PuLP_constraints``</span>
+<span class="sd">        * Note that additional variables are added to the existing dictionary ``D_PuLP_variables``, no additional dictionary is needed for grouped variables.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        L_grouped_lists : list</span>
+<span class="sd">          Python list of grouped variables. E.g., ``L = [&#39;a1 + a3&#39;, &#39;a2 + a4 + a6&#39;]``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># initialising the list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_grouped_variables_linear_constraints</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_L_linear_constraints</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_L_grouped_variables_PuLP_constraints</span>   <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_L_PuLP_constraints</span><span class="p">)</span>
+        
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">glist</span> <span class="ow">in</span> <span class="n">L_grouped_lists</span><span class="p">:</span>
+            <span class="n">grouped_var_name</span> <span class="o">=</span> <span class="s1">&#39;b</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">count</span>
+            
+            <span class="n">grouped_string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sum_of_variables_string</span><span class="p">(</span><span class="n">glist</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_D_grouped_variables</span><span class="p">[</span><span class="n">grouped_var_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">grouped_string</span>
+
+            <span class="c1">#delete keys from the self._D_PuLP_variables</span>
+            
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">glist</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="p">[</span><span class="n">grouped_var_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">LpVariable</span><span class="p">(</span><span class="n">grouped_var_name</span><span class="p">,</span><span class="n">lowBound</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                                
+            <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_L_linear_constraints</span><span class="p">):</span>
+                <span class="n">lhs_string</span> <span class="o">=</span> <span class="n">constraint</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">rhs_string</span> <span class="o">=</span> <span class="n">constraint</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">L_lhs_variables</span>   <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">r&#39;[+-]&#39;</span><span class="p">,</span> <span class="n">lhs_string</span><span class="p">)]</span>
+                <span class="n">set_lhs_variables</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">L_lhs_variables</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">set_lhs_variables</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">glist</span><span class="p">))</span><span class="o">==</span><span class="nb">set</span><span class="p">(</span><span class="n">glist</span><span class="p">):</span>
+                    <span class="n">set_diff</span> <span class="o">=</span> <span class="n">set_lhs_variables</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">glist</span><span class="p">))</span>
+                    <span class="n">lhs_string_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sum_of_variables_string</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">set_diff</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">lhs_string_new</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+                        <span class="n">lhs_string_new</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">grouped_var_name</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">lhs_string_new</span> <span class="o">+=</span> <span class="s1">&#39; + </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">grouped_var_name</span>
+                    
+                    <span class="c1"># replacing the existing linear constraint with an appropriate one</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_L_linear_constraints</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">lhs_string_new</span><span class="p">,</span> <span class="n">rhs_string</span><span class="p">)</span>
+                    
+                    <span class="c1">#replacing the existing linear constraint with an appropriate one</span>
+                    <span class="c1"># assuming index are same for identical linear constraints</span>
+                    
+                    <span class="n">LHS</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">lpSum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="p">[</span><span class="n">var</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">r&#39;[+-]&#39;</span><span class="p">,</span> <span class="n">lhs_string_new</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_L_PuLP_constraints</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">LpConstraint</span><span class="p">(</span><span class="n">LHS</span><span class="p">,</span><span class="n">rhs</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">rhs_string</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">continue</span></div>
+
+                <span class="c1">#end if-else set_lhs_variables.intersection(gset)==gset</span>
+            <span class="c1">#end for ii, constraint in enumerate(L_grouped_variables_linear_constraints)</span>
+        <span class="c1">#end for gset in L_grouped_sets</span>
+                
+    
+    
+<div class="viewcode-block" id="LinearConstraints.define_modform_space_for_linear_constraints"><a class="viewcode-back" href="../../modformPro.html#modformPro.linear_constraints.LinearConstraints.define_modform_space_for_linear_constraints">[docs]</a>    <span class="k">def</span> <span class="nf">define_modform_space_for_linear_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_variables_modforms_simulated</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">D_PuLP_variables_simulated</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * Its a subordinate method, only called within the same class.</span>
+<span class="sd">        * This function defines modforms space for linear constraints. It updates the instance attribute, ``modform_space``</span>
+<span class="sd">        * For simulation mode, predefined ``modform_space`` object is copied.</span>
+<span class="sd">        * For real mode, a fresh ``modform_space`` object is created.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        D_variables_modforms_simulated : dict</span>
+<span class="sd">          Python dictionary containing modform variables mapped to their :class:`.Modform` objects. This is non-empty for simulation mode.</span>
+<span class="sd">        </span>
+<span class="sd">        D_PuLP_variables_simulated : dict</span>
+<span class="sd">          Python dictionary containinng modform variables mapped to their :class:`.pulp` objects. This is non-empty for simulation mode.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specifications</span><span class="o">.</span><span class="n">data_mode</span><span class="o">==</span><span class="s1">&#39;simulation&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_variables_modforms</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">D_variables_modforms_simulated</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span>     <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">D_PuLP_variables_simulated</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specifications</span><span class="o">.</span><span class="n">data_mode</span><span class="o">==</span><span class="s1">&#39;real&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">generate_modform_space</span><span class="p">()</span></div>
+        
+    
+<div class="viewcode-block" id="LinearConstraints.derive_linear_constraints_from_MS_measurments"><a class="viewcode-back" href="../../modformPro.html#modformPro.linear_constraints.LinearConstraints.derive_linear_constraints_from_MS_measurments">[docs]</a>    <span class="k">def</span> <span class="nf">derive_linear_constraints_from_MS_measurments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L_isomeric_modforms_peak_areas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">D_peptide_isomeric_peak_areas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">D_variables_modforms_simulated</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">D_PuLP_variables_simulated</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * This method derives the linear constraints from available peak area measurments either from BUMS-MRM or TDMS or both.</span>
+<span class="sd">        * It populates the instance attributes, ``L_linear_constraints``, ``L_PuLP_constraints``</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        L_isomeric_modforms_peak_areas : list</span>
+<span class="sd">          Python list containing peak areas of isomeric modforms. This data typically comes from TDMS measurements.</span>
+<span class="sd">        </span>
+<span class="sd">        D_peptide_isomeric_peak_areas : dict</span>
+<span class="sd">          Python dictionary containing peak areas of peptides in their different isomeric states. This data typically comes from BUMS-MRM measurments.</span>
+<span class="sd">        </span>
+<span class="sd">        D_variables_modforms_simulated : dict</span>
+<span class="sd">          Python dictionary containing modform variables mapped to their :class:`.Modform` objects for simulated data. This ensures usage of predefined modform variables for the linear constraints.</span>
+<span class="sd">        </span>
+<span class="sd">        D_PuLP_variables_simulated : dict</span>
+<span class="sd">          Python dictionary containing modform variables mapped to their :class:`.pulp` objects for simulated data. This ensures usage of predefined modform variables for the linear constraints.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#defining modform space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">define_modform_space_for_linear_constraints</span><span class="p">(</span><span class="n">D_variables_modforms_simulated</span><span class="o">=</span><span class="n">D_variables_modforms_simulated</span><span class="p">,</span> <span class="n">D_PuLP_variables_simulated</span><span class="o">=</span><span class="n">D_PuLP_variables_simulated</span><span class="p">)</span>
+        
+        
+        <span class="c1"># dictionary of variables associated to modform objects</span>
+        <span class="c1"># assuming lists are sorted -- UNMOD, Ac, M, MM, MMM, P, U, UU, UUU</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specifications</span><span class="o">.</span><span class="n">file_tdms_data</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s2">&quot;#####TDMS LCs####&quot;</span>
+            <span class="k">for</span> <span class="n">modform_isomer</span> <span class="ow">in</span> <span class="n">L_isomeric_modforms_peak_areas</span><span class="p">:</span>
+                <span class="n">D_vars_modforms_isomeric</span><span class="p">,</span> <span class="n">D_PuLP_vars_isomeric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">get_isomeric_modforms</span><span class="p">(</span><span class="n">modform_isomer</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            
+                <span class="c1"># constructing linear equations for isomeric modforms</span>
+                <span class="n">L_sorted_vars</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">D_vars_modforms_isomeric</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">)</span>
+                                
+                <span class="n">lhs_string_isomeric</span> <span class="o">=</span> <span class="n">L_sorted_vars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">L_sorted_vars</span><span class="p">)):</span>
+                    
+                    <span class="n">lhs_string_isomeric</span> <span class="o">=</span> <span class="n">lhs_string_isomeric</span> <span class="o">+</span> <span class="s1">&#39; + </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">L_sorted_vars</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="c1">#end for k in range(1, len(L_sorted_vars))</span>
+                
+                <span class="n">rhs_string_isomeric</span> <span class="o">=</span> <span class="n">modform_isomer</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="nb">print</span> <span class="s2">&quot;TDMS Eq: </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">lhs_string_isomeric</span><span class="p">,</span> <span class="n">rhs_string_isomeric</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_L_linear_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">lhs_string_isomeric</span><span class="p">,</span><span class="n">rhs_string_isomeric</span><span class="p">))</span>
+                <span class="n">LHS</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">lpSum</span><span class="p">(</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">D_PuLP_vars_isomeric</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_L_PuLP_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pulp</span><span class="o">.</span><span class="n">LpConstraint</span><span class="p">(</span><span class="n">LHS</span><span class="p">,</span> <span class="n">rhs</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">rhs_string_isomeric</span><span class="p">)))</span>
+            
+            <span class="c1">#end for modform_isomer in L_isomeric_modforms_peak_areas</span>
+        
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        D_peptide_isomeric_peak_areas = {&#39;15-25&#39;:[({&#39;UNMOD&#39;:&#39;0&#39;},&#39;25&#39;),({&#39;P&#39;:&#39;1&#39;},&#39;50&#39;),({&#39;P&#39;:&#39;2&#39;},&#39;25&#39;)],</span>
+<span class="sd">        &#39;50-60&#39;:[([&#39;UNMOD&#39;:&#39;0&#39;},&#39;50&#39;),({&#39;P&#39;:&#39;1&#39;,&#39;Ac&#39;:&#39;1&#39;},&#39;30&#39;),({&#39;P&#39;:&#39;2&#39;},&#39;20&#39;)]}</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1">#print &quot;D_peptide_isomeric_peak_areas: &quot;, D_peptide_isomeric_peak_areas</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specifications</span><span class="o">.</span><span class="n">file_bums_mrm_data</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s2">&quot;#####BUMS LCs####&quot;</span>
+            <span class="k">for</span> <span class="n">peptide</span><span class="p">,</span> <span class="n">l_isomeric_peak_areas</span> <span class="ow">in</span> <span class="n">D_peptide_isomeric_peak_areas</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                
+                <span class="n">N_loc</span><span class="p">,</span> <span class="n">C_loc</span> <span class="o">=</span> <span class="n">peptide</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+            
+                <span class="k">for</span> <span class="n">pep_isomer</span> <span class="ow">in</span> <span class="n">l_isomeric_peak_areas</span><span class="p">:</span>
+                
+                    <span class="c1"># list of modform variables yielding the following isomer</span>
+                    <span class="n">L_modform_var</span> <span class="o">=</span> <span class="p">[]</span>
+                    
+                    <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">mform</span> <span class="ow">in</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_variables_modforms</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">mform</span><span class="o">.</span><span class="n">whether_modified_peptide_present_in_modform</span><span class="p">(</span><span class="n">N_loc</span><span class="p">,</span> <span class="n">C_loc</span><span class="p">,</span> <span class="n">D_peptide_mod_frequency</span><span class="o">=</span><span class="n">pep_isomer</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                            <span class="n">L_modform_var</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+                        
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">continue</span>
+                    
+                        <span class="c1">#end if-else   </span>
+                    <span class="c1">#end for var, mform</span>
+                    
+                    <span class="c1"># constructing a linear equation</span>
+                    <span class="n">L_modform_var</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">L_modform_var</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">)</span>
+                    <span class="n">lhs_string_isomeric</span> <span class="o">=</span> <span class="n">L_modform_var</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">L_modform_var</span><span class="p">)):</span>
+                        <span class="n">lhs_string_isomeric</span> <span class="o">=</span> <span class="n">lhs_string_isomeric</span> <span class="o">+</span> <span class="s1">&#39; + </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">L_modform_var</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="c1">#end for i in range..</span>
+                    
+                    <span class="n">rhs_string_isomeric</span> <span class="o">=</span> <span class="n">pep_isomer</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="nb">print</span> <span class="s2">&quot;BUMS Eq: </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">lhs_string_isomeric</span><span class="p">,</span> <span class="n">rhs_string_isomeric</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_L_linear_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">lhs_string_isomeric</span><span class="p">,</span> <span class="n">rhs_string_isomeric</span><span class="p">))</span>
+                    
+                    <span class="n">LHS</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">lpSum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>  <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">L_modform_var</span> <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">L_PuLP_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pulp</span><span class="o">.</span><span class="n">LpConstraint</span><span class="p">(</span><span class="n">LHS</span><span class="p">,</span> <span class="n">rhs</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">rhs_string_isomeric</span><span class="p">)))</span></div></div>
+
+                <span class="c1">#end for pep_isomer in l_isomeric_peak_areas</span>
+            <span class="c1">#end for peptide, l_isomeric_peak_areas..</span>
+            
+    
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Deepesh Agarwal &amp; Jeremy Gunawardena.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

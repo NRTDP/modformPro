@@ -1,0 +1,553 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>modformPro.statistics_and_plot &mdash; modformPro 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="modformPro 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> modformPro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Appendix.html">Appendix</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">modformPro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>modformPro.statistics_and_plot</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for modformPro.statistics_and_plot</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">import</span> <span class="nn">globalfuncs</span> <span class="k">as</span> <span class="nn">gbfunc</span>
+
+<div class="viewcode-block" id="StatisticsAndPlot"><a class="viewcode-back" href="../../modformPro.html#modformPro.statistics_and_plot.StatisticsAndPlot">[docs]</a><span class="k">class</span> <span class="nc">StatisticsAndPlot</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;This class provides methods to compute statistics and for plotting.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    
+<div class="viewcode-block" id="StatisticsAndPlot.plot_bars"><a class="viewcode-back" href="../../modformPro.html#modformPro.statistics_and_plot.StatisticsAndPlot.plot_bars">[docs]</a>    <span class="k">def</span> <span class="nf">plot_bars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_lower_bounds</span><span class="p">,</span> <span class="n">D_upper_bounds</span><span class="p">,</span> <span class="n">Output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        Plot bars showing lower and upper bounds of percentage concentration.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        D_lower_bounds : dict</span>
+<span class="sd">          Python dictionary containing modform :class:`.pulp` variables mapped to their lower bounds.</span>
+<span class="sd">        </span>
+<span class="sd">        D_upper_bounds : dict</span>
+<span class="sd">          Python dictionary containing modform :class:`.pulp` variables mapped to their upper bounds.</span>
+<span class="sd">                        </span>
+<span class="sd">        Output_dir : str</span>
+<span class="sd">          Output directory name. Default is ``Output``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">L_lower_bounds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">L_bounds_range</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">D_lower_bounds</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+            <span class="c1">#if v==0: continue</span>
+
+            <span class="n">L_lower_bounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">D_lower_bounds</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">D_upper_bounds</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">D_lower_bounds</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="n">L_bounds_range</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="c1">#end for k,v in D_lower_bounds</span>
+
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">D_lower_bounds</span><span class="p">)</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+        
+        <span class="n">width</span> <span class="o">=</span> <span class="mf">1.5</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">p1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">L_lower_bounds</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+        <span class="n">p2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">L_bounds_range</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="n">L_lower_bounds</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span><span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">% c</span><span class="s2">onc. bounds&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Modform concentration variable&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Bounds of percentage concentration&#39;</span><span class="p">)</span>
+        <span class="c1">#plt.title(&#39;modform region calculation for simulated data&#39;)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">D_lower_bounds</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="c1">#fout = &quot;mod-form-region-bounds-&quot; + options.output_file_suffix + &quot;.pdf&quot;</span>
+
+        <span class="c1"># create output directory if it doesn&#39;t exist</span>
+        <span class="n">dirname</span> <span class="o">=</span> <span class="n">Output_dir</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dirname</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
+
+        <span class="n">fplot_string</span> <span class="o">=</span> <span class="s1">&#39;modform-region-bounds.pdf&#39;</span>
+        <span class="n">fout</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">Output_dir</span><span class="p">,</span><span class="n">fplot_string</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[Bar plot generated] </span><span class="si">%s</span><span class="s2"> -- Bars representing bounds on percentage abundance for modforms: &quot;</span><span class="o">%</span><span class="n">fout</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fout</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fplot_string</span></div>
+    
+<div class="viewcode-block" id="StatisticsAndPlot.get_statistics_on_bounds"><a class="viewcode-back" href="../../modformPro.html#modformPro.statistics_and_plot.StatisticsAndPlot.get_statistics_on_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">get_statistics_on_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_lower_bounds</span><span class="p">,</span> <span class="n">D_upper_bounds</span><span class="p">):</span>
+        
+        <span class="n">L_bounds_ranges</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">D_lower_bounds</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">D_upper_bounds</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="n">L_bounds_ranges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+        <span class="c1">#end for k,v in D_lower_bounds.iteritems()</span>
+        
+        <span class="n">mean</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">L_bounds_ranges</span><span class="p">)</span>
+        <span class="n">stdev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">L_bounds_ranges</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">mean</span><span class="p">,</span><span class="n">stdev</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StatisticsAndPlot.get_sensitivity_statistics_for_one_sample"><a class="viewcode-back" href="../../modformPro.html#modformPro.statistics_and_plot.StatisticsAndPlot.get_sensitivity_statistics_for_one_sample">[docs]</a>    <span class="k">def</span> <span class="nf">get_sensitivity_statistics_for_one_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_lower_bounds</span><span class="p">,</span> <span class="n">D_upper_bounds</span><span class="p">,</span> <span class="n">D_variables_simulated_values</span><span class="p">):</span>
+        
+        <span class="n">True_hits</span><span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">False_hits</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">L_False_hits_variables</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">D_variables_simulated_values</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            
+            <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">D_lower_bounds</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">D_upper_bounds</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">float</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">):</span>
+                <span class="n">True_hits</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">False_hits</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">L_False_hits_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="c1">#end if</span>
+        <span class="c1">#end for</span>
+        
+        <span class="k">return</span> <span class="p">(</span><span class="n">True_hits</span><span class="p">,</span> <span class="n">False_hits</span><span class="p">,</span> <span class="n">L_False_hits_variables</span><span class="p">)</span></div>
+        
+
+<div class="viewcode-block" id="StatisticsAndPlot.get_sensitivity_performance_statistics_over_all_samples"><a class="viewcode-back" href="../../modformPro.html#modformPro.statistics_and_plot.StatisticsAndPlot.get_sensitivity_performance_statistics_over_all_samples">[docs]</a>    <span class="k">def</span> <span class="nf">get_sensitivity_performance_statistics_over_all_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L_D_lower_bounds</span><span class="p">,</span> <span class="n">L_D_upper_bounds</span><span class="p">,</span> <span class="n">D_vars_simulated_abundances</span><span class="p">,</span> <span class="n">Output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function provides statistics on true hits for simulated data</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># List of sensitivity values over all samples</span>
+        <span class="n">L_sensitivity_values</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># Dictionary for variables mapped to number of false hits</span>
+        <span class="n">D_variables_False_hits</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">L_D_lower_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">D_variables_False_hits</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+        
+        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">L_D_lower_bounds</span><span class="p">)):</span>
+            <span class="n">True_hits</span><span class="p">,</span> <span class="n">False_hits</span><span class="p">,</span> <span class="n">L_False_hits_variables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sensitivity_statistics_for_one_sample</span><span class="p">(</span><span class="n">L_D_lower_bounds</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">L_D_upper_bounds</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">D_vars_simulated_abundances</span><span class="p">)</span>
+            <span class="n">Total_hits</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">True_hits</span><span class="p">)</span><span class="o">+</span><span class="nb">int</span><span class="p">(</span><span class="n">False_hits</span><span class="p">)</span>
+            <span class="n">sensitivity</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">True_hits</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span><span class="o">*</span><span class="n">Total_hits</span><span class="p">)</span>
+            <span class="n">L_sensitivity_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sensitivity</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">L_False_hits_variables</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">D_variables_False_hits</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">new_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">D_variables_False_hits</span><span class="p">[</span><span class="n">v</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="n">D_variables_False_hits</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">D_variables_False_hits</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+                <span class="c1">#end if-else</span>
+
+            <span class="c1">#end for v in L_False_hits_variables</span>
+            
+        <span class="c1">#end for i in range(len(L_D_lower_bounds))</span>
+
+        <span class="c1"># statistics on overall Sensitivity</span>
+        <span class="n">mean_sensitivity</span>  <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%.3f</span><span class="s2">&quot;</span><span class="o">%</span><span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">L_sensitivity_values</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">stdev_sensitivity</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%.3f</span><span class="s2">&quot;</span><span class="o">%</span><span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">L_sensitivity_values</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span>
+
+        <span class="nb">print</span> <span class="s2">&quot;mean_sensitivity: &quot;</span><span class="p">,</span> <span class="n">mean_sensitivity</span>
+        <span class="nb">print</span> <span class="s2">&quot;stdev sensitivity: &quot;</span><span class="p">,</span> <span class="n">stdev_sensitivity</span>
+        
+        <span class="n">sample_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">L_D_lower_bounds</span><span class="p">)</span>
+
+        <span class="n">L_variable_sensitivity_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">L_variables</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">D_variables_False_hits</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+            <span class="n">var_sensitivity</span> <span class="o">=</span> <span class="p">(</span><span class="n">sample_size</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span><span class="o">*</span><span class="n">sample_size</span><span class="p">)</span>
+            <span class="n">L_variable_sensitivity_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var_sensitivity</span><span class="p">)</span>
+            <span class="n">L_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="c1">#end for</span>
+        
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">L_variables</span><span class="p">)</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="mf">0.3</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">L_variable_sensitivity_values</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Modform concentration variable&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Hit rate for a variable&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Variable wise sensitivity over all samples&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">L_variables</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+        <span class="c1">#plt.show()</span>
+        
+        <span class="c1"># create output directory if it doesn&#39;t exist</span>
+        <span class="n">dirname</span> <span class="o">=</span> <span class="n">Output_dir</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dirname</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
+        <span class="n">fout</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/variable-wise-sensitivity-over-all-samples-simulated-data.pdf&quot;</span><span class="o">%</span><span class="n">Output_dir</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fout</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="p">(</span><span class="n">fout</span><span class="p">,</span> <span class="n">mean_sensitivity</span><span class="p">,</span> <span class="n">stdev_sensitivity</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="StatisticsAndPlot.get_dictionary_of_mean_and_standard_deviation_of_bounds"><a class="viewcode-back" href="../../modformPro.html#modformPro.statistics_and_plot.StatisticsAndPlot.get_dictionary_of_mean_and_standard_deviation_of_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">get_dictionary_of_mean_and_standard_deviation_of_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_dictionary_variables_bounds</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function returns mean and standard deviation of lower bounds OR upper bounds when measurments are done multiple times. For simulated data, this amounts to sample multiple noise values.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">D_variables_bounds_mean</span>  <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">D_variables_bounds_stdev</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">list_dictionary_variables_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">L_bounds_key</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">list_dictionary_variables_bounds</span><span class="p">]</span>
+            <span class="n">mean_bounds</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">L_bounds_key</span><span class="p">)</span>
+            <span class="n">stdev_bounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">L_bounds_key</span><span class="p">)</span>
+            
+            <span class="n">D_variables_bounds_mean</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>  <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%.3f</span><span class="s2">&quot;</span><span class="o">%</span><span class="nb">round</span><span class="p">(</span><span class="n">mean_bounds</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">D_variables_bounds_stdev</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%.3f</span><span class="s2">&quot;</span><span class="o">%</span><span class="nb">round</span><span class="p">(</span><span class="n">stdev_bounds</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+            
+        <span class="c1">#end for key in list_dictionary_variables_bounds[0].keys()</span>
+        
+        <span class="k">return</span> <span class="p">(</span><span class="n">D_variables_bounds_mean</span><span class="p">,</span> <span class="n">D_variables_bounds_stdev</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StatisticsAndPlot.plot_bars_for_simulated_data"><a class="viewcode-back" href="../../modformPro.html#modformPro.statistics_and_plot.StatisticsAndPlot.plot_bars_for_simulated_data">[docs]</a>    <span class="k">def</span> <span class="nf">plot_bars_for_simulated_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_mean_lower_bounds</span><span class="p">,</span> <span class="n">D_mean_upper_bounds</span><span class="p">,</span> <span class="n">D_stdev_lower_bounds</span><span class="p">,</span> <span class="n">D_stdev_upper_bounds</span><span class="p">,</span> <span class="n">D_variables_simulated_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Ref: https://matplotlib.org/api/pyplot_api.html</span>
+<span class="sd">        </span>
+<span class="sd">        # a stacked bar plot with errorbars</span>
+<span class="sd">        N = 5</span>
+<span class="sd">        menMeans = (20, 35, 30, 35, 27)</span>
+<span class="sd">        womenMeans = (25, 32, 34, 20, 25)</span>
+<span class="sd">        menStd = (2, 3, 4, 1, 2)</span>
+<span class="sd">        womenStd = (3, 5, 2, 3, 3)</span>
+<span class="sd">        ind = np.arange(N) # the x locations for the groups</span>
+<span class="sd">        width = 0.35       # the width of the bars: can also be len(x) sequence</span>
+
+<span class="sd">        p1 = plt.bar(ind, menMeans, width, color=&#39;#d62728&#39;, yerr=menStd)</span>
+<span class="sd">        p2 = plt.bar(ind, womenMeans, width, bottom=menMeans, yerr=womenStd)</span>
+<span class="sd">        </span>
+<span class="sd">        plt.ylabel(&#39;Scores&#39;)</span>
+<span class="sd">        plt.title(&#39;Scores by group and gender&#39;)</span>
+<span class="sd">        plt.xticks(ind, (&#39;G1&#39;, &#39;G2&#39;, &#39;G3&#39;, &#39;G4&#39;, &#39;G5&#39;))</span>
+<span class="sd">        plt.yticks(np.arange(0, 81, 10))</span>
+<span class="sd">        plt.legend((p1[0], p2[0]), (&#39;Men&#39;, &#39;Women&#39;))</span>
+<span class="sd">        </span>
+<span class="sd">        plt.show()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="n">L_mean_lower_bounds</span>  <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">L_bounds_range</span>       <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">L_stdev_lower_bounds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">L_stdev_upper_bounds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">L_simulated_values</span>   <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">L_simulated_top</span>      <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">D_mean_lower_bounds</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+            <span class="n">L_mean_lower_bounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">D_mean_lower_bounds</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+            <span class="n">L_stdev_lower_bounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">D_stdev_lower_bounds</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+            <span class="n">L_stdev_upper_bounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">D_stdev_upper_bounds</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">D_mean_upper_bounds</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">D_mean_lower_bounds</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="n">L_bounds_range</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+            <span class="n">L_simulated_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">D_variables_simulated_values</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+            <span class="n">L_simulated_top</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1">#end for k in sorted(D_mean_lower_bounds.keys(), key=gbfunc.natural_keys)</span>
+        
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">D_mean_lower_bounds</span><span class="p">)</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+        
+        <span class="n">width</span> <span class="o">=</span> <span class="mf">1.5</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">p1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">L_mean_lower_bounds</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="n">L_stdev_lower_bounds</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">error_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ecolor&#39;</span><span class="p">:</span><span class="s1">&#39;black&#39;</span><span class="p">})</span>
+        <span class="n">p2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">L_bounds_range</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="n">L_mean_lower_bounds</span><span class="p">,</span><span class="n">yerr</span><span class="o">=</span><span class="n">L_stdev_upper_bounds</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;lightgray&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span><span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">error_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ecolor&#39;</span><span class="p">:</span><span class="s1">&#39;black&#39;</span><span class="p">},</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">% c</span><span class="s1">onc. bounds&#39;</span><span class="p">)</span>
+
+        <span class="c1">#plot for original simulated values</span>
+        <span class="n">p3</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">L_simulated_top</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="n">L_simulated_values</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;simulated </span><span class="si">% c</span><span class="s1">onc.&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Modform concentration variable&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Bounds of percentage concentration&#39;</span><span class="p">)</span>
+        <span class="c1">#plt.title(&#39;modform region calculation for simulated data&#39;)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">D_mean_lower_bounds</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="c1">#plt.show()</span>
+        
+        <span class="c1"># create output directory if it doesn&#39;t exist</span>
+        <span class="n">dirname</span> <span class="o">=</span> <span class="n">Output_dir</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dirname</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
+            
+        <span class="n">fplot_string</span> <span class="o">=</span> <span class="s1">&#39;modform-region-bounds-simulated-data.pdf&#39;</span>
+        <span class="n">fout</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">Output_dir</span><span class="p">,</span><span class="n">fplot_string</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fout</span><span class="p">)</span>
+    
+        <span class="k">return</span> <span class="n">fplot_string</span></div>
+    
+
+
+<div class="viewcode-block" id="StatisticsAndPlot.plot_simulated_values"><a class="viewcode-back" href="../../modformPro.html#modformPro.statistics_and_plot.StatisticsAndPlot.plot_simulated_values">[docs]</a>    <span class="k">def</span> <span class="nf">plot_simulated_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_variables_simulated_values</span><span class="p">,</span> <span class="n">Output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Ref: https://matplotlib.org/api/pyplot_api.html</span>
+<span class="sd">        </span>
+<span class="sd">        # a stacked bar plot with errorbars</span>
+<span class="sd">        N = 5</span>
+<span class="sd">        menMeans = (20, 35, 30, 35, 27)</span>
+<span class="sd">        womenMeans = (25, 32, 34, 20, 25)</span>
+<span class="sd">        menStd = (2, 3, 4, 1, 2)</span>
+<span class="sd">        womenStd = (3, 5, 2, 3, 3)</span>
+<span class="sd">        ind = np.arange(N) # the x locations for the groups</span>
+<span class="sd">        width = 0.35       # the width of the bars: can also be len(x) sequence</span>
+
+<span class="sd">        p1 = plt.bar(ind, menMeans, width, color=&#39;#d62728&#39;, yerr=menStd)</span>
+<span class="sd">        p2 = plt.bar(ind, womenMeans, width, bottom=menMeans, yerr=womenStd)</span>
+<span class="sd">        </span>
+<span class="sd">        plt.ylabel(&#39;Scores&#39;)</span>
+<span class="sd">        plt.title(&#39;Scores by group and gender&#39;)</span>
+<span class="sd">        plt.xticks(ind, (&#39;G1&#39;, &#39;G2&#39;, &#39;G3&#39;, &#39;G4&#39;, &#39;G5&#39;))</span>
+<span class="sd">        plt.yticks(np.arange(0, 81, 10))</span>
+<span class="sd">        plt.legend((p1[0], p2[0]), (&#39;Men&#39;, &#39;Women&#39;))</span>
+<span class="sd">        </span>
+<span class="sd">        plt.show()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">L_simulated_values</span>   <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">L_simulated_top</span>      <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">D_variables_simulated_values</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">):</span>
+            
+            <span class="n">L_simulated_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">D_variables_simulated_values</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+            <span class="n">L_simulated_top</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1">#end for k in sorted(D_mean_lower_bounds.keys(), key=gbfunc.natural_keys)</span>
+        
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">D_variables_simulated_values</span><span class="p">)</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+        
+        <span class="n">width</span> <span class="o">=</span> <span class="mf">1.5</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        
+        <span class="n">p1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">L_simulated_top</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="n">L_simulated_values</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Modform concentration variable&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;percentage concentration&#39;</span><span class="p">)</span>
+        <span class="c1">#plt.title(&#39;modform region calculation for simulated data&#39;)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">D_variables_simulated_values</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+        <span class="c1">#plt.show()</span>
+        
+        <span class="c1"># create output directory if it doesn&#39;t exist</span>
+        <span class="n">dirname</span> <span class="o">=</span> <span class="n">Output_dir</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dirname</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
+        
+        <span class="n">fplot_string</span> <span class="o">=</span> <span class="s1">&#39;modform-distribution-simulated-data.pdf&#39;</span>
+        <span class="n">fout</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">Output_dir</span><span class="p">,</span><span class="n">fplot_string</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fout</span><span class="p">)</span>
+    
+        <span class="k">return</span> <span class="n">fplot_string</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Deepesh Agarwal &amp; Jeremy Gunawardena.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

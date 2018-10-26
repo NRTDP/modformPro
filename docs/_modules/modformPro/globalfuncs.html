@@ -1,0 +1,791 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>modformPro.globalfuncs &mdash; modformPro 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="modformPro 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> modformPro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Appendix.html">Appendix</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">modformPro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>modformPro.globalfuncs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for modformPro.globalfuncs</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span><span class="p">,</span> <span class="n">combinations</span><span class="p">,</span> <span class="n">chain</span>
+
+<span class="kn">import</span> <span class="nn">pulp</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">modform</span> <span class="k">as</span> <span class="nn">modform</span>
+
+
+<div class="viewcode-block" id="TexFileGenerator"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.TexFileGenerator">[docs]</a><span class="k">class</span> <span class="nc">TexFileGenerator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+   <span class="sd">&quot;&quot;&quot;This class prints the output content in a tex file.</span>
+<span class="sd">   </span>
+<span class="sd">   Parameters</span>
+<span class="sd">   ----------</span>
+<span class="sd">   ftex_out : str</span>
+<span class="sd">     File name with .tex extension</span>
+<span class="sd">   </span>
+<span class="sd">   output_dir : str</span>
+<span class="sd">     Name of the output directory</span>
+<span class="sd">   </span>
+<span class="sd">   &quot;&quot;&quot;</span>
+   <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ftex_out</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+      
+      <span class="c1"># file name with .tex extension</span>
+      <span class="c1"># e.g., foo.tex</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_ftex_out</span> <span class="o">=</span> <span class="n">ftex_out</span>
+      
+      <span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span> <span class="o">=</span> <span class="n">output_dir</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+      
+      <span class="c1"># add header to the file</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">get_a_blank_tex_file_with_header</span><span class="p">()</span>
+
+   
+<div class="viewcode-block" id="TexFileGenerator.print_content_in_tex_file"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.TexFileGenerator.print_content_in_tex_file">[docs]</a>   <span class="k">def</span> <span class="nf">print_content_in_tex_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protein_seq</span><span class="p">,</span> <span class="n">D_sites_modtypes</span><span class="p">,</span> <span class="n">D_lower_bounds</span><span class="p">,</span> <span class="n">D_upper_bounds</span><span class="p">,</span> <span class="n">mform_region_plot_pdf</span><span class="p">,</span> <span class="n">D_variables_modforms</span><span class="p">,</span> <span class="n">D_grouped_variables</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">      </span>
+<span class="sd">      Prints output content in a tex file.</span>
+<span class="sd">      </span>
+<span class="sd">      Parameters</span>
+<span class="sd">      ----------</span>
+<span class="sd">      protein_seq : str</span>
+<span class="sd">        Amino-acid sequence of the protein under investigation.</span>
+<span class="sd">      </span>
+<span class="sd">      D_sites_modtypes : defaultdict(list)</span>
+<span class="sd">        Python dictionary containing residues mapped to the list of possible modifications. E.g., ``D = {&#39;T32&#39;: [&#39;P&#39;], &#39;S55&#39;: [&#39;Ac&#39;, &#39;P&#39;]}``</span>
+
+<span class="sd">      D_lower_bounds : dict</span>
+<span class="sd">        Python dictionary mapping modform variables to their lower bouds of percentage concentration.</span>
+
+<span class="sd">      D_upper_bounds : dict</span>
+<span class="sd">        Python dictionary mapping modform variables to their upper bouds of percentage concentration.</span>
+
+<span class="sd">      mform_region_plot_pdf : str</span>
+<span class="sd">        Name of the file with a pdf extension containing modform region plot.</span>
+<span class="sd">      </span>
+<span class="sd">      D_variables_modforms : dict</span>
+<span class="sd">        Python dictionary mapping modform variables (str) to their :class:`.Modform` objects.</span>
+<span class="sd">      </span>
+<span class="sd">      D_grouped_variables : dict, optional</span>
+<span class="sd">        Python dictionary mapping new coalesced variable to sum of modform concentration variables.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="c1"># printing the formatted fasta seq in a tex file</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">add_formatted_fasta_seq_in_the_file</span><span class="p">(</span><span class="n">protein_seq</span><span class="p">,</span> <span class="n">D_sites_modtypes</span><span class="p">)</span>
+      <span class="n">newline_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n\\</span><span class="s1">bigskip</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+      <span class="bp">self</span><span class="o">.</span><span class="n">add_sites_modifications_table_in_tex_file</span><span class="p">(</span><span class="n">D_sites_modtypes</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">add_modform_region_plot_in_tex_file</span><span class="p">(</span><span class="n">mform_region_plot_pdf</span><span class="p">)</span>
+      <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">D_grouped_variables</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">add_grouped_variables_in_tex_file</span><span class="p">(</span><span class="n">D_grouped_variables</span><span class="p">)</span>
+      
+      <span class="bp">self</span><span class="o">.</span><span class="n">add_percentage_concentration_bounds_in_tex_file</span><span class="p">(</span><span class="n">D_lower_bounds</span><span class="p">,</span> <span class="n">D_upper_bounds</span><span class="p">)</span>
+      
+      <span class="bp">self</span><span class="o">.</span><span class="n">add_modforms_in_tex_file</span><span class="p">(</span><span class="n">D_variables_modforms</span><span class="p">)</span>
+      
+      <span class="c1">#adding the end document directive in the tex file</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">add_end_document_statement</span><span class="p">()</span></div>
+   
+<div class="viewcode-block" id="TexFileGenerator.add_sites_modifications_table_in_tex_file"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.TexFileGenerator.add_sites_modifications_table_in_tex_file">[docs]</a>   <span class="k">def</span> <span class="nf">add_sites_modifications_table_in_tex_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_sites_modtypes</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">      </span>
+<span class="sd">      Adds sites and modifications table in tex file.</span>
+<span class="sd">     </span>
+<span class="sd">      Parameters</span>
+<span class="sd">      ----------</span>
+<span class="sd">      D_sites_modtypes : defaultdict(list)</span>
+<span class="sd">        Python dictionary mapping aa residues to a list of modification types to the respective residues.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">table_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">medskip </span><span class="se">\n</span><span class="s1">&#39;</span>
+      <span class="n">table_string</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n\n\\</span><span class="s1">begin</span><span class="si">{table}</span><span class="s1">[h]</span><span class="se">\n\\</span><span class="s1">centering</span><span class="se">\n\\</span><span class="s1">begin</span><span class="si">{tabular}</span><span class="s1">{|c|c|}</span><span class="se">\n</span><span class="s1"> </span><span class="se">\\</span><span class="s1">hline </span><span class="se">\n</span><span class="s1">&#39;</span>
+      <span class="n">table_string</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">textbf{Residue number} &amp; </span><span class="se">\\</span><span class="s1">textbf{possible modifications}</span><span class="se">\\\\</span><span class="s1"> </span><span class="se">\\</span><span class="s1">hline </span><span class="se">\n</span><span class="s1">&#39;</span>
+      <span class="k">for</span> <span class="n">site</span><span class="p">,</span><span class="n">mtypes</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">D_sites_modtypes</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:])):</span>
+         <span class="n">type_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">mtypes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mtypes</span><span class="p">)):</span>
+            <span class="n">type_string</span> <span class="o">+=</span> <span class="s1">&#39;, </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">mtypes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+         <span class="n">row_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> &amp; </span><span class="si">%s</span><span class="se">\\\\</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="n">type_string</span><span class="p">)</span>
+         <span class="n">row_string</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">hline </span><span class="se">\n</span><span class="s1">&#39;</span>
+         <span class="n">table_string</span> <span class="o">+=</span> <span class="n">row_string</span>
+        
+      <span class="c1">#end for site,mtypes in D_sites_modtypes.iteritems()</span>
+        
+      <span class="n">table_string</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">end</span><span class="si">{tabular}</span><span class="se">\n\\</span><span class="s1">caption{Residue number and possible modifications on them}</span><span class="se">\\</span><span class="s1">end</span><span class="si">{table}</span><span class="se">\n\\</span><span class="s1">medskip</span><span class="se">\n</span><span class="s1">&#39;</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">add_latex_code_in_the_file</span><span class="p">(</span><span class="n">table_string</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TexFileGenerator.add_modform_region_plot_in_tex_file"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.TexFileGenerator.add_modform_region_plot_in_tex_file">[docs]</a>   <span class="k">def</span> <span class="nf">add_modform_region_plot_in_tex_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mform_region_plot_pdf</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">      </span>
+<span class="sd">      Add modform region plot in the tex file.</span>
+<span class="sd">      </span>
+<span class="sd">      Parameters</span>
+<span class="sd">      ----------</span>
+<span class="sd">      mform_region_plot_pdf : str</span>
+<span class="sd">        Name of the file with a pdf extension containing modform region plot.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="c1"># adding modform region plot in a tex file</span>
+      <span class="c1">#plot_string  = &#39;\n{\large Figure: Modform region plot}\n&#39;</span>
+      <span class="n">plot_string</span>  <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> </span><span class="se">\\</span><span class="s1">begin</span><span class="si">{figure}</span><span class="s1">[h]</span><span class="se">\n\\</span><span class="s1">centering</span><span class="se">\n</span><span class="s1">&#39;</span>
+      <span class="n">plot_string</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">includegraphics[height=7.5cm]{</span><span class="si">%s</span><span class="s1">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">mform_region_plot_pdf</span>
+      <span class="n">plot_string</span> <span class="o">+=</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">caption{Modform region plot}</span><span class="se">\n\\</span><span class="s1">end</span><span class="si">{figure}</span><span class="se">\n</span><span class="s1">&#39;</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">add_latex_code_in_the_file</span><span class="p">(</span><span class="n">plot_string</span><span class="p">)</span></div>
+
+   
+<div class="viewcode-block" id="TexFileGenerator.add_grouped_variables_in_tex_file"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.TexFileGenerator.add_grouped_variables_in_tex_file">[docs]</a>   <span class="k">def</span> <span class="nf">add_grouped_variables_in_tex_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_grouped_variables</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">      </span>
+<span class="sd">      Add coalesced variables in the tex file.</span>
+<span class="sd">      </span>
+<span class="sd">      Parameters</span>
+<span class="sd">      ----------</span>
+<span class="sd">      D_grouped_variables : dict</span>
+<span class="sd">        Python dictionary mapping new coalesced variable to a sum of variables.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">grouped_variables_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> </span><span class="se">\\</span><span class="s1">newpage </span><span class="se">\n</span><span class="s1"> </span><span class="se">\\</span><span class="s1">noindent </span><span class="se">\n</span><span class="s1"> </span><span class="se">\\</span><span class="s1">textbf{</span><span class="se">\\</span><span class="s1">large Coalesced modform concentration variables:}</span><span class="se">\\</span><span class="s1">newline</span><span class="se">\n</span><span class="s1">&#39;</span>
+      <span class="k">for</span> <span class="n">gv</span><span class="p">,</span><span class="n">gp</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">D_grouped_variables</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">natural_keys</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+         <span class="n">grouped_variables_string</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1"> </span><span class="se">\\</span><span class="s1">newline </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">gv</span><span class="p">,</span><span class="n">gp</span><span class="p">)</span>
+      <span class="c1">#end for gv,gp in sorted(linear_constraints.D_grouped_variables.iteritems(), key=lambda x:gbfunc.natural_keys(x[0]))</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">add_latex_code_in_the_file</span><span class="p">(</span><span class="n">grouped_variables_string</span><span class="p">)</span></div>
+
+   
+<div class="viewcode-block" id="TexFileGenerator.add_percentage_concentration_bounds_in_tex_file"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.TexFileGenerator.add_percentage_concentration_bounds_in_tex_file">[docs]</a>   <span class="k">def</span> <span class="nf">add_percentage_concentration_bounds_in_tex_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_lower_bounds</span><span class="p">,</span> <span class="n">D_upper_bounds</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">      </span>
+<span class="sd">      Adds percentage concentration bounds of modforms in a tex file.</span>
+<span class="sd">     </span>
+<span class="sd">      Parameters</span>
+<span class="sd">      ----------</span>
+<span class="sd">      D_lower_bounds : dict</span>
+<span class="sd">        Python dictionary mapping modform variables to their lower bouds of percentage concentration.</span>
+<span class="sd">      </span>
+<span class="sd">      D_upper_bounds : dict</span>
+<span class="sd">        Python dictionary mapping modform variables to their upper bouds of percentage concentration.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">percentage_bounds_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> </span><span class="se">\\</span><span class="s1">newpage </span><span class="se">\n</span><span class="s1"> </span><span class="se">\\</span><span class="s1">noindent </span><span class="se">\n</span><span class="s1"> </span><span class="se">\\</span><span class="s1">textbf{</span><span class="se">\\</span><span class="s1">large Percentage bounds for modforms:}</span><span class="se">\\</span><span class="s1">newline </span><span class="se">\n</span><span class="s1">&#39;</span>
+      
+      <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">D_lower_bounds</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">natural_keys</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+            <span class="n">percentage_bounds_string</span> <span class="o">+=</span> <span class="s2">&quot;$</span><span class="si">%s</span><span class="s2"> \leq </span><span class="si">%s</span><span class="s2"> \leq </span><span class="si">%s</span><span class="s2">$</span><span class="se">\\</span><span class="s2">newline</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">D_lower_bounds</span><span class="p">[</span><span class="n">k</span><span class="p">],</span><span class="n">k</span><span class="p">,</span><span class="n">D_upper_bounds</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+      <span class="bp">self</span><span class="o">.</span><span class="n">add_latex_code_in_the_file</span><span class="p">(</span><span class="n">percentage_bounds_string</span><span class="p">)</span></div>
+      
+<div class="viewcode-block" id="TexFileGenerator.add_modforms_in_tex_file"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.TexFileGenerator.add_modforms_in_tex_file">[docs]</a>   <span class="k">def</span> <span class="nf">add_modforms_in_tex_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_variables_modforms</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;Instance method</span>
+
+<span class="sd">      Adds modform variables and their modification maps in the tex file.</span>
+<span class="sd">      </span>
+<span class="sd">      Parameters</span>
+<span class="sd">      ----------</span>
+<span class="sd">      D_variables_modforms : dict</span>
+<span class="sd">        Python dictionary mapping modform variables (str) to their :class:`.Modform` objects.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">mform_tex_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> </span><span class="se">\\</span><span class="s1">newpage </span><span class="se">\n</span><span class="s1"> </span><span class="se">\\</span><span class="s1">noindent </span><span class="se">\n</span><span class="s1"> </span><span class="se">\\</span><span class="s1">textbf{</span><span class="se">\\</span><span class="s1">large Modform variables and their modifications map} </span><span class="se">\n\\</span><span class="s1">newline</span><span class="se">\n</span><span class="s1">&#39;</span>
+      <span class="c1">#self._tex_output_file.add_latex_code_in_the_file(mform_header_string)</span>
+        
+      <span class="k">for</span> <span class="n">mvar</span><span class="p">,</span><span class="n">mform</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">D_variables_modforms</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">natural_keys</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+         <span class="n">mform_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">mform</span><span class="p">)</span>
+         <span class="n">mform_tex_string</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="se">\\</span><span class="s1">newline</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">mform_string</span>
+            
+      <span class="c1">#end for mvar,mform in sorted(linear_constraints.D_variables_modforms.iteritems(), key=lambda x: natural_keys(x[0]))</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">add_latex_code_in_the_file</span><span class="p">(</span><span class="n">mform_tex_string</span><span class="p">)</span></div>
+
+   
+<div class="viewcode-block" id="TexFileGenerator.get_a_blank_tex_file_with_header"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.TexFileGenerator.get_a_blank_tex_file_with_header">[docs]</a>   <span class="k">def</span> <span class="nf">get_a_blank_tex_file_with_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="n">ftex_out</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftex_out</span><span class="p">)</span>
+      <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">ftex_out</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+      
+      <span class="n">print_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">documentclass</span><span class="si">{article}</span><span class="se">\n\\</span><span class="s1">usepackage[margin=0.5in]</span><span class="si">{geometry}</span><span class="se">\\</span><span class="s1">usepackage</span><span class="si">{graphicx}</span><span class="se">\n\\</span><span class="s1">usepackage[usenames, dvipsnames]</span><span class="si">{color}</span><span class="se">\n\\</span><span class="s1">usepackage</span><span class="si">{float}</span><span class="se">\n</span><span class="s1">&#39;</span>
+      <span class="n">print_string</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n\\</span><span class="s1">begin</span><span class="si">{document}</span><span class="se">\n</span><span class="s1">&#39;</span>
+      <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">print_string</span><span class="p">)</span>
+      <span class="n">fout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+      
+
+<div class="viewcode-block" id="TexFileGenerator.add_latex_code_in_the_file"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.TexFileGenerator.add_latex_code_in_the_file">[docs]</a>   <span class="k">def</span> <span class="nf">add_latex_code_in_the_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tex_string</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">      </span>
+<span class="sd">      Adds latex code in the tex file.</span>
+<span class="sd">      </span>
+<span class="sd">      Parameters</span>
+<span class="sd">      ----------</span>
+<span class="sd">      tex_string : str</span>
+<span class="sd">        Latex code string to be included.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">ftex_out</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftex_out</span><span class="p">)</span>
+      <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">ftex_out</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+      <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tex_string</span><span class="p">)</span>
+      <span class="n">fout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+   
+<div class="viewcode-block" id="TexFileGenerator.add_formatted_fasta_seq_in_the_file"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.TexFileGenerator.add_formatted_fasta_seq_in_the_file">[docs]</a>   <span class="k">def</span> <span class="nf">add_formatted_fasta_seq_in_the_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">protein_seq</span><span class="p">,</span> <span class="n">D_sites_modtypes</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">      </span>
+<span class="sd">      This function adds the fasta seq string in a particular format and also highlights modification sites by a bold blue and underlined.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+    
+      <span class="c1"># list of possible modification sites</span>
+      <span class="n">L_mod_sites</span> <span class="o">=</span> <span class="n">D_sites_modtypes</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+      
+      <span class="n">L_amino_acids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">protein_seq</span><span class="p">)</span>
+
+      <span class="c1">#making every modification site bold, green, underlined</span>
+      <span class="k">for</span> <span class="n">msite</span> <span class="ow">in</span> <span class="n">L_mod_sites</span><span class="p">:</span>
+         <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">msite</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">-</span><span class="mi">1</span>
+         <span class="n">L_amino_acids</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">underline{</span><span class="se">\\</span><span class="s2">textbf{</span><span class="se">\\</span><span class="s2">textcolor</span><span class="si">{OliveGreen}</span><span class="s2">{</span><span class="se">\\</span><span class="s2">Large </span><span class="si">%s</span><span class="s2">}}}&quot;</span><span class="o">%</span><span class="n">L_amino_acids</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+      <span class="c1">#end for msite in L_mod_sites</span>
+
+      <span class="c1">#code for printing the amino acid sequence in blocks of 10 amino acids</span>
+    
+      <span class="c1">#making lists of 10 amino acid sequence</span>
+      <span class="n">L_lists_of_10_aa</span> <span class="o">=</span> <span class="p">[</span><span class="n">L_amino_acids</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">10</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">L_amino_acids</span><span class="p">),</span><span class="mi">10</span><span class="p">)]</span>
+
+      <span class="c1">#joining each sublist of 10 amino-acids amino acids as one string after making relevant sites bold, green and underlined</span>
+      <span class="n">L_seq_blocks</span> <span class="o">=</span> <span class="p">[]</span>
+      <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">L_lists_of_10_aa</span><span class="p">:</span>
+         <span class="n">L_seq_blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sublist</span><span class="p">))</span>
+
+   
+      <span class="c1"># printing 5 blocks per line, each block has 10 amino-acids</span>
+      <span class="n">formatted_fasta_seq</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+      <span class="k">for</span> <span class="n">bindex</span><span class="p">,</span><span class="n">block</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">L_seq_blocks</span><span class="p">):</span>
+      
+         <span class="n">block_count</span> <span class="o">=</span> <span class="n">bindex</span> <span class="o">+</span> <span class="mi">1</span>
+      
+         <span class="c1">#At the beginning of every line</span>
+         <span class="k">if</span> <span class="n">block_count</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">aa_num</span> <span class="o">=</span> <span class="p">(</span><span class="n">block_count</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">10</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">formatted_fasta_seq</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> &amp; </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">aa_num</span><span class="p">,</span><span class="n">block</span><span class="p">)</span>
+               
+         <span class="c1">#At the end of every line</span>
+         <span class="k">elif</span> <span class="n">block_count</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">aa_num</span> <span class="o">=</span> <span class="n">block_count</span><span class="o">*</span><span class="mi">10</span>
+            <span class="n">formatted_fasta_seq</span> <span class="o">+=</span> <span class="s2">&quot;&amp; </span><span class="si">%s</span><span class="s2"> &amp;  </span><span class="si">%s</span><span class="s2"> </span><span class="se">\\\\</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">block</span><span class="p">,</span><span class="n">aa_num</span><span class="p">)</span>
+               
+         <span class="c1">#For intermediate blocks (Otherwise)</span>
+         <span class="k">else</span><span class="p">:</span>
+            <span class="n">formatted_fasta_seq</span> <span class="o">+=</span> <span class="s2">&quot;&amp; </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">block</span>
+      
+         <span class="c1">#end if-else</span>
+      <span class="c1"># end for bindex,block in enumerate(L_seq_blocks)</span>
+
+      <span class="c1"># adding the formatted_fasta_seq in the tex file</span>
+      <span class="n">ftex_out</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftex_out</span><span class="p">)</span>
+      <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">ftex_out</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span>
+      <span class="n">print_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">noindent</span><span class="se">\n</span><span class="s1">&#39;</span>
+      <span class="n">print_string</span> <span class="o">+=</span> <span class="s1">&#39;{</span><span class="se">\\</span><span class="s1">large Amino acid sequence highlighting modification residue}</span><span class="se">\n</span><span class="s1">&#39;</span>
+      <span class="n">print_string</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">begin</span><span class="si">{table}</span><span class="s1">[h]&#39;</span>
+      <span class="c1">#print_string += &#39;\\hspace{-2cm}\n&#39;</span>
+      <span class="n">print_string</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">begin</span><span class="si">{tabular}{lllllll}</span><span class="se">\n</span><span class="s1">&#39;</span>
+      <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">print_string</span><span class="p">)</span>
+      <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">formatted_fasta_seq</span><span class="p">)</span>
+      <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\\</span><span class="s1">end</span><span class="si">{tabular}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+      <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">end</span><span class="si">{table}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+      <span class="n">fout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+      <span class="c1">#return formatted_fasta_seq </span>
+      
+   
+<div class="viewcode-block" id="TexFileGenerator.add_end_document_statement"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.TexFileGenerator.add_end_document_statement">[docs]</a>   <span class="k">def</span> <span class="nf">add_end_document_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="n">ftex_out</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftex_out</span><span class="p">)</span>
+      <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">ftex_out</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+      <span class="n">print_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n\\</span><span class="s1">end</span><span class="si">{document}</span><span class="s1">&#39;</span>
+      <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">print_string</span><span class="p">)</span>
+      <span class="n">fout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+
+   
+
+      
+
+
+<div class="viewcode-block" id="read_sites_and_modification_types_from_file"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.read_sites_and_modification_types_from_file">[docs]</a><span class="k">def</span> <span class="nf">read_sites_and_modification_types_from_file</span><span class="p">(</span><span class="n">fname_modifications</span><span class="p">):</span>
+   <span class="sd">&quot;&quot;&quot;Global method</span>
+<span class="sd">   </span>
+<span class="sd">   * Function populated instance variable, a dictionary, D_sites_modtypes with sites associated to their modfication types</span>
+<span class="sd">   * Read from an input file</span>
+<span class="sd">   * This information must be known apriori</span>
+<span class="sd">   </span>
+<span class="sd">   Parameters</span>
+<span class="sd">   ----------</span>
+<span class="sd">   fname_modifications : str</span>
+<span class="sd">     Name of an input file containing amino-acid residues and their respective modification types.</span>
+<span class="sd">   </span>
+<span class="sd">   Returns</span>
+<span class="sd">   -------</span>
+<span class="sd">   D_sites_modtypes : defaultdict(list)</span>
+<span class="sd">     Python dictionary mapping aa residues to a list of modification types to the respective residues. </span>
+<span class="sd">   E.g., ``{&#39;13&#39;:[&#39;P&#39;]; &#39;16&#39;:[&#39;P&#39;]; &#39;19&#39;:[&#39;P&#39;]; &#39;40&#39;:[&#39;P&#39;, &#39;Ac&#39;]}``</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+
+   <span class="c1"># initializing variable for number of sites</span>
+   <span class="n">D_sites_modtypes</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    
+   <span class="n">nsites</span> <span class="o">=</span> <span class="mi">0</span>
+
+   <span class="c1">#opening a file in read mode</span>
+   <span class="n">fin_handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname_modifications</span><span class="p">)</span>
+
+   <span class="c1"># Binary variables to detect tags in the file are initialized to be False</span>
+   <span class="n">read_nsites</span> <span class="o">=</span> <span class="kc">False</span><span class="p">;</span> <span class="n">read_modification_sites</span> <span class="o">=</span> <span class="kc">False</span>
+   
+   <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fin_handle</span><span class="p">:</span>
+      
+      <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+      
+      <span class="c1"># skipping the blank line</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+         <span class="k">continue</span>
+      <span class="c1"># skipping the comment line</span>
+      <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;#&quot;</span><span class="p">:</span>
+         <span class="k">continue</span>
+      
+      <span class="k">if</span>   <span class="n">line</span><span class="o">==</span><span class="s2">&quot;NSITESBEGIN&quot;</span><span class="p">:</span> <span class="n">read_nsites</span> <span class="o">=</span> <span class="kc">True</span>
+      <span class="k">elif</span> <span class="n">line</span><span class="o">==</span><span class="s2">&quot;NSITESEND&quot;</span>  <span class="p">:</span> <span class="n">read_nsites</span> <span class="o">=</span> <span class="kc">False</span>
+      
+      <span class="k">if</span> <span class="n">read_nsites</span> <span class="ow">and</span> <span class="n">line</span> <span class="o">!=</span><span class="s2">&quot;NSITESBEGIN&quot;</span><span class="p">:</span>
+         <span class="n">nsites</span> <span class="o">=</span> <span class="n">line</span>
+
+      <span class="k">if</span>   <span class="n">line</span><span class="o">==</span><span class="s2">&quot;MODSITESBEGIN&quot;</span><span class="p">:</span> <span class="n">read_modification_sites</span> <span class="o">=</span> <span class="kc">True</span>
+      <span class="k">elif</span> <span class="n">line</span><span class="o">==</span><span class="s2">&quot;MODSITESEND&quot;</span>  <span class="p">:</span> <span class="n">read_modification_sites</span> <span class="o">=</span> <span class="kc">False</span>
+
+      <span class="k">if</span> <span class="n">read_modification_sites</span> <span class="ow">and</span> <span class="n">line</span><span class="o">!=</span><span class="s2">&quot;MODSITESBEGIN&quot;</span><span class="p">:</span>
+         <span class="n">site_modtype</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+
+         <span class="n">site</span>    <span class="o">=</span> <span class="n">site_modtype</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+         <span class="n">modtype</span> <span class="o">=</span> <span class="n">site_modtype</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+         
+         <span class="n">D_sites_modtypes</span><span class="p">[</span><span class="n">site</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modtype</span><span class="p">)</span>
+
+   <span class="c1">#end for line in fin_handle</span>
+   
+   <span class="k">if</span>  <span class="nb">int</span><span class="p">(</span><span class="n">nsites</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">D_sites_modtypes</span><span class="p">):</span>
+      <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Number of sites not identical to the size of dictionary of sites associated with their modification types&quot;</span><span class="p">)</span>
+
+   
+   <span class="k">return</span> <span class="n">D_sites_modtypes</span></div>
+
+
+<div class="viewcode-block" id="get_fasta_seq_from_the_file"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.get_fasta_seq_from_the_file">[docs]</a><span class="k">def</span> <span class="nf">get_fasta_seq_from_the_file</span><span class="p">(</span><span class="n">file_fasta_sequence</span><span class="p">):</span>
+   <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">   The function reads fasta sequence from the file</span>
+<span class="sd">   &#39;&#39;&#39;</span>
+
+   <span class="k">try</span><span class="p">:</span>
+      <span class="n">fin</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_fasta_sequence</span><span class="p">)</span>
+
+   <span class="k">except</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;provide fasta sequence file name in the specification file&quot;</span><span class="p">)</span>
+   
+   
+   <span class="n">seq</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+   <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fin</span><span class="p">:</span>
+      <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+      
+      <span class="c1">#skip the blank line and commented lines</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">or</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;#&quot;</span> <span class="ow">or</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;&gt;&quot;</span><span class="p">:</span> <span class="k">continue</span>
+      
+      <span class="c1">#skip the commented line</span>
+      
+      <span class="n">seq</span> <span class="o">+=</span> <span class="n">line</span>
+
+   <span class="k">return</span> <span class="n">seq</span></div>
+
+
+
+<div class="viewcode-block" id="get_modforms_from_simulated_data"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.get_modforms_from_simulated_data">[docs]</a><span class="k">def</span> <span class="nf">get_modforms_from_simulated_data</span><span class="p">(</span><span class="n">D_variables_modforms_simulated</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">D_PuLP_variables_simulated</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">D_protein_mod_frequency</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+   <span class="sd">&quot;&quot;&quot;Global method</span>
+<span class="sd">   </span>
+<span class="sd">   * The function is alternative to the function get_modforms.</span>
+<span class="sd">   * The difference however is that the modform variables and objects are used from simulated data and not generated from the dictionary D_sites_modtypes</span>
+<span class="sd">   * This helps in comparing the results of computed modform distribution to that of the simulated modform distribution.</span>
+<span class="sd">   </span>
+<span class="sd">   Parameters</span>
+<span class="sd">   ----------</span>
+<span class="sd">   D_variables_modforms_simulated : dict</span>
+<span class="sd">     Python dictionary containing modform variables mapped to their :class:`.Modform` objects for simulated data.</span>
+<span class="sd">   </span>
+<span class="sd">   D_PuLP_variables_simulated : dict</span>
+<span class="sd">     Python dictionary containing modform variables mapped to their :class:`.pulp` objects for simulated data.</span>
+<span class="sd">   </span>
+<span class="sd">   D_protein_mod_frequency : dict</span>
+<span class="sd">     Python dictionary containing modifications mapped to their frequencues.</span>
+<span class="sd">   </span>
+<span class="sd">   Returns</span>
+<span class="sd">   -------</span>
+<span class="sd">   D_vars_modforms_isobaric : dict</span>
+<span class="sd">     Python dictionary contaitning isomeric modform variables mapped to their :class:`.Modform` objects.  </span>
+<span class="sd">   </span>
+<span class="sd">   D_PuLP_variables_isobaric : dict</span>
+<span class="sd">     Python dictionary containing isomeric modform variables mapped to their :class:`.pulp` objects.</span>
+
+<span class="sd">   Notes</span>
+<span class="sd">   -----</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+   <span class="n">D_vars_modforms_isobaric</span> <span class="o">=</span> <span class="p">{};</span> <span class="n">D_PuLP_variables_isobaric</span> <span class="o">=</span> <span class="p">{}</span>
+   
+
+   <span class="k">for</span> <span class="n">var</span><span class="p">,</span><span class="n">mform</span> <span class="ow">in</span> <span class="n">D_variables_modforms_simulated</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+      <span class="n">D_mform_mod_frequency</span> <span class="o">=</span> <span class="n">mform</span><span class="o">.</span><span class="n">get_modifications_frequency_map</span><span class="p">()</span>
+
+      <span class="k">if</span> <span class="n">D_mform_mod_frequency</span> <span class="o">==</span> <span class="n">D_protein_mod_frequency</span><span class="p">:</span>
+         <span class="n">D_vars_modforms_isobaric</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>   <span class="o">=</span> <span class="n">mform</span>
+         <span class="n">D_PuLP_variables_isobaric</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">D_PuLP_variables_simulated</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> 
+      <span class="k">else</span><span class="p">:</span>
+         <span class="k">continue</span>
+
+      <span class="c1">#end if-else D_mform_mod_frequency == D_protein_mod_frequency</span>
+
+   <span class="c1">#end for var,mform in D_variables_modforms_simulated.iteritems()</span>
+
+   <span class="k">return</span> <span class="p">(</span><span class="n">D_vars_modforms_isobaric</span><span class="p">,</span> <span class="n">D_PuLP_variables_isobaric</span><span class="p">)</span></div>
+
+
+
+    
+<div class="viewcode-block" id="get_modforms"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.get_modforms">[docs]</a><span class="k">def</span> <span class="nf">get_modforms</span><span class="p">(</span><span class="n">start_index</span><span class="p">,</span> <span class="n">D_sites_modtypes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">D_protein_mod_frequency</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+   <span class="sd">&quot;&quot;&quot;Global method</span>
+<span class="sd">   </span>
+<span class="sd">   Provides a set of intact isomeric modforms having same modification frequency and types.</span>
+<span class="sd">   </span>
+<span class="sd">   Parameters</span>
+<span class="sd">   ----------</span>
+<span class="sd">   start_index : int</span>
+<span class="sd">     Index of the modform variable name.</span>
+<span class="sd">   </span>
+<span class="sd">   D_sites_modtypes : defaultdict(list), optional</span>
+<span class="sd">     Python dictionary containing residues mapped to the list of possible modifications. E.g., ``D = {&#39;T32&#39;: [&#39;P&#39;], &#39;S55&#39;: [&#39;Ac&#39;, &#39;P&#39;]}``</span>
+<span class="sd">   D_protein_mod_frequency : dict</span>
+<span class="sd">     Python dictionary containing modifications mapped to their frequencies for isomeric modforms. E.g., ``D = {&#39;P&#39;: &#39;2&#39;, &#39;Ac&#39;: &#39;1&#39;}``</span>
+<span class="sd">   </span>
+<span class="sd">   Returns</span>
+<span class="sd">   -------</span>
+<span class="sd">   D_vars_modforms_isobaric : dict</span>
+<span class="sd">     Python dictionary contaitning isomeric modform variables mapped to their :class:`.Modform` objects.  </span>
+<span class="sd">   </span>
+<span class="sd">   D_PuLP_variables_isobaric : dict</span>
+<span class="sd">     Python dictionary containing isomeric modform variables mapped to their :class:`.pulp` objects.</span>
+<span class="sd">   </span>
+<span class="sd">   Examples</span>
+<span class="sd">   --------</span>
+<span class="sd">   &gt;&gt;&gt; </span>
+<span class="sd">   &gt;&gt;&gt; D_sites_modtypes = {&#39;15&#39;:[&#39;P&#39;]; &#39;16&#39;:[&#39;P&#39;]; &#39;52&#39;:[&#39;Ac&#39;, &#39;P&#39;]; &#39;54&#39;:[&#39;P&#39;]; &#39;59&#39;:[&#39;P&#39;]}</span>
+<span class="sd">   &gt;&gt;&gt; </span>
+<span class="sd">   &gt;&gt;&gt; get_modforms(start_index=1, D_sites_modtypes)</span>
+<span class="sd">   {&#39;0&#39;: &#39;UNMOD&#39;}</span>
+<span class="sd">   &gt;&gt;&gt;</span>
+<span class="sd">   &gt;&gt;&gt; D_protein_mod_frequency = {&#39;P&#39;: &#39;2&#39;}</span>
+<span class="sd">   &gt;&gt;&gt; get_modforms(start_index=1, D_sites_modtypes, D_protein_mod_frequency)</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+   
+   <span class="n">D_vars_modforms_isobaric</span>    <span class="o">=</span> <span class="p">{}</span>
+   <span class="n">D_PuLP_variables_isobaric</span>   <span class="o">=</span> <span class="p">{}</span>
+   
+   <span class="c1"># for unmodified modform</span>
+   <span class="n">total_freq</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">D_protein_mod_frequency</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
+   <span class="k">if</span> <span class="n">D_protein_mod_frequency</span><span class="o">==</span><span class="kc">None</span> <span class="ow">or</span> <span class="n">D_protein_mod_frequency</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="o">==</span><span class="p">[(</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">,</span><span class="s1">&#39;0&#39;</span><span class="p">)]</span> <span class="ow">or</span> <span class="n">total_freq</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+      
+      <span class="n">modform_unmod</span>    <span class="o">=</span> <span class="n">modform</span><span class="o">.</span><span class="n">Modform</span><span class="p">(</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;0&#39;</span><span class="p">:</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">})</span>
+      <span class="n">PuLP_modform_var</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">LpVariable</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="n">lowBound</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+      
+      <span class="n">D_vars_modforms_isobaric</span><span class="p">[</span><span class="s1">&#39;a1&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">modform_unmod</span>
+      <span class="n">D_PuLP_variables_isobaric</span><span class="p">[</span><span class="s1">&#39;a1&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">PuLP_modform_var</span>
+      
+      <span class="k">return</span> <span class="p">(</span><span class="n">D_vars_modforms_isobaric</span><span class="p">,</span> <span class="n">D_PuLP_variables_isobaric</span><span class="p">)</span>
+   
+   <span class="k">else</span><span class="p">:</span>
+      <span class="c1"># creating list of all possible dictionaries of isobaric occupancy</span>
+      <span class="n">L_dictionaries</span> <span class="o">=</span> <span class="p">[{</span><span class="n">j</span><span class="p">:</span> <span class="n">D_sites_modtypes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="p">}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">D_sites_modtypes</span><span class="p">,</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">D_protein_mod_frequency</span><span class="o">.</span><span class="n">values</span><span class="p">()]))]</span>
+      
+      
+      <span class="n">count</span> <span class="o">=</span> <span class="n">start_index</span> <span class="c1">#modform index starting at 2 (by default) for modified modforms</span>
+      
+      <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">L_dictionaries</span><span class="p">:</span>
+         
+         <span class="c1"># list of modforms a sub-dictionary</span>
+         <span class="n">L_modforms</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">k</span><span class="o">.</span><span class="n">values</span><span class="p">())]</span>
+         
+         <span class="k">for</span> <span class="n">mform</span> <span class="ow">in</span> <span class="n">L_modforms</span><span class="p">:</span>
+            
+            <span class="c1"># set of modifications</span>
+            <span class="n">set_modification_types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">mform</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            
+            <span class="c1"># The type of modifications must be identical</span>
+            <span class="n">set_modification_types_sought</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">D_protein_mod_frequency</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">set_modification_types</span><span class="o">.</span><span class="n">symmetric_difference</span><span class="p">(</span><span class="n">set_modification_types_sought</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+               <span class="k">continue</span>
+            
+            <span class="k">else</span><span class="p">:</span>
+               <span class="c1">#list of modifications in the mform</span>
+               <span class="n">l_mod</span> <span class="o">=</span> <span class="n">mform</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+               
+               <span class="c1"># list of True,False upon cross-verification</span>
+               <span class="n">L_bin</span> <span class="o">=</span> <span class="p">[</span><span class="n">l_mod</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">==</span><span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">D_protein_mod_frequency</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+               <span class="k">if</span> <span class="kc">False</span> <span class="ow">in</span> <span class="n">L_bin</span><span class="p">:</span>
+                  <span class="k">continue</span>
+               
+               <span class="k">else</span><span class="p">:</span>
+                  
+                  <span class="n">var_name</span> <span class="o">=</span> <span class="s2">&quot;a</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">count</span> <span class="c1">#variable name</span>
+                  
+                  <span class="c1"># creating a modform object</span>
+                  <span class="n">modform_object</span> <span class="o">=</span> <span class="n">modform</span><span class="o">.</span><span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="n">mform</span><span class="p">)</span>
+                  <span class="n">PuLP_modform_var</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">LpVariable</span><span class="p">(</span><span class="n">var_name</span><span class="p">,</span> <span class="n">lowBound</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                  
+                  <span class="c1"># populating the dictionary of isobaric modforms</span>
+                  <span class="n">D_vars_modforms_isobaric</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span>    <span class="o">=</span> <span class="n">modform_object</span>
+                  <span class="n">D_PuLP_variables_isobaric</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">PuLP_modform_var</span>
+                  
+                  <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+               <span class="c1">#end if-else False in L_bin</span>
+
+            <span class="c1">#end if-else len(set_modification_types.symmetric_difference(set_modification_types_sought))&gt;0</span>
+
+         <span class="c1">#end for mform in L_modforms</span>
+
+      <span class="c1">#end for k in L_dictionaries</span>
+         
+   <span class="c1">#end if-else D_protein_mod_frequency==None or D_protein_mod_frequency.items()==[(&#39;UNMOD&#39;,&#39;0&#39;)]</span>
+
+   <span class="k">return</span> <span class="p">(</span><span class="n">D_vars_modforms_isobaric</span><span class="p">,</span> <span class="n">D_PuLP_variables_isobaric</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="natural_keys"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.natural_keys">[docs]</a><span class="k">def</span> <span class="nf">natural_keys</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Global method</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; L = [&#39;a11&#39;, &#39;a9&#39;, &#39;a2&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; print sorted(L)</span>
+<span class="sd">    [&#39;a11&#39;, &#39;a2&#39;, &#39;a9&#39;]</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; print sorted(L, key=lambda x: natural_keys(x))</span>
+<span class="sd">    [&#39;a2&#39;, &#39;a9&#39;, &#39;a11&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(\d+)&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)]</span></div>
+ 
+<div class="viewcode-block" id="powerset"><a class="viewcode-back" href="../../modformPro.html#modformPro.globalfuncs.powerset">[docs]</a><span class="k">def</span> <span class="nf">powerset</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+   <span class="sd">&quot;&quot;&quot;Global method</span>
+<span class="sd">   </span>
+<span class="sd">   Returns a chain of elements of powerset of the iterable.</span>
+<span class="sd">   </span>
+<span class="sd">   Examples</span>
+<span class="sd">   --------</span>
+<span class="sd">   &gt;&gt;&gt; print list(powerset([1,2,3]))</span>
+<span class="sd">   [() (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)]</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+   <span class="n">s</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+   <span class="k">return</span> <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">combinations</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Deepesh Agarwal &amp; Jeremy Gunawardena.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+========
+Appendix
+========
+
+Definitions
+===========
+**Modform** : An intact protein with a global pattern of post-translational modifications.
+
+**Isomeric modforms** : Positional isomers of modforms having identical mass. Sometimes, the word `Isobaric` is used for modforms.
+
+**Isomeric peptides**: Positional isomers of peptides having identical mass.
+
+**Modform distribution** : Percentage concentration of all modforms in a sample.
+
+**Modform region** : Region in the modform space constraining modform distribution.
+
+Variables
+=========
+
+Here is a description of the variable names used in the software.
+
+``D_protein_sites_modifications``: dict
+  Python dictionary representing global pattern of modification for a modform. ::
+    
+    e.g., {'S15': 'P', 'S55': 'Ac', 'T376': 'P'}, {'0': 'UNMOD'}
+
+``D_sites_modtypes``: defaultdict(list)
+   Python dictionary mapping amino-acid residues to python list of modification type for a protein under investigation. This is typically known from bottom-up (BU) mass spectrometry (MS) analysis. ::
+     
+     e.g, {'S15': ['P'], 'S55': ['Ac', 'P']}
+
+``D_variables_modforms``: dict
+  Python dictionary mapping modform variables (str) to their :class:`.Modform` objects. ::
+   
+    e.g, {'a1': Modform('a1', D_protein_sites_modifications={'0': 'UNMOD'})}
+   
+``D_PuLP_variables``: dict
+  Python dictionary mapping modform variables (str) to their :class:`.pulp` objects. ::
+
+    e.g., {'a2': LpVariable('a2', low_bound=0)}
+
+``D_protein_mod_frequency``: dict
+  Python dictionary mapping modification types to their frequency in isomeric modforms. ::
+
+    e.g., {'P': '2', 'Ac': '1'}
+
+``D_peptide_isomeric_peak_areas``: dict
+  Python dictionary mapping peptides (`N_loc`, `C_loc`) to their peak areas of different isomeric states. ::
+
+    e.g., {‘15-25’: [({‘UNMOD’: ‘0’}, ‘25’), ({‘P’: ‘1’}, ‘50’), ({‘P’: ‘2’}, ‘25’)],
+           ‘50-60’: [({‘UNMOD’: ‘0’}, ‘50’), ({‘Ac’: ‘1’, ‘P’: ‘1’}, ‘30’), ({‘P’: ‘2’}, ‘20’)]}
+
+
+``L_isomeric_modform_nodes``: list
+  Python list of python dictionaries having modification types mapped to their frequency. The list essentially are isomeric modform nodes. ::
+
+    e.g., [{‘UNMOD’: ‘0’}, {‘P’: ‘1’}, {‘Ac’: ‘1’, ‘P’: ‘2’}]

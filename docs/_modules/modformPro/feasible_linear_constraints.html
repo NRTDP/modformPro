@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>modformPro.feasible_linear_constraints &mdash; modformPro 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="modformPro 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> modformPro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Appendix.html">Appendix</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">modformPro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>modformPro.feasible_linear_constraints</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for modformPro.feasible_linear_constraints</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">pulp</span>
+
+<span class="kn">import</span> <span class="nn">modform</span> <span class="k">as</span> <span class="nn">modform</span>
+<span class="kn">import</span> <span class="nn">linear_constraints</span> <span class="k">as</span> <span class="nn">lc</span>
+<span class="kn">import</span> <span class="nn">linear_programming_solver</span> <span class="k">as</span> <span class="nn">lps</span>
+
+<div class="viewcode-block" id="natural_keys"><a class="viewcode-back" href="../../modformPro.html#modformPro.feasible_linear_constraints.natural_keys">[docs]</a><span class="k">def</span> <span class="nf">natural_keys</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(\d+)&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="FeasibleLinearConstraints"><a class="viewcode-back" href="../../modformPro.html#modformPro.feasible_linear_constraints.FeasibleLinearConstraints">[docs]</a><span class="k">class</span> <span class="nc">FeasibleLinearConstraints</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;This class provides attributes and methods to obtain feasible linear constraints by removing the inconsistency introduced possibly due to measurment errors.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    linear_constraints : :class:`.LinearConstraints`</span>
+<span class="sd">      Set of linear constraints.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">linear_constraints</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span> <span class="o">=</span> <span class="n">linear_constraints</span>
+
+        <span class="c1"># Initializing feasible linear constraints object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_feasible_linear_constraints</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">LinearConstraints</span><span class="p">(</span><span class="n">linear_constraints</span><span class="o">.</span><span class="n">D_sites_modtypes</span><span class="p">,</span> <span class="n">linear_constraints</span><span class="o">.</span><span class="n">specifications</span><span class="p">)</span>
+
+        <span class="c1"># Using the same modform space; only variable names are of importance.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_feasible_linear_constraints</span><span class="o">.</span><span class="n">modform_space</span> <span class="o">=</span> <span class="n">linear_constraints</span><span class="o">.</span><span class="n">modform_space</span>
+
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">feasible_linear_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        * Instance attribute</span>
+<span class="sd">        * New instance of :class:`.LinearConstraints` object.</span>
+<span class="sd">        * It is populated by member method</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feasible_linear_constraints</span>
+
+    <span class="nd">@feasible_linear_constraints</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">feasible_linear_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feasible_lc</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_feasible_linear_constraints</span> <span class="o">=</span> <span class="n">feasible_lc</span>
+
+    
+<div class="viewcode-block" id="FeasibleLinearConstraints.get_feasible_linear_constraints"><a class="viewcode-back" href="../../modformPro.html#modformPro.feasible_linear_constraints.FeasibleLinearConstraints.get_feasible_linear_constraints">[docs]</a>    <span class="k">def</span> <span class="nf">get_feasible_linear_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * This method obtains set of feasible linear constraints and populated the instance attribute, ``feasible_linear_constraints``.</span>
+<span class="sd">        * Linear programming algorithm is employed with slack variables</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">E_constraints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_elastic_constraints</span><span class="p">()</span>
+
+        <span class="c1"># trying something new</span>
+        <span class="c1">###############################################</span>
+        <span class="c1"># additional constraints</span>
+        
+        <span class="n">L_evariables_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">E_constraints</span><span class="o">.</span><span class="n">modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;e&#39;</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="n">natural_keys</span><span class="p">)</span>
+        <span class="n">L_PuLP_evariables_sorted</span> <span class="o">=</span> <span class="p">[</span><span class="n">E_constraints</span><span class="o">.</span><span class="n">modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">L_evariables_sorted</span><span class="p">]</span>
+        
+        <span class="n">L_extra_PuLP_constraints</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># e.g., -t &lt;= e_1-e_2 &lt;= t</span>
+        <span class="n">t_var</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">LpVariable</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="n">lowBound</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">L_PuLP_evariables_sorted</span><span class="p">),</span> <span class="mi">2</span><span class="p">):</span>
+    
+            <span class="n">e1</span> <span class="o">=</span> <span class="n">L_evariables_sorted</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+            <span class="n">e2</span> <span class="o">=</span> <span class="n">L_evariables_sorted</span><span class="p">[</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            
+            <span class="c1">#e1_e2 - t &lt;= 0; sense=-1 sets LE-- less than equal to inequality</span>
+            <span class="n">LHS_1</span> <span class="o">=</span> <span class="n">E_constraints</span><span class="o">.</span><span class="n">modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="p">[</span><span class="n">e1</span><span class="p">]</span> <span class="o">-</span> <span class="n">E_constraints</span><span class="o">.</span><span class="n">modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="p">[</span><span class="n">e2</span><span class="p">]</span> <span class="o">-</span> <span class="n">t_var</span>  
+            <span class="n">L_extra_PuLP_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pulp</span><span class="o">.</span><span class="n">LpConstraint</span><span class="p">(</span><span class="n">LHS_1</span><span class="p">,</span><span class="n">rhs</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sense</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+            
+            <span class="c1"># e1-e2 +t &gt;= 0; sense=1 sets GE-- greater than equal to inequality</span>
+            <span class="n">LHS_2</span> <span class="o">=</span> <span class="n">E_constraints</span><span class="o">.</span><span class="n">modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="p">[</span><span class="n">e1</span><span class="p">]</span> <span class="o">-</span> <span class="n">E_constraints</span><span class="o">.</span><span class="n">modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="p">[</span><span class="n">e2</span><span class="p">]</span> <span class="o">+</span> <span class="n">t_var</span>  
+            <span class="n">L_extra_PuLP_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pulp</span><span class="o">.</span><span class="n">LpConstraint</span><span class="p">(</span><span class="n">LHS_2</span><span class="p">,</span><span class="n">rhs</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sense</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1">#end for ii in xrange(0, len(L_PuLP_evariables_sorted), 2)</span>
+            
+        <span class="c1">#L_PuLP_constraints_extended = list(E_constraints.L_PuLP_constraints)</span>
+        <span class="n">E_constraints</span><span class="o">.</span><span class="n">L_PuLP_constraints</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">L_extra_PuLP_constraints</span><span class="p">)</span>
+        
+        <span class="c1">#objective_function_PuLP_extended   = t_var + pulp.lpSum(L_PuLP_evariables_sorted)</span>
+        
+        
+        <span class="c1">#################################################</span>
+        
+        
+        <span class="n">lp_solver</span> <span class="o">=</span> <span class="n">lps</span><span class="o">.</span><span class="n">LinearProgrammingSolver</span><span class="p">(</span><span class="n">E_constraints</span><span class="p">)</span>
+        
+        <span class="c1">#L_variables_sorted = sorted([k for k,v in E_constraints.D_PuLP_variables.iteritems() if k[0]==&#39;e&#39;], key=natural_keys)</span>
+        <span class="c1">#L_PuLP_evariables_sorted = [E_constraints.D_PuLP_variables[k] for k in L_variables_sorted]</span>
+        
+        <span class="n">objective_function_PuLP</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">lpSum</span><span class="p">(</span><span class="n">L_PuLP_evariables_sorted</span><span class="p">)</span> <span class="o">+</span> <span class="n">t_var</span>
+        
+        <span class="n">lp_minimize_solution</span> <span class="o">=</span> <span class="n">lp_solver</span><span class="o">.</span><span class="n">linear_programming_solver</span><span class="p">(</span><span class="n">objective_function_PuLP</span><span class="p">,</span> <span class="n">pulp</span><span class="o">.</span><span class="n">LpMinimize</span><span class="p">)</span>
+        
+        <span class="c1">#print(lp_minimize_solution)</span>
+        <span class="c1">#print(&quot;status: &quot;, LpStatus[lp_minimize_solution.status])</span>
+        
+        <span class="c1">#for v in lp_minimize_solution.variables():</span>
+        <span class="c1">#    print(v, pulp.value(v))</span>
+        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span><span class="o">.</span><span class="n">L_linear_constraints</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+
+            <span class="n">elastic_variable1</span> <span class="o">=</span> <span class="s2">&quot;e_</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">elastic_variable2</span> <span class="o">=</span>  <span class="s2">&quot;e_</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">)</span>
+
+            <span class="n">value_PuLP_evariable1</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">E_constraints</span><span class="o">.</span><span class="n">modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="p">[</span><span class="n">elastic_variable1</span><span class="p">])</span> 
+            
+            <span class="n">value_PuLP_evariable2</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">E_constraints</span><span class="o">.</span><span class="n">modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="p">[</span><span class="n">elastic_variable2</span><span class="p">])</span>
+            <span class="n">diff</span>         <span class="o">=</span> <span class="n">value_PuLP_evariable1</span> <span class="o">-</span> <span class="n">value_PuLP_evariable2</span>
+            <span class="n">adjusted_rhs</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span><span class="o">.</span><span class="n">L_linear_constraints</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">diff</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">_feasible_linear_constraints</span><span class="o">.</span><span class="n">L_linear_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span><span class="o">.</span><span class="n">L_linear_constraints</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">adjusted_rhs</span><span class="p">))</span>
+            
+            <span class="n">lhs_PuLP</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span><span class="o">.</span><span class="n">L_PuLP_constraints</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_feasible_linear_constraints</span><span class="o">.</span><span class="n">L_PuLP_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pulp</span><span class="o">.</span><span class="n">LpConstraint</span><span class="p">(</span><span class="n">lhs_PuLP</span><span class="p">,</span> <span class="n">rhs</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">adjusted_rhs</span><span class="p">)))</span> </div>
+
+    
+<div class="viewcode-block" id="FeasibleLinearConstraints.get_elastic_constraints"><a class="viewcode-back" href="../../modformPro.html#modformPro.feasible_linear_constraints.FeasibleLinearConstraints.get_elastic_constraints">[docs]</a>    <span class="k">def</span> <span class="nf">get_elastic_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        This method creates an instance of the class LinearConstraints where elastic/slack variables are added.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        E_linear_constraints : :class:`.LinearConstraints`</span>
+<span class="sd">          Linear constraints with added pair of elastic (slack) variables to each constraint.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">E_linear_constraints</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">LinearConstraints</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span><span class="o">.</span><span class="n">D_sites_modtypes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span><span class="o">.</span><span class="n">specifications</span><span class="p">)</span>
+        
+        <span class="n">L_econstraints</span>                 <span class="o">=</span> <span class="p">[]</span> <span class="c1"># initializing list of elastic constraints</span>
+        <span class="n">L_PuLP_econstraints</span>            <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">D_variables_modforms_ex</span>        <span class="o">=</span> <span class="p">{}</span> 
+        <span class="n">D_PuLP_variables_ex</span>            <span class="o">=</span> <span class="p">{}</span> <span class="c1"># initializing extended dictionary</span>
+
+        <span class="c1"># initializing extended dictionary for Modform objects</span>
+        <span class="n">D_variables_modforms_ex</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span><span class="o">.</span><span class="n">modform_space</span><span class="o">.</span><span class="n">D_variables_modforms</span><span class="p">)</span>  
+        
+        <span class="c1"># initializing extended dictionary for LpVariable objects</span>
+        <span class="n">D_PuLP_variables_ex</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span><span class="o">.</span><span class="n">modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span><span class="o">.</span><span class="n">L_linear_constraints</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            
+            <span class="n">lhs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span><span class="o">.</span><span class="n">L_linear_constraints</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        
+            <span class="n">elastic_variable1</span> <span class="o">=</span> <span class="s2">&quot;e_</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">elastic_variable2</span> <span class="o">=</span>  <span class="s2">&quot;e_</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">evariables_diff</span> <span class="o">=</span> <span class="s2">&quot; + &quot;</span> <span class="o">+</span> <span class="n">elastic_variable1</span> <span class="o">+</span> <span class="s2">&quot; - &quot;</span> <span class="o">+</span> <span class="n">elastic_variable2</span>
+
+            <span class="n">PuLP_evariable1</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">LpVariable</span><span class="p">(</span><span class="n">elastic_variable1</span><span class="p">,</span> <span class="n">lowBound</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">PuLP_evariable2</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">LpVariable</span><span class="p">(</span><span class="n">elastic_variable2</span><span class="p">,</span> <span class="n">lowBound</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            
+            <span class="n">D_variables_modforms_ex</span><span class="p">[</span><span class="n">elastic_variable1</span><span class="p">]</span> <span class="o">=</span> <span class="n">modform</span><span class="o">.</span><span class="n">Modform</span><span class="p">(</span><span class="n">elastic_variable1</span><span class="p">)</span>
+            <span class="n">D_variables_modforms_ex</span><span class="p">[</span><span class="n">elastic_variable2</span><span class="p">]</span> <span class="o">=</span> <span class="n">modform</span><span class="o">.</span><span class="n">Modform</span><span class="p">(</span><span class="n">elastic_variable2</span><span class="p">)</span>
+                        
+            <span class="n">D_PuLP_variables_ex</span><span class="p">[</span><span class="n">elastic_variable1</span><span class="p">]</span> <span class="o">=</span> <span class="n">PuLP_evariable1</span>
+            <span class="n">D_PuLP_variables_ex</span><span class="p">[</span><span class="n">elastic_variable2</span><span class="p">]</span> <span class="o">=</span> <span class="n">PuLP_evariable2</span>
+                        
+            <span class="n">lhs_new</span> <span class="o">=</span> <span class="n">lhs</span> <span class="o">+</span> <span class="n">evariables_diff</span>
+            
+            <span class="n">L_econstraints</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">lhs_new</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span><span class="o">.</span><span class="n">L_linear_constraints</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c1"># </span>
+            <span class="n">lhs_PuLP</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span><span class="o">.</span><span class="n">L_PuLP_constraints</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+            <span class="n">LHS</span> <span class="o">=</span> <span class="n">lhs_PuLP</span> <span class="o">+</span> <span class="n">PuLP_evariable1</span> <span class="o">-</span> <span class="n">PuLP_evariable2</span>
+            
+            <span class="n">L_PuLP_econstraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pulp</span><span class="o">.</span><span class="n">LpConstraint</span><span class="p">(</span><span class="n">LHS</span><span class="p">,</span> <span class="n">rhs</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_linear_constraints</span><span class="o">.</span><span class="n">L_linear_constraints</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])))</span>           
+        
+        <span class="n">E_linear_constraints</span><span class="o">.</span><span class="n">L_linear_constraints</span> <span class="o">=</span> <span class="n">L_econstraints</span>
+        <span class="n">E_linear_constraints</span><span class="o">.</span><span class="n">L_PuLP_constraints</span>   <span class="o">=</span> <span class="n">L_PuLP_econstraints</span>
+        
+        <span class="n">E_linear_constraints</span><span class="o">.</span><span class="n">modform_space</span><span class="o">.</span><span class="n">D_variables_modforms</span> <span class="o">=</span> <span class="n">D_variables_modforms_ex</span>
+        <span class="n">E_linear_constraints</span><span class="o">.</span><span class="n">modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span>     <span class="o">=</span> <span class="n">D_PuLP_variables_ex</span>
+        
+        
+        <span class="k">return</span> <span class="n">E_linear_constraints</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Deepesh Agarwal &amp; Jeremy Gunawardena.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

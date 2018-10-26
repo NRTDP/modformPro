@@ -1,0 +1,110 @@
+modformPro package
+==================
+
+Submodules
+----------
+
+modformPro.data_simulator module
+--------------------------------
+
+.. automodule:: modformPro.data_simulator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+modformPro.feasible_linear_constraints module
+---------------------------------------------
+
+.. automodule:: modformPro.feasible_linear_constraints
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+modformPro.globalfuncs module
+-----------------------------
+
+.. automodule:: modformPro.globalfuncs
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+modformPro.linear_constraints module
+------------------------------------
+
+.. automodule:: modformPro.linear_constraints
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+modformPro.linear_programming_solver module
+-------------------------------------------
+
+.. automodule:: modformPro.linear_programming_solver
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+modformPro.mainsolver module
+----------------------------
+
+.. automodule:: modformPro.mainsolver
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+modformPro.modform module
+-------------------------
+
+.. automodule:: modformPro.modform
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+modformPro.modform_region_estimator module
+------------------------------------------
+
+.. automodule:: modformPro.modform_region_estimator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+modformPro.modform_space module
+-------------------------------
+
+.. automodule:: modformPro.modform_space
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+modformPro.ms_measurments_extractor module
+------------------------------------------
+
+.. automodule:: modformPro.ms_measurments_extractor
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+modformPro.specifications module
+--------------------------------
+
+.. automodule:: modformPro.specifications
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+modformPro.statistics_and_plot module
+-------------------------------------
+
+.. automodule:: modformPro.statistics_and_plot
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: modformPro
+    :members:
+    :undoc-members:
+    :show-inheritance:

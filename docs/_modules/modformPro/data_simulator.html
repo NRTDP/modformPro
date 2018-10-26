@@ -1,0 +1,851 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>modformPro.data_simulator &mdash; modformPro 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="modformPro 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> modformPro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Appendix.html">Appendix</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">modformPro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>modformPro.data_simulator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for modformPro.data_simulator</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">globalfuncs</span>   <span class="k">as</span> <span class="nn">gbfunc</span>
+<span class="kn">import</span> <span class="nn">modform_space</span> <span class="k">as</span> <span class="nn">mform_space</span>
+
+<div class="viewcode-block" id="DataSimulator"><a class="viewcode-back" href="../../modformPro.html#modformPro.data_simulator.DataSimulator">[docs]</a><span class="k">class</span> <span class="nc">DataSimulator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class simulates modform distribution and then simulates the MS process on the simulated modform distribution. </span>
+<span class="sd">    </span>
+<span class="sd">    Based on fields set by the user in the specification file, peak areas for BUMS/MRM or TDMS or both are calculated which sets the stage for estimation of modform region from the simulated data.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    specifications : :class:`.ModformProSpecifications`</span>
+<span class="sd">      - ModformSpecifications object</span>
+<span class="sd">      - Contains information about the options set by the user in the specification file.</span>
+
+<span class="sd">    D_sites_modtypes : dict</span>
+<span class="sd">      - Python dictionary containing aa residues mapped to the list of possible modifications.</span>
+<span class="sd">      - In the current implementation, this is set after the creation of the instance object of this class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">specifications</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">D_sites_modtypes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">specifications</span>    <span class="o">=</span> <span class="n">specifications</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_sites_modtypes</span> <span class="o">=</span> <span class="n">D_sites_modtypes</span>
+        
+        <span class="k">if</span> <span class="n">specifications</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span>    <span class="o">=</span> <span class="n">mform_space</span><span class="o">.</span><span class="n">ModformSpace</span><span class="p">(</span><span class="n">specifications</span><span class="p">,</span> <span class="n">specifications</span><span class="o">.</span><span class="n">modes</span><span class="p">)</span>
+        
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">D_sites_modtypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        * Python dictionary having aa residues mapped to the list of possible modifications</span>
+<span class="sd">        * E.g., ``D = {&#39;T32&#39;: [&#39;P&#39;], &#39;S55&#39;: [&#39;Ac&#39;, &#39;P&#39;]}``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_D_sites_modtypes</span>
+
+    <span class="nd">@D_sites_modtypes</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">D_sites_modtypes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_sites_modtypes</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_D_sites_modtypes</span> <span class="o">=</span> <span class="n">D_sites_modtypes</span>
+        
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">modform_space</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance attribute</span>
+<span class="sd">        </span>
+<span class="sd">        Instance of a :class:`.ModformSpace` object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span>
+
+    <span class="nd">@modform_space</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">modform_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modform_space</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span> <span class="o">=</span> <span class="n">modform_space</span>
+
+    
+    
+<div class="viewcode-block" id="DataSimulator.generate_modform_distribution"><a class="viewcode-back" href="../../modformPro.html#modformPro.data_simulator.DataSimulator.generate_modform_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">generate_modform_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">         </span>
+<span class="sd">           This method generates simulated modform distribution and populates the instance attribute ``modform_space``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1">#asserting that nmodes(number of protein isomeric modes) must be less than nsites (number of sites)</span>
+        <span class="n">nsites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D_sites_modtypes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">specifications</span><span class="o">.</span><span class="n">number_modes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">nsites</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Number of protein isomeric modes simulated should be less than number of modification sites&quot;</span><span class="p">)</span>
+            
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">specifications</span><span class="o">.</span><span class="n">modes</span><span class="p">)</span><span class="o">!=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">specifications</span><span class="o">.</span><span class="n">number_modes</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Number of modes must match modes provided&quot;</span><span class="p">)</span>
+        <span class="c1"># generating modform space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">generate_modform_space</span><span class="p">()</span>
+        
+                        
+        <span class="c1">#specifying the percentage abundance of modforms</span>
+        <span class="n">total_molecules</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_variables_nmolecules</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
+        
+        <span class="c1"># setting the percentage abundance (two decimal places) for each modform</span>
+        <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">mform</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_variables_modforms</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">nmolecules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_variables_nmolecules</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
+            <span class="n">percentage_abundance</span> <span class="o">=</span> <span class="mi">100</span><span class="o">*</span><span class="nb">float</span><span class="p">(</span><span class="n">nmolecules</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">total_molecules</span><span class="p">)</span>
+
+            <span class="c1"># storing float value upto three decimal places</span>
+            <span class="n">percentage_abundance_three_decimal_places</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%.3f</span><span class="s2">&quot;</span><span class="o">%</span><span class="nb">round</span><span class="p">(</span><span class="n">percentage_abundance</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">mform</span><span class="o">.</span><span class="n">percentage_abundance</span> <span class="o">=</span> <span class="n">percentage_abundance_three_decimal_places</span>
+                    
+        <span class="c1">#end for var, mform in self._modform_space..</span>
+
+        <span class="k">if</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_variables_modforms</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">!=</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_PuLP_variables</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                  <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Keys in the both the dictionaries must match&quot;</span><span class="p">)</span>
+                        
+        <span class="nb">print</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">#######simulated modform distribution percentage abundances#########&quot;</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_variables_modforms</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">gbfunc</span><span class="o">.</span><span class="n">natural_keys</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+            <span class="nb">print</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="o">.</span><span class="n">percentage_abundance</span><span class="p">)</span></div>
+        
+        
+        
+<div class="viewcode-block" id="DataSimulator.get_list_isomeric_modforms_peak_areas_lists"><a class="viewcode-back" href="../../modformPro.html#modformPro.data_simulator.DataSimulator.get_list_isomeric_modforms_peak_areas_lists">[docs]</a>    <span class="k">def</span> <span class="nf">get_list_isomeric_modforms_peak_areas_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_variables_modforms</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        Its a subordinate method, i.e., called within the class only by a member method.</span>
+<span class="sd">        </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">         D_variables_modforms : dict</span>
+<span class="sd">           Python dictionary of modform variables mapped to their modform objects.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from data_simulator import DataSimulator</span>
+<span class="sd">        &gt;&gt;&gt; from modform import Modform</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms = {}</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms[&#39;a1&#39;] = Modform(var_name=&#39;a1&#39;, D_protein_sites_modifications={&#39;0&#39;: &#39;UNMOD&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms[&#39;a2&#39;] = Modform(var_name=&#39;a2&#39;, D_protein_sites_modifications={&#39;S20&#39;: &#39;P&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms[&#39;a3&#39;] = Modform(var_name=&#39;a3&#39;, D_protein_sites_modifications={&#39;S15&#39;: &#39;P&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms[&#39;a4&#39;] = Modform(var_name=&#39;a4&#39;, D_protein_sites_modifications={&#39;S15&#39;: &#39;P&#39;, &#39;S20&#39;: &#39;P&#39;})</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; for k,v in D_variables_modforms.iteritems():</span>
+<span class="sd">        ...     if k==&#39;a1&#39;: v.percentage_abundance=&#39;0.000&#39;</span>
+<span class="sd">        ...     elif k==&#39;a2&#39;: v.percentage_abundance=&#39;11.111&#39;</span>
+<span class="sd">        ...     elif k==&#39;a3&#39;: v.percentage_abundance=&#39;44.444&#39;</span>
+<span class="sd">        ...     elif k==&#39;a4&#39;: v.percentage_abundance=&#39;44.444&#39;</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; D_sites_modtypes = {&#39;S20&#39;: [&#39;P&#39;], &#39;S15&#39;: [&#39;P&#39;]}</span>
+<span class="sd">        &gt;&gt;&gt; sim_data = DataSimulator(D_sites_modtypes=D_sites_modtypes)</span>
+<span class="sd">        &gt;&gt;&gt; L_peptides = [(1, 5), (6, 10), (11, 20), (21, 32)]</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; D = sim_data.get_dictionary_peptides_isomeric_peak_areas(D_variables_modforms, L_peptides)</span>
+<span class="sd">        &gt;&gt;&gt; print D</span>
+<span class="sd">        defaultdict(&lt;type &#39;list&#39;&gt;, {&#39;11-20&#39;: [[{&#39;UNMOD&#39;: &#39;0&#39;}, &#39;0.000&#39;], [{&#39;P&#39;: 1}, &#39;55.555&#39;], [{&#39;P&#39;: 2}, &#39;44.444&#39;]]})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">L_isomeric_modforms_peak_areas</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">D_variables_modforms</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+
+            <span class="c1"># getting a modification frequency map for this modform</span>
+            <span class="n">D_map</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">get_modifications_frequency_map</span><span class="p">()</span>
+
+            
+            <span class="n">percentage_peak_area_contribution</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">percentage_abundance</span>
+
+            <span class="k">if</span> <span class="n">D_map</span> <span class="ow">in</span> <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">L_isomeric_modforms_peak_areas</span><span class="p">]:</span>
+                <span class="n">t_index</span> <span class="o">=</span>  <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">L_isomeric_modforms_peak_areas</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">D_map</span><span class="p">)</span>
+
+                <span class="n">p_area</span> <span class="o">=</span> <span class="n">L_isomeric_modforms_peak_areas</span><span class="p">[</span><span class="n">t_index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+                <span class="n">percentage_peak_area</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">percentage_peak_area_contribution</span><span class="p">)</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">p_area</span><span class="p">)</span>
+                <span class="n">L_isomeric_modforms_peak_areas</span><span class="p">[</span><span class="n">t_index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">percentage_peak_area</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">L_isomeric_modforms_peak_areas</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">D_map</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">percentage_peak_area_contribution</span><span class="p">)])</span>
+        
+        <span class="k">return</span> <span class="n">L_isomeric_modforms_peak_areas</span></div>
+
+    
+<div class="viewcode-block" id="DataSimulator.generate_TDMS_data"><a class="viewcode-back" href="../../modformPro.html#modformPro.data_simulator.DataSimulator.generate_TDMS_data">[docs]</a>    <span class="k">def</span> <span class="nf">generate_TDMS_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * This method computes peak areas for Intact mass spectrometry for simulated modform distribution.</span>
+<span class="sd">        * This is done only if the option ``FILE_TDMS_DATA`` is specified in the specification file. The content is then printed in the file specified.</span>
+<span class="sd">        * Noise can also be introduced in the peak area values.</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Prints a file having information of the isomeric modforms and their respective percentage peak areas.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">D_variables_modforms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_variables_modforms</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_list_isomeric_modforms_peak_areas_lists</span><span class="p">(</span><span class="n">D_variables_modforms</span><span class="p">)</span>
+        
+        <span class="n">L_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]))</span>        
+        
+        <span class="c1">#adding measurment error in the simulated relative peak area values</span>
+        <span class="n">L_relative_peak_areas</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">L_sorted</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">rarea</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">L_relative_peak_areas</span><span class="p">):</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">specifications</span><span class="o">.</span><span class="n">noise_stdev</span><span class="p">))</span>
+                        
+            <span class="n">rarea</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rarea</span><span class="p">)</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">rarea</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">L_relative_peak_areas</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">L_relative_peak_areas</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">rarea</span><span class="p">)</span>
+            
+            
+        <span class="c1">#end for index, rarea in enumerate(L_relative_peak_areas)</span>
+        
+        <span class="n">sum_areas</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">rarea</span><span class="p">)</span> <span class="k">for</span> <span class="n">rarea</span> <span class="ow">in</span> <span class="n">L_relative_peak_areas</span><span class="p">])</span>
+        <span class="n">L_relative_peak_areas</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">rarea</span><span class="p">)</span><span class="o">*</span><span class="mf">100.0</span><span class="o">/</span><span class="n">sum_areas</span><span class="p">)</span> <span class="k">for</span> <span class="n">rarea</span> <span class="ow">in</span> <span class="n">L_relative_peak_areas</span><span class="p">]</span>
+        
+        <span class="c1">#replacing relative peak area values (added error)</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span><span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">L_sorted</span><span class="p">):</span>
+            <span class="n">L_sorted</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">L_relative_peak_areas</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="c1">#end for</span>
+        
+        <span class="n">print_string</span> <span class="o">=</span> <span class="s2">&quot;#Isomeric modforms and their percentage peak areas</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        
+        <span class="n">print_string</span> <span class="o">+=</span> <span class="s2">&quot;START</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">L_sorted</span><span class="p">:</span>
+            
+            <span class="n">l_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="n">l_string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2"> &quot;</span><span class="o">%</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+            <span class="c1">#end for   </span>
+            
+            <span class="n">print_string</span> <span class="o">+=</span> <span class="s2">&quot;IsomericModformsPeakArea: </span><span class="si">%s%.3f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">l_string</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="mi">3</span><span class="p">))</span>
+        <span class="c1">#end for l in L_sorted</span>
+        
+        <span class="n">print_string</span> <span class="o">+=</span> <span class="s2">&quot;END</span><span class="se">\n</span><span class="s2">&quot;</span>
+        
+        <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">specifications</span><span class="o">.</span><span class="n">file_tdms_data</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">print_string</span><span class="p">)</span>
+        <span class="n">fout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+        
+    
+<div class="viewcode-block" id="DataSimulator.find"><a class="viewcode-back" href="../../modformPro.html#modformPro.data_simulator.DataSimulator.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq_string</span><span class="p">,</span> <span class="n">character</span><span class="p">,</span> <span class="n">proline_check</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * This is a subpordinate method, i.e., only called within the same class by a member method</span>
+<span class="sd">        * Returs a list of positions of amino-acids (single alphabet representation) in a string</span>
+<span class="sd">        * Note that position starts from 1</span>
+<span class="sd">        * Note that the method is case-sensitive</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        seq_string : str</span>
+<span class="sd">          amino-acid sequence.</span>
+<span class="sd">        </span>
+<span class="sd">        character : str</span>
+<span class="sd">          Character whose position(s) in the sequence is to be found.</span>
+<span class="sd">        </span>
+<span class="sd">        proline_check : bool</span>
+<span class="sd">          If this is set to be ``True`` then positions of the amino-acids preceding proline will be ignored. Default is ``False``.</span>
+<span class="sd">        </span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from data_simulator import DataSimulator</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; sim_data = DataSimulator()</span>
+<span class="sd">        &gt;&gt;&gt; </span>
+<span class="sd">        &gt;&gt;&gt; aa_sequence = &#39;MSRYSRT&#39;</span>
+<span class="sd">        &gt;&gt;&gt; L_arginine_locations = list(sim_data.find(aa_sequence, &quot;R&quot;, proline_check=False))</span>
+<span class="sd">        &gt;&gt;&gt; print L_arginine_locations</span>
+<span class="sd">        [3, 6]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">ltr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seq_string</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">ltr</span><span class="o">==</span><span class="n">character</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">proline_check</span> <span class="ow">and</span> <span class="n">seq_string</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;P&quot;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span></div>
+    
+
+<div class="viewcode-block" id="DataSimulator.get_peptides_from_GluC_digestion"><a class="viewcode-back" href="../../modformPro.html#modformPro.data_simulator.DataSimulator.get_peptides_from_GluC_digestion">[docs]</a>    <span class="k">def</span> <span class="nf">get_peptides_from_GluC_digestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aa_sequence</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * This is a subordinate method, i.e., only called within the same class</span>
+<span class="sd">        * The function returns a list of tuples of start and end locations of peptides resulting from Gluc digestion</span>
+<span class="sd">        * GluC digests at the carboxyl side of glutamic acid (E) and aspartic acid (D)</span>
+<span class="sd">        * Note that peptides strictly larger than 4 amino-acid residues are reported</span>
+<span class="sd">        * List of peptides cross-examined using ExPaSy PeptideCutter: http://web.expasy.org/peptide_cutter/</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        aa_sequence : str</span>
+<span class="sd">          amino-acid sequence</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from data_simulator import DataSimulator</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; sim_data = DataSimulator()</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; aa_sequence = &#39;MFLTRSEYDRGVNTFSPEGRLF&#39;</span>
+<span class="sd">        &gt;&gt;&gt; L_tuples = sim_data.get_peptides_from_GluC_digestion(aa_sequence)</span>
+<span class="sd">        &gt;&gt;&gt; print L_tuples</span>
+<span class="sd">        [(1, 7), (10, 18)]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">L_tuples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">first</span>    <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">L_E</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">aa_sequence</span><span class="p">,</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="n">proline_check</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span> <span class="c1"># Glutamic acid</span>
+        <span class="n">L_D</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">aa_sequence</span><span class="p">,</span><span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="n">proline_check</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span> <span class="c1"># Aspartic acid</span>
+        
+        <span class="n">L_ED</span> <span class="o">=</span> <span class="n">L_E</span> <span class="o">+</span> <span class="n">L_D</span>
+        <span class="n">L_ED</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">L_ED</span><span class="p">:</span>
+            <span class="n">tup</span> <span class="o">=</span> <span class="p">(</span><span class="n">first</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
+            <span class="n">length_peptide</span> <span class="o">=</span> <span class="n">p</span><span class="o">-</span><span class="n">first</span><span class="o">+</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="n">length_peptide</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">L_tuples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span>
+
+            <span class="n">first</span> <span class="o">=</span> <span class="n">p</span><span class="o">+</span><span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">L_tuples</span></div>
+    
+    
+<div class="viewcode-block" id="DataSimulator.get_peptides_from_Trypsin_digestion"><a class="viewcode-back" href="../../modformPro.html#modformPro.data_simulator.DataSimulator.get_peptides_from_Trypsin_digestion">[docs]</a>    <span class="k">def</span> <span class="nf">get_peptides_from_Trypsin_digestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aa_sequence</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * This is a subordinate method, i.e., only called within the same class</span>
+<span class="sd">        * This method returns a list of tuples of start and end locations of peptides resulting from Trypsin digestion</span>
+<span class="sd">        * With Proline check - Trypsin digests at the carboxyl side of lysine or arginine unless they are followed by proline</span>
+<span class="sd">        * Note that peptides strictly larger than 4 amino acids are reported</span>
+<span class="sd">        * List of peptides cross-examined using ExPaSy PeptideCutter: http://web.expasy.org/peptide_cutter/</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">          aa_sequence : str</span>
+<span class="sd">             amino-acid sequence</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from data_simulator import DataSimulator</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; sim_data = DataSimulator()</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; aa_sequence = &#39;MFLTRSEYDRGVNTFSPEGRLF&#39;</span>
+<span class="sd">        &gt;&gt;&gt; L_tuples = sim_data.get_peptides_from_Trypsin_digestion(aa_sequence)</span>
+<span class="sd">        &gt;&gt;&gt; print L_tuples</span>
+<span class="sd">        [(1, 5), (6, 10), (11, 20)]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">L_tuples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">first</span>    <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">L_K</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">aa_sequence</span><span class="p">,</span><span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="n">proline_check</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span> <span class="c1"># Lysine</span>
+        <span class="n">L_R</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">aa_sequence</span><span class="p">,</span><span class="s2">&quot;R&quot;</span><span class="p">,</span> <span class="n">proline_check</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span> <span class="c1"># Arginine</span>
+        <span class="n">L_KR</span> <span class="o">=</span> <span class="n">L_K</span> <span class="o">+</span> <span class="n">L_R</span>
+        <span class="n">L_KR</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">L_KR</span><span class="p">:</span>
+            <span class="n">tup</span> <span class="o">=</span> <span class="p">(</span><span class="n">first</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
+            <span class="n">length_peptide</span> <span class="o">=</span> <span class="n">p</span><span class="o">-</span><span class="n">first</span><span class="o">+</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="n">length_peptide</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">L_tuples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span>
+
+            <span class="n">first</span> <span class="o">=</span> <span class="n">p</span><span class="o">+</span><span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">L_tuples</span></div>
+    
+<div class="viewcode-block" id="DataSimulator.whether_peptide_contains_any_modification_site"><a class="viewcode-back" href="../../modformPro.html#modformPro.data_simulator.DataSimulator.whether_peptide_contains_any_modification_site">[docs]</a>    <span class="k">def</span> <span class="nf">whether_peptide_contains_any_modification_site</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N_loc</span><span class="p">,</span> <span class="n">C_loc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * This is a subordinate method, i.e., only called within the same class by a member method</span>
+<span class="sd">        * The method tells whether the peptide (N_loc, C_loc) contains any modification site</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        N_loc : str or int</span>
+<span class="sd">          N-terminal location of the peptide in the aa sequence</span>
+<span class="sd">        </span>
+<span class="sd">        C_loc : str or int</span>
+<span class="sd">          C-terminal location of the peptide in the aa sequence</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">        </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        A given peptide specified by its ``N_loc`` and ``C_loc`` residue positions is examined for containing any modification site. The information on modification sites is contained in the dictionary ``D_sites_modtypes``, which stores the data from an input file. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">L_sites_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_D_sites_modtypes</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+        
+        <span class="n">modification_site_presence</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">L_sites_sorted</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">site</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">&gt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N_loc</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">site</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">C_loc</span><span class="p">):</span>
+                <span class="n">modification_site_presence</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="n">modification_site_presence</span></div>
+    
+<div class="viewcode-block" id="DataSimulator.get_dictionary_modification_frequency_for_peptide_in_modform"><a class="viewcode-back" href="../../modformPro.html#modformPro.data_simulator.DataSimulator.get_dictionary_modification_frequency_for_peptide_in_modform">[docs]</a>    <span class="k">def</span> <span class="nf">get_dictionary_modification_frequency_for_peptide_in_modform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N_loc</span><span class="p">,</span> <span class="n">C_loc</span><span class="p">,</span> <span class="n">modform_object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * This is a subordinate method, i.e., only called within the same class by a member method</span>
+<span class="sd">        * This function provides ``D_peptide_mod_frequency`` for a peptide (``N_loc``, ``C_loc``) in a given protein modform</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        N_loc : str or int</span>
+<span class="sd">          N terminal position of the peptide in the protein sequence</span>
+<span class="sd">        </span>
+<span class="sd">        C_loc : str or int</span>
+<span class="sd">          C terminal position of the peptide in the protein sequence</span>
+<span class="sd">        </span>
+<span class="sd">        modform_object : :class:`.Modform`</span>
+<span class="sd">          Modform object</span>
+<span class="sd">          </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        D_peptide_mod_frequency : dict</span>
+<span class="sd">          Python dictionary containing modifications mapped to their frequencies for a peptide (``N_loc``, ``C_loc``).</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from data_simulator import DataSimulator</span>
+<span class="sd">        &gt;&gt;&gt; from modform import Modform</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; sim_data = DataSimulator()</span>
+<span class="sd">        &gt;&gt;&gt; mform = Modform(var_name=&#39;a15&#39;, D_protein_sites_modifications={&#39;S15&#39;: &#39;P&#39;, &#39;T16&#39;: &#39;P&#39;, &#39;S54&#39;: &#39;P&#39;})</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; N_loc = 1; C_loc = 24 # peptide - (1, 24)</span>
+<span class="sd">        &gt;&gt;&gt; D_peptide_mod_frequency = sim_data.get_dictionary_modification_frequency_for_peptide_in_modform(N_loc, C_loc, mform)</span>
+<span class="sd">        &gt;&gt;&gt; print D_peptide_mod_frequency</span>
+<span class="sd">        {&#39;P&#39;: &#39;2&#39;}</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; N_loc = 50; C_loc = 58 # peptide - (50, 58)</span>
+<span class="sd">        &gt;&gt;&gt; D_peptide_mod_frequency = sim_data.get_dictionary_modification_frequency_for_peptide_in_modform(N_loc, C_loc, mform)</span>
+<span class="sd">        &gt;&gt;&gt; print D_peptide_mod_frequency</span>
+<span class="sd">        {&#39;P&#39;: &#39;1&#39;}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">D_peptide_mod_frequency</span> <span class="o">=</span> <span class="p">{}</span>
+                
+        <span class="c1"># for an unmodified modform</span>
+        <span class="k">if</span> <span class="n">modform_object</span><span class="o">.</span><span class="n">D_protein_sites_modifications</span><span class="o">==</span><span class="p">{</span><span class="s1">&#39;0&#39;</span><span class="p">:</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">}:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span><span class="p">}</span>
+                   
+        <span class="k">else</span><span class="p">:</span>
+            
+            <span class="c1"># dictionary of mod and frequency for this modform</span>
+            <span class="n">L_sites_modifications_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">modform_object</span><span class="o">.</span><span class="n">D_protein_sites_modifications</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:]))</span>
+            
+            <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="n">L_sites_modifications_sorted</span><span class="p">:</span>
+
+                <span class="c1"># checking if the modification site lies within the peptide (N_loc, C_loc)</span>
+                <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span> <span class="o">&gt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N_loc</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">C_loc</span><span class="p">):</span>
+                    
+                    <span class="k">if</span> <span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">D_peptide_mod_frequency</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">freq</span> <span class="o">=</span> <span class="n">D_peptide_mod_frequency</span><span class="p">[</span><span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                        <span class="n">D_peptide_mod_frequency</span><span class="p">[</span><span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+                                
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">D_peptide_mod_frequency</span><span class="p">[</span><span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+                                
+                <span class="k">else</span><span class="p">:</span> <span class="c1">#if int(tup[0]) &gt;= int(N_loc)...</span>
+                    <span class="k">continue</span>
+
+            <span class="c1">#end for tup in L_sites_modifications_sorted</span>
+
+        <span class="c1">#end if-else</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">D_peptide_mod_frequency</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;UNMOD&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">D_peptide_mod_frequency</span></div>
+    
+    
+<div class="viewcode-block" id="DataSimulator.get_dictionary_peptides_isomeric_peak_areas"><a class="viewcode-back" href="../../modformPro.html#modformPro.data_simulator.DataSimulator.get_dictionary_peptides_isomeric_peak_areas">[docs]</a>    <span class="k">def</span> <span class="nf">get_dictionary_peptides_isomeric_peak_areas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_variables_modforms</span><span class="p">,</span> <span class="n">L_peptides</span><span class="p">):</span>      
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * This is a subordinate method, i.e., only called within the same class by a member method.</span>
+<span class="sd">        * This method computes the percentage peak areas for isomeric peptides from their abundance and returns a dictionary of peptides mapped to their isomeric peak areas.</span>
+<span class="sd">                </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        D_variables_modforms : dict</span>
+<span class="sd">          Python dictionary of modform variables mapped to their :class:`.Modform` objects.</span>
+<span class="sd">        </span>
+<span class="sd">        L_peptides : list</span>
+<span class="sd">          Python list of tuples of peptides, e.g., ``L = [(1, 6), (7, 15), (16, 30)]``. Each tuple is starting and ending position of a peptide in the protein sequence.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        defaultdict(list)</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from data_simulator import DataSimulator</span>
+<span class="sd">        &gt;&gt;&gt; from modform import Modform</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms = {}</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms[&#39;a1&#39;] = Modform(var_name=&#39;a1&#39;, D_protein_sites_modifications={&#39;0&#39;: &#39;UNMOD&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms[&#39;a2&#39;] = Modform(var_name=&#39;a2&#39;, D_protein_sites_modifications={&#39;S20&#39;: &#39;P&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms[&#39;a3&#39;] = Modform(var_name=&#39;a3&#39;, D_protein_sites_modifications={&#39;S15&#39;: &#39;P&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; D_variables_modforms[&#39;a4&#39;] = Modform(var_name=&#39;a4&#39;, D_protein_sites_modifications={&#39;S15&#39;: &#39;P&#39;, &#39;S20&#39;: &#39;P&#39;})</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt;for k,v in D_variables_modforms.iteritems():</span>
+<span class="sd">        ...    if k==&#39;a1&#39;: v.percentage_abundance=&#39;0.000&#39;</span>
+<span class="sd">        ...    elif k==&#39;a2&#39;: v.percentage_abundance=&#39;11.111&#39;</span>
+<span class="sd">        ...    elif k==&#39;a3&#39;: v.percentage_abundance=&#39;44.444&#39;</span>
+<span class="sd">        ...    elif k==&#39;a4&#39;: v.percentage_abundance=&#39;44.444&#39;</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; D_sites_modtypes = {&#39;S20&#39;: [&#39;P&#39;], &#39;S15&#39;: [&#39;P&#39;]}</span>
+<span class="sd">        &gt;&gt;&gt; sim_data = DataSimulator(D_sites_modtypes=D_sites_modtypes)</span>
+<span class="sd">        &gt;&gt;&gt; L_peptides = [(1, 5), (6, 10), (11, 20), (21, 32)]</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; D = sim_data.get_dictionary_peptides_isomeric_peak_areas(D_variables_modforms, L_peptides)</span>
+<span class="sd">        &gt;&gt;&gt; print D</span>
+<span class="sd">        defaultdict(&lt;type &#39;list&#39;&gt;, {&#39;11-20&#39;: [[{&#39;UNMOD&#39;: &#39;0&#39;}, &#39;0.000&#39;], [{&#39;P&#39;: 1}, &#39;55.555&#39;], [{&#39;P&#39;: 2}, &#39;44.444&#39;]]})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">D_peptide_isomeric_peak_areas</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        
+        <span class="c1"># finding percentage peak areas for isomeric peptides</span>
+        <span class="k">for</span> <span class="n">peptide</span> <span class="ow">in</span> <span class="n">L_peptides</span><span class="p">:</span>
+            
+            <span class="n">N_loc</span> <span class="o">=</span> <span class="n">peptide</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">C_loc</span> <span class="o">=</span> <span class="n">peptide</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            
+            <span class="n">L_isomeric_peptides_peak_areas</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># list of lists [..[D_peptide_mod_frequency, peak_area]..]</span>
+            
+            <span class="c1"># skip peptides which do not contain any modification sites</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">whether_peptide_contains_any_modification_site</span><span class="p">(</span><span class="n">N_loc</span><span class="p">,</span> <span class="n">C_loc</span><span class="p">):</span>
+                <span class="k">continue</span>
+            
+            <span class="k">else</span><span class="p">:</span>
+                
+                <span class="c1"># find isomers of this peptide in across all modforms</span>
+                <span class="c1"># add peak area for same D_peptide_mod_frequency map</span>
+
+                <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">mform</span> <span class="ow">in</span> <span class="n">D_variables_modforms</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                    <span class="n">D_peptide_mod_frequency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dictionary_modification_frequency_for_peptide_in_modform</span><span class="p">(</span><span class="n">N_loc</span><span class="p">,</span> <span class="n">C_loc</span><span class="p">,</span> <span class="n">mform</span><span class="p">)</span>
+
+                    <span class="c1">#updating the percentage peak area</span>
+                    
+                    <span class="n">percentage_peak_area_contribution</span> <span class="o">=</span> <span class="n">mform</span><span class="o">.</span><span class="n">percentage_abundance</span>
+                    <span class="k">if</span> <span class="n">D_peptide_mod_frequency</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">L_isomeric_peptides_peak_areas</span><span class="p">]:</span>
+                            <span class="n">x_index</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">L_isomeric_peptides_peak_areas</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">D_peptide_mod_frequency</span><span class="p">)</span>
+                            <span class="n">p_area</span> <span class="o">=</span> <span class="n">L_isomeric_peptides_peak_areas</span><span class="p">[</span><span class="n">x_index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                            <span class="n">percentage_peak_area</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">percentage_peak_area_contribution</span><span class="p">)</span><span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">p_area</span><span class="p">)</span>
+                            <span class="n">L_isomeric_peptides_peak_areas</span><span class="p">[</span><span class="n">x_index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">percentage_peak_area</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">L_isomeric_peptides_peak_areas</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">D_peptide_mod_frequency</span> <span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">percentage_peak_area_contribution</span><span class="p">)])</span>
+                        
+                    <span class="c1">#end if-else</span>
+                <span class="c1">#end for var, mform in D_variables_modforms.iteritems()</span>
+                                                    
+                <span class="n">peptide_string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">-</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">peptide</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">peptide</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">D_peptide_isomeric_peak_areas</span><span class="p">[</span><span class="n">peptide_string</span><span class="p">]</span> <span class="o">=</span> <span class="n">L_isomeric_peptides_peak_areas</span>
+                
+        <span class="c1">#end for peptide in L_peptides</span>
+        
+        <span class="k">return</span> <span class="n">D_peptide_isomeric_peak_areas</span></div>
+
+    
+<div class="viewcode-block" id="DataSimulator.generate_BUMS_MRM_data"><a class="viewcode-back" href="../../modformPro.html#modformPro.data_simulator.DataSimulator.generate_BUMS_MRM_data">[docs]</a>    <span class="k">def</span> <span class="nf">generate_BUMS_MRM_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instance method</span>
+<span class="sd">        </span>
+<span class="sd">        * This method computes peak areas for BUMS-MRM method</span>
+<span class="sd">        * This is done only if the option ``FILE_BUMS_MRM_DATA`` is specified in the specification file. The content is then printed in the file specified.</span>
+<span class="sd">        * User can choose ``Trypsin`` or ``Gluc`` or both in the specification file</span>
+<span class="sd">        * Noise can also be introduced in the peak area values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">D_variables_modforms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modform_space</span><span class="o">.</span><span class="n">D_variables_modforms</span>
+        <span class="n">aa_sequence</span> <span class="o">=</span> <span class="n">gbfunc</span><span class="o">.</span><span class="n">get_fasta_seq_from_the_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">specifications</span><span class="o">.</span><span class="n">file_fasta_sequence</span><span class="p">)</span>
+        
+        <span class="n">L_peptides</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">specifications</span><span class="o">.</span><span class="n">Trypsin</span><span class="p">:</span>
+            <span class="n">L_peptides_Trypsin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_peptides_from_Trypsin_digestion</span><span class="p">(</span><span class="n">aa_sequence</span><span class="p">)</span>
+            <span class="n">L_peptides</span> <span class="o">=</span> <span class="n">L_peptides</span> <span class="o">+</span> <span class="n">L_peptides_Trypsin</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">specifications</span><span class="o">.</span><span class="n">GluC</span><span class="p">:</span>
+            <span class="n">L_peptides_GluC</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_peptides_from_GluC_digestion</span><span class="p">(</span><span class="n">aa_sequence</span><span class="p">)</span>
+            <span class="n">L_peptides</span> <span class="o">=</span> <span class="n">L_peptides</span> <span class="o">+</span> <span class="n">L_peptides_GluC</span> 
+        
+        <span class="n">D_peptide_isomeric_peak_areas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dictionary_peptides_isomeric_peak_areas</span><span class="p">(</span><span class="n">D_variables_modforms</span><span class="p">,</span> <span class="n">L_peptides</span><span class="p">)</span>
+        
+        <span class="n">print_string</span> <span class="o">=</span>  <span class="s2">&quot;# Peptides and percentage peak areas of isomeric peptides</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">print_string</span> <span class="o">+=</span> <span class="s2">&quot;# Modification_type=frequency; e.g., P=2 Ac=1 MM=2</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">print_string</span> <span class="o">+=</span> <span class="s2">&quot;# Last column reserved for percentage peak area value</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        
+        <span class="k">for</span> <span class="n">p</span><span class="p">,</span><span class="n">A</span> <span class="ow">in</span> <span class="n">D_peptide_isomeric_peak_areas</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            
+            <span class="n">print_string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">PEPSTART</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">print_string</span> <span class="o">+=</span> <span class="s2">&quot;peptide: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">p</span>
+            
+            <span class="n">A_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]))</span>
+
+            <span class="c1">#adding measurment error in the simulated relative peak area values</span>
+            <span class="n">L_relative_peak_areas</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">A_sorted</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">rarea</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">L_relative_peak_areas</span><span class="p">):</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">specifications</span><span class="o">.</span><span class="n">noise_stdev</span><span class="p">))</span>
+                <span class="n">rarea</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rarea</span><span class="p">)</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">rarea</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="n">L_relative_peak_areas</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">L_relative_peak_areas</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">rarea</span><span class="p">)</span>
+            <span class="c1">#end for index, rarea in enumerate(L_relative_peak_areas)</span>
+        
+            <span class="n">sum_areas</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">rarea</span><span class="p">)</span> <span class="k">for</span> <span class="n">rarea</span> <span class="ow">in</span> <span class="n">L_relative_peak_areas</span><span class="p">])</span>
+            <span class="n">L_relative_peak_areas</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">rarea</span><span class="p">)</span><span class="o">*</span><span class="mf">100.0</span><span class="o">/</span><span class="n">sum_areas</span><span class="p">)</span> <span class="k">for</span> <span class="n">rarea</span> <span class="ow">in</span> <span class="n">L_relative_peak_areas</span><span class="p">]</span>
+            
+            <span class="c1">#modifying relative peak area values (added error)</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span><span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">A_sorted</span><span class="p">):</span>
+                <span class="n">A_sorted</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">L_relative_peak_areas</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="c1">#end for</span>
+            
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">A_sorted</span><span class="p">:</span>
+                <span class="n">l_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                    <span class="n">l_string</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2"> &quot;</span><span class="o">%</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+                
+                <span class="n">print_string</span> <span class="o">+=</span> <span class="s2">&quot;IsomericPeptidesPeakArea: </span><span class="si">%s%.3f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">l_string</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="mi">3</span><span class="p">))</span>
+            <span class="n">print_string</span> <span class="o">+=</span> <span class="s2">&quot;PEPEND</span><span class="se">\n</span><span class="s2">&quot;</span>
+        
+        <span class="c1">#end for p, A in D_peptide_isomeric_peak_areas.iteritems()</span>
+        
+        <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">specifications</span><span class="o">.</span><span class="n">file_bums_mrm_data</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">print_string</span><span class="p">)</span>
+
+        <span class="n">fout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+ 
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Deepesh Agarwal &amp; Jeremy Gunawardena.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

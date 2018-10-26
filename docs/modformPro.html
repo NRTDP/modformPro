@@ -1,0 +1,1983 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>modformPro package &mdash; modformPro 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="modformPro 1.0.0 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> modformPro
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html">modformPro Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Appendix.html">Appendix</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">modformPro</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>modformPro package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/modformPro.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="modformpro-package">
+<h1>modformPro package<a class="headerlink" href="#modformpro-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-modformPro.data_simulator">
+<span id="modformpro-data-simulator-module"></span><h2>modformPro.data_simulator module<a class="headerlink" href="#module-modformPro.data_simulator" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modformPro.data_simulator.DataSimulator">
+<em class="property">class </em><code class="descclassname">modformPro.data_simulator.</code><code class="descname">DataSimulator</code><span class="sig-paren">(</span><em>specifications=None</em>, <em>D_sites_modtypes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/data_simulator.html#DataSimulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.data_simulator.DataSimulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class simulates modform distribution and then simulates the MS process on the simulated modform distribution.</p>
+<p>Based on fields set by the user in the specification file, peak areas for BUMS/MRM or TDMS or both are calculated which sets the stage for estimation of modform region from the simulated data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>specifications</strong> : <a class="reference internal" href="#modformPro.specifications.ModformProSpecifications" title="modformPro.specifications.ModformProSpecifications"><code class="xref py py-class docutils literal"><span class="pre">ModformProSpecifications</span></code></a></p>
+<blockquote>
+<div><ul class="simple">
+<li>ModformSpecifications object</li>
+<li>Contains information about the options set by the user in the specification file.</li>
+</ul>
+</div></blockquote>
+<p><strong>D_sites_modtypes</strong> : dict</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>Python dictionary containing aa residues mapped to the list of possible modifications.</li>
+<li>In the current implementation, this is set after the creation of the instance object of this class.</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="modformPro.data_simulator.DataSimulator.D_sites_modtypes">
+<code class="descname">D_sites_modtypes</code><a class="headerlink" href="#modformPro.data_simulator.DataSimulator.D_sites_modtypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<ul class="simple">
+<li>Python dictionary having aa residues mapped to the list of possible modifications</li>
+<li>E.g., <code class="docutils literal"><span class="pre">D</span> <span class="pre">=</span> <span class="pre">{'T32':</span> <span class="pre">['P'],</span> <span class="pre">'S55':</span> <span class="pre">['Ac',</span> <span class="pre">'P']}</span></code></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.data_simulator.DataSimulator.find">
+<code class="descname">find</code><span class="sig-paren">(</span><em>seq_string</em>, <em>character</em>, <em>proline_check=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/data_simulator.html#DataSimulator.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.data_simulator.DataSimulator.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This is a subpordinate method, i.e., only called within the same class by a member method</li>
+<li>Returs a list of positions of amino-acids (single alphabet representation) in a string</li>
+<li>Note that position starts from 1</li>
+<li>Note that the method is case-sensitive</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seq_string</strong> : str</p>
+<blockquote>
+<div><p>amino-acid sequence.</p>
+</div></blockquote>
+<p><strong>character</strong> : str</p>
+<blockquote>
+<div><p>Character whose position(s) in the sequence is to be found.</p>
+</div></blockquote>
+<p><strong>proline_check</strong> : bool</p>
+<blockquote class="last">
+<div><p>If this is set to be <code class="docutils literal"><span class="pre">True</span></code> then positions of the amino-acids preceding proline will be ignored. Default is <code class="docutils literal"><span class="pre">False</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">data_simulator</span> <span class="k">import</span> <span class="n">DataSimulator</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim_data</span> <span class="o">=</span> <span class="n">DataSimulator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aa_sequence</span> <span class="o">=</span> <span class="s1">&#39;MSRYSRT&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L_arginine_locations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sim_data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">aa_sequence</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">,</span> <span class="n">proline_check</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">L_arginine_locations</span>
+<span class="go">[3, 6]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.data_simulator.DataSimulator.generate_BUMS_MRM_data">
+<code class="descname">generate_BUMS_MRM_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/data_simulator.html#DataSimulator.generate_BUMS_MRM_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.data_simulator.DataSimulator.generate_BUMS_MRM_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This method computes peak areas for BUMS-MRM method</li>
+<li>This is done only if the option <code class="docutils literal"><span class="pre">FILE_BUMS_MRM_DATA</span></code> is specified in the specification file. The content is then printed in the file specified.</li>
+<li>User can choose <code class="docutils literal"><span class="pre">Trypsin</span></code> or <code class="docutils literal"><span class="pre">Gluc</span></code> or both in the specification file</li>
+<li>Noise can also be introduced in the peak area values</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.data_simulator.DataSimulator.generate_TDMS_data">
+<code class="descname">generate_TDMS_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/data_simulator.html#DataSimulator.generate_TDMS_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.data_simulator.DataSimulator.generate_TDMS_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This method computes peak areas for Intact mass spectrometry for simulated modform distribution.</li>
+<li>This is done only if the option <code class="docutils literal"><span class="pre">FILE_TDMS_DATA</span></code> is specified in the specification file. The content is then printed in the file specified.</li>
+<li>Noise can also be introduced in the peak area values.</li>
+</ul>
+<p class="rubric">Notes</p>
+<p>Prints a file having information of the isomeric modforms and their respective percentage peak areas.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.data_simulator.DataSimulator.generate_modform_distribution">
+<code class="descname">generate_modform_distribution</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/data_simulator.html#DataSimulator.generate_modform_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.data_simulator.DataSimulator.generate_modform_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>This method generates simulated modform distribution and populates the instance attribute <code class="docutils literal"><span class="pre">modform_space</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.data_simulator.DataSimulator.get_dictionary_modification_frequency_for_peptide_in_modform">
+<code class="descname">get_dictionary_modification_frequency_for_peptide_in_modform</code><span class="sig-paren">(</span><em>N_loc</em>, <em>C_loc</em>, <em>modform_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/data_simulator.html#DataSimulator.get_dictionary_modification_frequency_for_peptide_in_modform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.data_simulator.DataSimulator.get_dictionary_modification_frequency_for_peptide_in_modform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This is a subordinate method, i.e., only called within the same class by a member method</li>
+<li>This function provides <code class="docutils literal"><span class="pre">D_peptide_mod_frequency</span></code> for a peptide (<code class="docutils literal"><span class="pre">N_loc</span></code>, <code class="docutils literal"><span class="pre">C_loc</span></code>) in a given protein modform</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>N_loc</strong> : str or int</p>
+<blockquote>
+<div><p>N terminal position of the peptide in the protein sequence</p>
+</div></blockquote>
+<p><strong>C_loc</strong> : str or int</p>
+<blockquote>
+<div><p>C terminal position of the peptide in the protein sequence</p>
+</div></blockquote>
+<p><strong>modform_object</strong> : <a class="reference internal" href="#modformPro.modform.Modform" title="modformPro.modform.Modform"><code class="xref py py-class docutils literal"><span class="pre">Modform</span></code></a></p>
+<blockquote>
+<div><p>Modform object</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>D_peptide_mod_frequency</strong> : dict</p>
+<blockquote class="last">
+<div><p>Python dictionary containing modifications mapped to their frequencies for a peptide (<code class="docutils literal"><span class="pre">N_loc</span></code>, <code class="docutils literal"><span class="pre">C_loc</span></code>).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">data_simulator</span> <span class="k">import</span> <span class="n">DataSimulator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">modform</span> <span class="k">import</span> <span class="n">Modform</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim_data</span> <span class="o">=</span> <span class="n">DataSimulator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mform</span> <span class="o">=</span> <span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;a15&#39;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;S15&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;T16&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;S54&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">})</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">N_loc</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">C_loc</span> <span class="o">=</span> <span class="mi">24</span> <span class="c1"># peptide - (1, 24)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_peptide_mod_frequency</span> <span class="o">=</span> <span class="n">sim_data</span><span class="o">.</span><span class="n">get_dictionary_modification_frequency_for_peptide_in_modform</span><span class="p">(</span><span class="n">N_loc</span><span class="p">,</span> <span class="n">C_loc</span><span class="p">,</span> <span class="n">mform</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">D_peptide_mod_frequency</span>
+<span class="go">{&#39;P&#39;: &#39;2&#39;}</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">N_loc</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span> <span class="n">C_loc</span> <span class="o">=</span> <span class="mi">58</span> <span class="c1"># peptide - (50, 58)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_peptide_mod_frequency</span> <span class="o">=</span> <span class="n">sim_data</span><span class="o">.</span><span class="n">get_dictionary_modification_frequency_for_peptide_in_modform</span><span class="p">(</span><span class="n">N_loc</span><span class="p">,</span> <span class="n">C_loc</span><span class="p">,</span> <span class="n">mform</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">D_peptide_mod_frequency</span>
+<span class="go">{&#39;P&#39;: &#39;1&#39;}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.data_simulator.DataSimulator.get_dictionary_peptides_isomeric_peak_areas">
+<code class="descname">get_dictionary_peptides_isomeric_peak_areas</code><span class="sig-paren">(</span><em>D_variables_modforms</em>, <em>L_peptides</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/data_simulator.html#DataSimulator.get_dictionary_peptides_isomeric_peak_areas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.data_simulator.DataSimulator.get_dictionary_peptides_isomeric_peak_areas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This is a subordinate method, i.e., only called within the same class by a member method.</li>
+<li>This method computes the percentage peak areas for isomeric peptides from their abundance and returns a dictionary of peptides mapped to their isomeric peak areas.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>D_variables_modforms</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary of modform variables mapped to their <a class="reference internal" href="#modformPro.modform.Modform" title="modformPro.modform.Modform"><code class="xref py py-class docutils literal"><span class="pre">Modform</span></code></a> objects.</p>
+</div></blockquote>
+<p><strong>L_peptides</strong> : list</p>
+<blockquote>
+<div><p>Python list of tuples of peptides, e.g., <code class="docutils literal"><span class="pre">L</span> <span class="pre">=</span> <span class="pre">[(1,</span> <span class="pre">6),</span> <span class="pre">(7,</span> <span class="pre">15),</span> <span class="pre">(16,</span> <span class="pre">30)]</span></code>. Each tuple is starting and ending position of a peptide in the protein sequence.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">defaultdict(list)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">data_simulator</span> <span class="k">import</span> <span class="n">DataSimulator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">modform</span> <span class="k">import</span> <span class="n">Modform</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span><span class="p">[</span><span class="s1">&#39;a1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;0&#39;</span><span class="p">:</span> <span class="s1">&#39;UNMOD&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span><span class="p">[</span><span class="s1">&#39;a2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;a2&#39;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;S20&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span><span class="p">[</span><span class="s1">&#39;a3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;a3&#39;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;S15&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span><span class="p">[</span><span class="s1">&#39;a4&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;a4&#39;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;S15&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;S20&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">})</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="go">&gt;&gt;&gt;for k,v in D_variables_modforms.iteritems():</span>
+<span class="gp">... </span>   <span class="k">if</span> <span class="n">k</span><span class="o">==</span><span class="s1">&#39;a1&#39;</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">percentage_abundance</span><span class="o">=</span><span class="s1">&#39;0.000&#39;</span>
+<span class="gp">... </span>   <span class="k">elif</span> <span class="n">k</span><span class="o">==</span><span class="s1">&#39;a2&#39;</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">percentage_abundance</span><span class="o">=</span><span class="s1">&#39;11.111&#39;</span>
+<span class="gp">... </span>   <span class="k">elif</span> <span class="n">k</span><span class="o">==</span><span class="s1">&#39;a3&#39;</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">percentage_abundance</span><span class="o">=</span><span class="s1">&#39;44.444&#39;</span>
+<span class="gp">... </span>   <span class="k">elif</span> <span class="n">k</span><span class="o">==</span><span class="s1">&#39;a4&#39;</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">percentage_abundance</span><span class="o">=</span><span class="s1">&#39;44.444&#39;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_sites_modtypes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;S20&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;P&#39;</span><span class="p">],</span> <span class="s1">&#39;S15&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;P&#39;</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim_data</span> <span class="o">=</span> <span class="n">DataSimulator</span><span class="p">(</span><span class="n">D_sites_modtypes</span><span class="o">=</span><span class="n">D_sites_modtypes</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L_peptides</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">32</span><span class="p">)]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">sim_data</span><span class="o">.</span><span class="n">get_dictionary_peptides_isomeric_peak_areas</span><span class="p">(</span><span class="n">D_variables_modforms</span><span class="p">,</span> <span class="n">L_peptides</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">D</span>
+<span class="go">defaultdict(&lt;type &#39;list&#39;&gt;, {&#39;11-20&#39;: [[{&#39;UNMOD&#39;: &#39;0&#39;}, &#39;0.000&#39;], [{&#39;P&#39;: 1}, &#39;55.555&#39;], [{&#39;P&#39;: 2}, &#39;44.444&#39;]]})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.data_simulator.DataSimulator.get_list_isomeric_modforms_peak_areas_lists">
+<code class="descname">get_list_isomeric_modforms_peak_areas_lists</code><span class="sig-paren">(</span><em>D_variables_modforms</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/data_simulator.html#DataSimulator.get_list_isomeric_modforms_peak_areas_lists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.data_simulator.DataSimulator.get_list_isomeric_modforms_peak_areas_lists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>Its a subordinate method, i.e., called within the class only by a member method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>D_variables_modforms</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary of modform variables mapped to their modform objects.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">data_simulator</span> <span class="k">import</span> <span class="n">DataSimulator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">modform</span> <span class="k">import</span> <span class="n">Modform</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span><span class="p">[</span><span class="s1">&#39;a1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;0&#39;</span><span class="p">:</span> <span class="s1">&#39;UNMOD&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span><span class="p">[</span><span class="s1">&#39;a2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;a2&#39;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;S20&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span><span class="p">[</span><span class="s1">&#39;a3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;a3&#39;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;S15&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span><span class="p">[</span><span class="s1">&#39;a4&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;a4&#39;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;S15&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;S20&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">})</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">D_variables_modforms</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">k</span><span class="o">==</span><span class="s1">&#39;a1&#39;</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">percentage_abundance</span><span class="o">=</span><span class="s1">&#39;0.000&#39;</span>
+<span class="gp">... </span>    <span class="k">elif</span> <span class="n">k</span><span class="o">==</span><span class="s1">&#39;a2&#39;</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">percentage_abundance</span><span class="o">=</span><span class="s1">&#39;11.111&#39;</span>
+<span class="gp">... </span>    <span class="k">elif</span> <span class="n">k</span><span class="o">==</span><span class="s1">&#39;a3&#39;</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">percentage_abundance</span><span class="o">=</span><span class="s1">&#39;44.444&#39;</span>
+<span class="gp">... </span>    <span class="k">elif</span> <span class="n">k</span><span class="o">==</span><span class="s1">&#39;a4&#39;</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">percentage_abundance</span><span class="o">=</span><span class="s1">&#39;44.444&#39;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_sites_modtypes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;S20&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;P&#39;</span><span class="p">],</span> <span class="s1">&#39;S15&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;P&#39;</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim_data</span> <span class="o">=</span> <span class="n">DataSimulator</span><span class="p">(</span><span class="n">D_sites_modtypes</span><span class="o">=</span><span class="n">D_sites_modtypes</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L_peptides</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">32</span><span class="p">)]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">sim_data</span><span class="o">.</span><span class="n">get_dictionary_peptides_isomeric_peak_areas</span><span class="p">(</span><span class="n">D_variables_modforms</span><span class="p">,</span> <span class="n">L_peptides</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">D</span>
+<span class="go">defaultdict(&lt;type &#39;list&#39;&gt;, {&#39;11-20&#39;: [[{&#39;UNMOD&#39;: &#39;0&#39;}, &#39;0.000&#39;], [{&#39;P&#39;: 1}, &#39;55.555&#39;], [{&#39;P&#39;: 2}, &#39;44.444&#39;]]})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.data_simulator.DataSimulator.get_peptides_from_GluC_digestion">
+<code class="descname">get_peptides_from_GluC_digestion</code><span class="sig-paren">(</span><em>aa_sequence</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/data_simulator.html#DataSimulator.get_peptides_from_GluC_digestion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.data_simulator.DataSimulator.get_peptides_from_GluC_digestion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This is a subordinate method, i.e., only called within the same class</li>
+<li>The function returns a list of tuples of start and end locations of peptides resulting from Gluc digestion</li>
+<li>GluC digests at the carboxyl side of glutamic acid (E) and aspartic acid (D)</li>
+<li>Note that peptides strictly larger than 4 amino-acid residues are reported</li>
+<li>List of peptides cross-examined using ExPaSy PeptideCutter: <a class="reference external" href="http://web.expasy.org/peptide_cutter/">http://web.expasy.org/peptide_cutter/</a></li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>aa_sequence</strong> : str</p>
+<blockquote>
+<div><p>amino-acid sequence</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">data_simulator</span> <span class="k">import</span> <span class="n">DataSimulator</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim_data</span> <span class="o">=</span> <span class="n">DataSimulator</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aa_sequence</span> <span class="o">=</span> <span class="s1">&#39;MFLTRSEYDRGVNTFSPEGRLF&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L_tuples</span> <span class="o">=</span> <span class="n">sim_data</span><span class="o">.</span><span class="n">get_peptides_from_GluC_digestion</span><span class="p">(</span><span class="n">aa_sequence</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">L_tuples</span>
+<span class="go">[(1, 7), (10, 18)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.data_simulator.DataSimulator.get_peptides_from_Trypsin_digestion">
+<code class="descname">get_peptides_from_Trypsin_digestion</code><span class="sig-paren">(</span><em>aa_sequence</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/data_simulator.html#DataSimulator.get_peptides_from_Trypsin_digestion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.data_simulator.DataSimulator.get_peptides_from_Trypsin_digestion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This is a subordinate method, i.e., only called within the same class</li>
+<li>This method returns a list of tuples of start and end locations of peptides resulting from Trypsin digestion</li>
+<li>With Proline check - Trypsin digests at the carboxyl side of lysine or arginine unless they are followed by proline</li>
+<li>Note that peptides strictly larger than 4 amino acids are reported</li>
+<li>List of peptides cross-examined using ExPaSy PeptideCutter: <a class="reference external" href="http://web.expasy.org/peptide_cutter/">http://web.expasy.org/peptide_cutter/</a></li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>aa_sequence</strong> : str</p>
+<blockquote>
+<div><p>amino-acid sequence</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">data_simulator</span> <span class="k">import</span> <span class="n">DataSimulator</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim_data</span> <span class="o">=</span> <span class="n">DataSimulator</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aa_sequence</span> <span class="o">=</span> <span class="s1">&#39;MFLTRSEYDRGVNTFSPEGRLF&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L_tuples</span> <span class="o">=</span> <span class="n">sim_data</span><span class="o">.</span><span class="n">get_peptides_from_Trypsin_digestion</span><span class="p">(</span><span class="n">aa_sequence</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">L_tuples</span>
+<span class="go">[(1, 5), (6, 10), (11, 20)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.data_simulator.DataSimulator.modform_space">
+<code class="descname">modform_space</code><a class="headerlink" href="#modformPro.data_simulator.DataSimulator.modform_space" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<p>Instance of a <a class="reference internal" href="#modformPro.modform_space.ModformSpace" title="modformPro.modform_space.ModformSpace"><code class="xref py py-class docutils literal"><span class="pre">ModformSpace</span></code></a> object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.data_simulator.DataSimulator.whether_peptide_contains_any_modification_site">
+<code class="descname">whether_peptide_contains_any_modification_site</code><span class="sig-paren">(</span><em>N_loc</em>, <em>C_loc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/data_simulator.html#DataSimulator.whether_peptide_contains_any_modification_site"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.data_simulator.DataSimulator.whether_peptide_contains_any_modification_site" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This is a subordinate method, i.e., only called within the same class by a member method</li>
+<li>The method tells whether the peptide (N_loc, C_loc) contains any modification site</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>N_loc</strong> : str or int</p>
+<blockquote>
+<div><p>N-terminal location of the peptide in the aa sequence</p>
+</div></blockquote>
+<p><strong>C_loc</strong> : str or int</p>
+<blockquote>
+<div><p>C-terminal location of the peptide in the aa sequence</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>A given peptide specified by its <code class="docutils literal"><span class="pre">N_loc</span></code> and <code class="docutils literal"><span class="pre">C_loc</span></code> residue positions is examined for containing any modification site. The information on modification sites is contained in the dictionary <code class="docutils literal"><span class="pre">D_sites_modtypes</span></code>, which stores the data from an input file.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modformPro.feasible_linear_constraints">
+<span id="modformpro-feasible-linear-constraints-module"></span><h2>modformPro.feasible_linear_constraints module<a class="headerlink" href="#module-modformPro.feasible_linear_constraints" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modformPro.feasible_linear_constraints.FeasibleLinearConstraints">
+<em class="property">class </em><code class="descclassname">modformPro.feasible_linear_constraints.</code><code class="descname">FeasibleLinearConstraints</code><span class="sig-paren">(</span><em>linear_constraints</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/feasible_linear_constraints.html#FeasibleLinearConstraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.feasible_linear_constraints.FeasibleLinearConstraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class provides attributes and methods to obtain feasible linear constraints by removing the inconsistency introduced possibly due to measurment errors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>linear_constraints</strong> : <a class="reference internal" href="#modformPro.linear_constraints.LinearConstraints" title="modformPro.linear_constraints.LinearConstraints"><code class="xref py py-class docutils literal"><span class="pre">LinearConstraints</span></code></a></p>
+<blockquote class="last">
+<div><p>Set of linear constraints.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="modformPro.feasible_linear_constraints.FeasibleLinearConstraints.feasible_linear_constraints">
+<code class="descname">feasible_linear_constraints</code><a class="headerlink" href="#modformPro.feasible_linear_constraints.FeasibleLinearConstraints.feasible_linear_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Instance attribute</li>
+<li>New instance of <a class="reference internal" href="#modformPro.linear_constraints.LinearConstraints" title="modformPro.linear_constraints.LinearConstraints"><code class="xref py py-class docutils literal"><span class="pre">LinearConstraints</span></code></a> object.</li>
+<li>It is populated by member method</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.feasible_linear_constraints.FeasibleLinearConstraints.get_elastic_constraints">
+<code class="descname">get_elastic_constraints</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/feasible_linear_constraints.html#FeasibleLinearConstraints.get_elastic_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.feasible_linear_constraints.FeasibleLinearConstraints.get_elastic_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>This method creates an instance of the class LinearConstraints where elastic/slack variables are added.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>E_linear_constraints</strong> : <a class="reference internal" href="#modformPro.linear_constraints.LinearConstraints" title="modformPro.linear_constraints.LinearConstraints"><code class="xref py py-class docutils literal"><span class="pre">LinearConstraints</span></code></a></p>
+<blockquote class="last">
+<div><p>Linear constraints with added pair of elastic (slack) variables to each constraint.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.feasible_linear_constraints.FeasibleLinearConstraints.get_feasible_linear_constraints">
+<code class="descname">get_feasible_linear_constraints</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/feasible_linear_constraints.html#FeasibleLinearConstraints.get_feasible_linear_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.feasible_linear_constraints.FeasibleLinearConstraints.get_feasible_linear_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This method obtains set of feasible linear constraints and populated the instance attribute, <code class="docutils literal"><span class="pre">feasible_linear_constraints</span></code>.</li>
+<li>Linear programming algorithm is employed with slack variables</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="modformPro.feasible_linear_constraints.natural_keys">
+<code class="descclassname">modformPro.feasible_linear_constraints.</code><code class="descname">natural_keys</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/feasible_linear_constraints.html#natural_keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.feasible_linear_constraints.natural_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-modformPro.globalfuncs">
+<span id="modformpro-globalfuncs-module"></span><h2>modformPro.globalfuncs module<a class="headerlink" href="#module-modformPro.globalfuncs" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modformPro.globalfuncs.TexFileGenerator">
+<em class="property">class </em><code class="descclassname">modformPro.globalfuncs.</code><code class="descname">TexFileGenerator</code><span class="sig-paren">(</span><em>ftex_out</em>, <em>output_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#TexFileGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.TexFileGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class prints the output content in a tex file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ftex_out</strong> : str</p>
+<blockquote>
+<div><p>File name with .tex extension</p>
+</div></blockquote>
+<p><strong>output_dir</strong> : str</p>
+<blockquote class="last">
+<div><p>Name of the output directory</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="modformPro.globalfuncs.TexFileGenerator.add_end_document_statement">
+<code class="descname">add_end_document_statement</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#TexFileGenerator.add_end_document_statement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.TexFileGenerator.add_end_document_statement" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="modformPro.globalfuncs.TexFileGenerator.add_formatted_fasta_seq_in_the_file">
+<code class="descname">add_formatted_fasta_seq_in_the_file</code><span class="sig-paren">(</span><em>protein_seq</em>, <em>D_sites_modtypes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#TexFileGenerator.add_formatted_fasta_seq_in_the_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.TexFileGenerator.add_formatted_fasta_seq_in_the_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>This function adds the fasta seq string in a particular format and also highlights modification sites by a bold blue and underlined.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.globalfuncs.TexFileGenerator.add_grouped_variables_in_tex_file">
+<code class="descname">add_grouped_variables_in_tex_file</code><span class="sig-paren">(</span><em>D_grouped_variables</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#TexFileGenerator.add_grouped_variables_in_tex_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.TexFileGenerator.add_grouped_variables_in_tex_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>Add coalesced variables in the tex file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>D_grouped_variables</strong> : dict</p>
+<blockquote class="last">
+<div><p>Python dictionary mapping new coalesced variable to a sum of variables.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.globalfuncs.TexFileGenerator.add_latex_code_in_the_file">
+<code class="descname">add_latex_code_in_the_file</code><span class="sig-paren">(</span><em>tex_string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#TexFileGenerator.add_latex_code_in_the_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.TexFileGenerator.add_latex_code_in_the_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>Adds latex code in the tex file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tex_string</strong> : str</p>
+<blockquote class="last">
+<div><p>Latex code string to be included.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.globalfuncs.TexFileGenerator.add_modform_region_plot_in_tex_file">
+<code class="descname">add_modform_region_plot_in_tex_file</code><span class="sig-paren">(</span><em>mform_region_plot_pdf</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#TexFileGenerator.add_modform_region_plot_in_tex_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.TexFileGenerator.add_modform_region_plot_in_tex_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>Add modform region plot in the tex file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mform_region_plot_pdf</strong> : str</p>
+<blockquote class="last">
+<div><p>Name of the file with a pdf extension containing modform region plot.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.globalfuncs.TexFileGenerator.add_modforms_in_tex_file">
+<code class="descname">add_modforms_in_tex_file</code><span class="sig-paren">(</span><em>D_variables_modforms</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#TexFileGenerator.add_modforms_in_tex_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.TexFileGenerator.add_modforms_in_tex_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>Adds modform variables and their modification maps in the tex file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>D_variables_modforms</strong> : dict</p>
+<blockquote class="last">
+<div><p>Python dictionary mapping modform variables (str) to their <a class="reference internal" href="#modformPro.modform.Modform" title="modformPro.modform.Modform"><code class="xref py py-class docutils literal"><span class="pre">Modform</span></code></a> objects.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.globalfuncs.TexFileGenerator.add_percentage_concentration_bounds_in_tex_file">
+<code class="descname">add_percentage_concentration_bounds_in_tex_file</code><span class="sig-paren">(</span><em>D_lower_bounds</em>, <em>D_upper_bounds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#TexFileGenerator.add_percentage_concentration_bounds_in_tex_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.TexFileGenerator.add_percentage_concentration_bounds_in_tex_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>Adds percentage concentration bounds of modforms in a tex file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>D_lower_bounds</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary mapping modform variables to their lower bouds of percentage concentration.</p>
+</div></blockquote>
+<p><strong>D_upper_bounds</strong> : dict</p>
+<blockquote class="last">
+<div><p>Python dictionary mapping modform variables to their upper bouds of percentage concentration.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.globalfuncs.TexFileGenerator.add_sites_modifications_table_in_tex_file">
+<code class="descname">add_sites_modifications_table_in_tex_file</code><span class="sig-paren">(</span><em>D_sites_modtypes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#TexFileGenerator.add_sites_modifications_table_in_tex_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.TexFileGenerator.add_sites_modifications_table_in_tex_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>Adds sites and modifications table in tex file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>D_sites_modtypes</strong> : defaultdict(list)</p>
+<blockquote class="last">
+<div><p>Python dictionary mapping aa residues to a list of modification types to the respective residues.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.globalfuncs.TexFileGenerator.get_a_blank_tex_file_with_header">
+<code class="descname">get_a_blank_tex_file_with_header</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#TexFileGenerator.get_a_blank_tex_file_with_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.TexFileGenerator.get_a_blank_tex_file_with_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="modformPro.globalfuncs.TexFileGenerator.print_content_in_tex_file">
+<code class="descname">print_content_in_tex_file</code><span class="sig-paren">(</span><em>protein_seq</em>, <em>D_sites_modtypes</em>, <em>D_lower_bounds</em>, <em>D_upper_bounds</em>, <em>mform_region_plot_pdf</em>, <em>D_variables_modforms</em>, <em>D_grouped_variables=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#TexFileGenerator.print_content_in_tex_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.TexFileGenerator.print_content_in_tex_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>Prints output content in a tex file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>protein_seq</strong> : str</p>
+<blockquote>
+<div><p>Amino-acid sequence of the protein under investigation.</p>
+</div></blockquote>
+<p><strong>D_sites_modtypes</strong> : defaultdict(list)</p>
+<blockquote>
+<div><p>Python dictionary containing residues mapped to the list of possible modifications. E.g., <code class="docutils literal"><span class="pre">D</span> <span class="pre">=</span> <span class="pre">{'T32':</span> <span class="pre">['P'],</span> <span class="pre">'S55':</span> <span class="pre">['Ac',</span> <span class="pre">'P']}</span></code></p>
+</div></blockquote>
+<p><strong>D_lower_bounds</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary mapping modform variables to their lower bouds of percentage concentration.</p>
+</div></blockquote>
+<p><strong>D_upper_bounds</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary mapping modform variables to their upper bouds of percentage concentration.</p>
+</div></blockquote>
+<p><strong>mform_region_plot_pdf</strong> : str</p>
+<blockquote>
+<div><p>Name of the file with a pdf extension containing modform region plot.</p>
+</div></blockquote>
+<p><strong>D_variables_modforms</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary mapping modform variables (str) to their <a class="reference internal" href="#modformPro.modform.Modform" title="modformPro.modform.Modform"><code class="xref py py-class docutils literal"><span class="pre">Modform</span></code></a> objects.</p>
+</div></blockquote>
+<p><strong>D_grouped_variables</strong> : dict, optional</p>
+<blockquote class="last">
+<div><p>Python dictionary mapping new coalesced variable to sum of modform concentration variables.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="modformPro.globalfuncs.get_fasta_seq_from_the_file">
+<code class="descclassname">modformPro.globalfuncs.</code><code class="descname">get_fasta_seq_from_the_file</code><span class="sig-paren">(</span><em>file_fasta_sequence</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#get_fasta_seq_from_the_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.get_fasta_seq_from_the_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function reads fasta sequence from the file</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="modformPro.globalfuncs.get_modforms">
+<code class="descclassname">modformPro.globalfuncs.</code><code class="descname">get_modforms</code><span class="sig-paren">(</span><em>start_index</em>, <em>D_sites_modtypes=None</em>, <em>D_protein_mod_frequency=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#get_modforms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.get_modforms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Global method</p>
+<p>Provides a set of intact isomeric modforms having same modification frequency and types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>start_index</strong> : int</p>
+<blockquote>
+<div><p>Index of the modform variable name.</p>
+</div></blockquote>
+<p><strong>D_sites_modtypes</strong> : defaultdict(list), optional</p>
+<blockquote>
+<div><p>Python dictionary containing residues mapped to the list of possible modifications. E.g., <code class="docutils literal"><span class="pre">D</span> <span class="pre">=</span> <span class="pre">{'T32':</span> <span class="pre">['P'],</span> <span class="pre">'S55':</span> <span class="pre">['Ac',</span> <span class="pre">'P']}</span></code></p>
+</div></blockquote>
+<p><strong>D_protein_mod_frequency</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary containing modifications mapped to their frequencies for isomeric modforms. E.g., <code class="docutils literal"><span class="pre">D</span> <span class="pre">=</span> <span class="pre">{'P':</span> <span class="pre">'2',</span> <span class="pre">'Ac':</span> <span class="pre">'1'}</span></code></p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>D_vars_modforms_isobaric</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary contaitning isomeric modform variables mapped to their <a class="reference internal" href="#modformPro.modform.Modform" title="modformPro.modform.Modform"><code class="xref py py-class docutils literal"><span class="pre">Modform</span></code></a> objects.</p>
+</div></blockquote>
+<p><strong>D_PuLP_variables_isobaric</strong> : dict</p>
+<blockquote class="last">
+<div><p>Python dictionary containing isomeric modform variables mapped to their <code class="xref py py-class docutils literal"><span class="pre">pulp</span></code> objects.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_sites_modtypes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;15&#39;</span><span class="p">:[</span><span class="s1">&#39;P&#39;</span><span class="p">];</span> <span class="s1">&#39;16&#39;</span><span class="p">:[</span><span class="s1">&#39;P&#39;</span><span class="p">];</span> <span class="s1">&#39;52&#39;</span><span class="p">:[</span><span class="s1">&#39;Ac&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">];</span> <span class="s1">&#39;54&#39;</span><span class="p">:[</span><span class="s1">&#39;P&#39;</span><span class="p">];</span> <span class="s1">&#39;59&#39;</span><span class="p">:[</span><span class="s1">&#39;P&#39;</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_modforms</span><span class="p">(</span><span class="n">start_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">D_sites_modtypes</span><span class="p">)</span>
+<span class="go">{&#39;0&#39;: &#39;UNMOD&#39;}</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_protein_mod_frequency</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;P&#39;</span><span class="p">:</span> <span class="s1">&#39;2&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_modforms</span><span class="p">(</span><span class="n">start_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">D_sites_modtypes</span><span class="p">,</span> <span class="n">D_protein_mod_frequency</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="modformPro.globalfuncs.get_modforms_from_simulated_data">
+<code class="descclassname">modformPro.globalfuncs.</code><code class="descname">get_modforms_from_simulated_data</code><span class="sig-paren">(</span><em>D_variables_modforms_simulated=None</em>, <em>D_PuLP_variables_simulated=None</em>, <em>D_protein_mod_frequency=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#get_modforms_from_simulated_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.get_modforms_from_simulated_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Global method</p>
+<ul class="simple">
+<li>The function is alternative to the function get_modforms.</li>
+<li>The difference however is that the modform variables and objects are used from simulated data and not generated from the dictionary D_sites_modtypes</li>
+<li>This helps in comparing the results of computed modform distribution to that of the simulated modform distribution.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>D_variables_modforms_simulated</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary containing modform variables mapped to their <a class="reference internal" href="#modformPro.modform.Modform" title="modformPro.modform.Modform"><code class="xref py py-class docutils literal"><span class="pre">Modform</span></code></a> objects for simulated data.</p>
+</div></blockquote>
+<p><strong>D_PuLP_variables_simulated</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary containing modform variables mapped to their <code class="xref py py-class docutils literal"><span class="pre">pulp</span></code> objects for simulated data.</p>
+</div></blockquote>
+<p><strong>D_protein_mod_frequency</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary containing modifications mapped to their frequencues.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>D_vars_modforms_isobaric</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary contaitning isomeric modform variables mapped to their <a class="reference internal" href="#modformPro.modform.Modform" title="modformPro.modform.Modform"><code class="xref py py-class docutils literal"><span class="pre">Modform</span></code></a> objects.</p>
+</div></blockquote>
+<p><strong>D_PuLP_variables_isobaric</strong> : dict</p>
+<blockquote class="last">
+<div><p>Python dictionary containing isomeric modform variables mapped to their <code class="xref py py-class docutils literal"><span class="pre">pulp</span></code> objects.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="modformPro.globalfuncs.natural_keys">
+<code class="descclassname">modformPro.globalfuncs.</code><code class="descname">natural_keys</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#natural_keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.natural_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Global method</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a11&#39;</span><span class="p">,</span> <span class="s1">&#39;a9&#39;</span><span class="p">,</span> <span class="s1">&#39;a2&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+<span class="go">[&#39;a11&#39;, &#39;a2&#39;, &#39;a9&#39;]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">natural_keys</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="go">[&#39;a2&#39;, &#39;a9&#39;, &#39;a11&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="modformPro.globalfuncs.powerset">
+<code class="descclassname">modformPro.globalfuncs.</code><code class="descname">powerset</code><span class="sig-paren">(</span><em>iterable</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#powerset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.powerset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Global method</p>
+<p>Returns a chain of elements of powerset of the iterable.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">list</span><span class="p">(</span><span class="n">powerset</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]))</span>
+<span class="go">[() (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="modformPro.globalfuncs.read_sites_and_modification_types_from_file">
+<code class="descclassname">modformPro.globalfuncs.</code><code class="descname">read_sites_and_modification_types_from_file</code><span class="sig-paren">(</span><em>fname_modifications</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/globalfuncs.html#read_sites_and_modification_types_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.globalfuncs.read_sites_and_modification_types_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Global method</p>
+<ul class="simple">
+<li>Function populated instance variable, a dictionary, D_sites_modtypes with sites associated to their modfication types</li>
+<li>Read from an input file</li>
+<li>This information must be known apriori</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fname_modifications</strong> : str</p>
+<blockquote>
+<div><p>Name of an input file containing amino-acid residues and their respective modification types.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>D_sites_modtypes</strong> : defaultdict(list)</p>
+<blockquote>
+<div><p>Python dictionary mapping aa residues to a list of modification types to the respective residues.</p>
+</div></blockquote>
+<p class="last">E.g., <code class="docutils literal"><span class="pre">{'13':['P'];</span> <span class="pre">'16':['P'];</span> <span class="pre">'19':['P'];</span> <span class="pre">'40':['P',</span> <span class="pre">'Ac']}</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-modformPro.linear_constraints">
+<span id="modformpro-linear-constraints-module"></span><h2>modformPro.linear_constraints module<a class="headerlink" href="#module-modformPro.linear_constraints" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modformPro.linear_constraints.LinearConstraints">
+<em class="property">class </em><code class="descclassname">modformPro.linear_constraints.</code><code class="descname">LinearConstraints</code><span class="sig-paren">(</span><em>D_sites_modtypes</em>, <em>specifications=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/linear_constraints.html#LinearConstraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class provides framework to store python list of linear constraints in string format as well in PuLP format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>D_sites_modtypes</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary containing residues mapped to the list of possible modifications. E.g., <code class="docutils literal"><span class="pre">D</span> <span class="pre">=</span> <span class="pre">{'T32':</span> <span class="pre">['P'],</span> <span class="pre">'S55':</span> <span class="pre">['Ac',</span> <span class="pre">'P']}</span></code></p>
+</div></blockquote>
+<p><strong>specifications</strong> : <a class="reference internal" href="#modformPro.specifications.ModformProSpecifications" title="modformPro.specifications.ModformProSpecifications"><code class="xref py py-class docutils literal"><span class="pre">ModformProSpecifications</span></code></a></p>
+<blockquote class="last">
+<div><p>Instance of ModformProSpecifications object.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="modformPro.linear_constraints.LinearConstraints.D_grouped_variables">
+<code class="descname">D_grouped_variables</code><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints.D_grouped_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<ul class="simple">
+<li>Python dictionary having a new coalesced variables mapped to the group of co-existing variables.</li>
+<li>This is populated in a member method if <code class="docutils literal"><span class="pre">VARIABLES_GROUPING</span></code> is <code class="docutils literal"><span class="pre">True</span></code> in the specification file.</li>
+<li>E.g., <code class="docutils literal"><span class="pre">D</span> <span class="pre">=</span> <span class="pre">{'b1':</span> <span class="pre">'a1</span> <span class="pre">+</span> <span class="pre">a4',</span> <span class="pre">'b2':</span> <span class="pre">'a3</span> <span class="pre">+</span> <span class="pre">a5</span> <span class="pre">+</span> <span class="pre">a6'}</span></code></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.linear_constraints.LinearConstraints.D_sites_modtypes">
+<code class="descname">D_sites_modtypes</code><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints.D_sites_modtypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<p>Python dictionary having aa residues mapped to the list ofpossible modifications on that residue.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.linear_constraints.LinearConstraints.L_PuLP_constraints">
+<code class="descname">L_PuLP_constraints</code><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints.L_PuLP_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<ul class="simple">
+<li>Python list of linear constraints in PuLP format</li>
+<li>PuLP format is needed to use pulp library for linear programming.</li>
+<li>This is populated by a member method of this class</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Demo L_PuLP_constraints</span>
+<span class="go">[LpConstraint(LpVariable(a1) + LpVariable(a3) + LpVariable(a5), 30.00), LpConstraint(LpVariable(a2) + LpVariable(a4) + LpVariable(a6), 70.00)]``</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.linear_constraints.LinearConstraints.L_grouped_variables_PuLP_constraints">
+<code class="descname">L_grouped_variables_PuLP_constraints</code><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints.L_grouped_variables_PuLP_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<ul class="simple">
+<li>Python list of linear constraints in PuLP format with new coalesced variables</li>
+<li>This is populated by a member method of this class.</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.linear_constraints.LinearConstraints.L_grouped_variables_linear_constraints">
+<code class="descname">L_grouped_variables_linear_constraints</code><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints.L_grouped_variables_linear_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Instance attribute</li>
+<li>Python list of linear constraints with new coalesced variables</li>
+<li>This is populated by a member method of this class.</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.linear_constraints.LinearConstraints.L_linear_constraints">
+<code class="descname">L_linear_constraints</code><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints.L_linear_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<ul class="simple">
+<li>Python list of linear constraints in string format</li>
+<li>This is populated by a member method of this class</li>
+<li>E.g., <code class="docutils literal"><span class="pre">L</span> <span class="pre">=</span> <span class="pre">[('a1</span> <span class="pre">+</span> <span class="pre">a3</span> <span class="pre">+</span> <span class="pre">a5',</span> <span class="pre">'30'),</span> <span class="pre">('a2</span> <span class="pre">+</span> <span class="pre">a4</span> <span class="pre">+</span> <span class="pre">a6',</span> <span class="pre">'70')]</span></code></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.linear_constraints.LinearConstraints.define_modform_space_for_linear_constraints">
+<code class="descname">define_modform_space_for_linear_constraints</code><span class="sig-paren">(</span><em>D_variables_modforms_simulated=None</em>, <em>D_PuLP_variables_simulated=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/linear_constraints.html#LinearConstraints.define_modform_space_for_linear_constraints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints.define_modform_space_for_linear_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>Its a subordinate method, only called within the same class.</li>
+<li>This function defines modforms space for linear constraints. It updates the instance attribute, <code class="docutils literal"><span class="pre">modform_space</span></code></li>
+<li>For simulation mode, predefined <code class="docutils literal"><span class="pre">modform_space</span></code> object is copied.</li>
+<li>For real mode, a fresh <code class="docutils literal"><span class="pre">modform_space</span></code> object is created.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>D_variables_modforms_simulated</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary containing modform variables mapped to their <a class="reference internal" href="#modformPro.modform.Modform" title="modformPro.modform.Modform"><code class="xref py py-class docutils literal"><span class="pre">Modform</span></code></a> objects. This is non-empty for simulation mode.</p>
+</div></blockquote>
+<p><strong>D_PuLP_variables_simulated</strong> : dict</p>
+<blockquote class="last">
+<div><p>Python dictionary containinng modform variables mapped to their <code class="xref py py-class docutils literal"><span class="pre">pulp</span></code> objects. This is non-empty for simulation mode.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.linear_constraints.LinearConstraints.derive_linear_constraints_from_MS_measurments">
+<code class="descname">derive_linear_constraints_from_MS_measurments</code><span class="sig-paren">(</span><em>L_isomeric_modforms_peak_areas=None</em>, <em>D_peptide_isomeric_peak_areas=None</em>, <em>D_variables_modforms_simulated=None</em>, <em>D_PuLP_variables_simulated=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/linear_constraints.html#LinearConstraints.derive_linear_constraints_from_MS_measurments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints.derive_linear_constraints_from_MS_measurments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This method derives the linear constraints from available peak area measurments either from BUMS-MRM or TDMS or both.</li>
+<li>It populates the instance attributes, <code class="docutils literal"><span class="pre">L_linear_constraints</span></code>, <code class="docutils literal"><span class="pre">L_PuLP_constraints</span></code></li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L_isomeric_modforms_peak_areas</strong> : list</p>
+<blockquote>
+<div><p>Python list containing peak areas of isomeric modforms. This data typically comes from TDMS measurements.</p>
+</div></blockquote>
+<p><strong>D_peptide_isomeric_peak_areas</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary containing peak areas of peptides in their different isomeric states. This data typically comes from BUMS-MRM measurments.</p>
+</div></blockquote>
+<p><strong>D_variables_modforms_simulated</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary containing modform variables mapped to their <a class="reference internal" href="#modformPro.modform.Modform" title="modformPro.modform.Modform"><code class="xref py py-class docutils literal"><span class="pre">Modform</span></code></a> objects for simulated data. This ensures usage of predefined modform variables for the linear constraints.</p>
+</div></blockquote>
+<p><strong>D_PuLP_variables_simulated</strong> : dict</p>
+<blockquote class="last">
+<div><p>Python dictionary containing modform variables mapped to their <code class="xref py py-class docutils literal"><span class="pre">pulp</span></code> objects for simulated data. This ensures usage of predefined modform variables for the linear constraints.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.linear_constraints.LinearConstraints.get_grouped_variables">
+<code class="descname">get_grouped_variables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/linear_constraints.html#LinearConstraints.get_grouped_variables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints.get_grouped_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>This function returns a python list of grouped variables.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.linear_constraints.LinearConstraints.get_linear_constraints_with_grouped_variables">
+<code class="descname">get_linear_constraints_with_grouped_variables</code><span class="sig-paren">(</span><em>L_grouped_lists</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/linear_constraints.html#LinearConstraints.get_linear_constraints_with_grouped_variables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints.get_linear_constraints_with_grouped_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This method creates List of linear constraints with grouped variables both in string as well as PuLP format thereby, populating the instance attributes, <code class="docutils literal"><span class="pre">L_grouped_variables_linear_constraints</span></code>, <code class="docutils literal"><span class="pre">L_grouped_variables_PuLP_constraints</span></code></li>
+<li>Note that additional variables are added to the existing dictionary <code class="docutils literal"><span class="pre">D_PuLP_variables</span></code>, no additional dictionary is needed for grouped variables.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L_grouped_lists</strong> : list</p>
+<blockquote class="last">
+<div><p>Python list of grouped variables. E.g., <code class="docutils literal"><span class="pre">L</span> <span class="pre">=</span> <span class="pre">['a1</span> <span class="pre">+</span> <span class="pre">a3',</span> <span class="pre">'a2</span> <span class="pre">+</span> <span class="pre">a4</span> <span class="pre">+</span> <span class="pre">a6']</span></code></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.linear_constraints.LinearConstraints.get_sum_of_variables_string">
+<code class="descname">get_sum_of_variables_string</code><span class="sig-paren">(</span><em>L_variables</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/linear_constraints.html#LinearConstraints.get_sum_of_variables_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints.get_sum_of_variables_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This is a subordinate method, i.e., only called in a member method of the same class.</li>
+<li>The function returns a string of sum of variables given in the input list.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L_variables</strong> : list</p>
+<blockquote>
+<div><p>Python list of modform variables in string format.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.linear_constraints.LinearConstraints.modform_space">
+<code class="descname">modform_space</code><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints.modform_space" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<ul class="simple">
+<li>Instance of a <a class="reference internal" href="#modformPro.modform_space.ModformSpace" title="modformPro.modform_space.ModformSpace"><code class="xref py py-class docutils literal"><span class="pre">ModformSpace</span></code></a> object.</li>
+<li>This needs to be defined for real data.</li>
+<li>Predefined modform_space is used when running in simulation mode.</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.linear_constraints.LinearConstraints.specifications">
+<code class="descname">specifications</code><a class="headerlink" href="#modformPro.linear_constraints.LinearConstraints.specifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<p>Instance of a <a class="reference internal" href="#modformPro.specifications.ModformProSpecifications" title="modformPro.specifications.ModformProSpecifications"><code class="xref py py-class docutils literal"><span class="pre">ModformProSpecifications</span></code></a> object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modformPro.linear_programming_solver">
+<span id="modformpro-linear-programming-solver-module"></span><h2>modformPro.linear_programming_solver module<a class="headerlink" href="#module-modformPro.linear_programming_solver" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modformPro.linear_programming_solver.LinearProgrammingSolver">
+<em class="property">class </em><code class="descclassname">modformPro.linear_programming_solver.</code><code class="descname">LinearProgrammingSolver</code><span class="sig-paren">(</span><em>linear_constraints</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/linear_programming_solver.html#LinearProgrammingSolver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.linear_programming_solver.LinearProgrammingSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class contains attributes and methods to solve linear programming problems.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>linear_constraints</strong> : <a class="reference internal" href="#modformPro.linear_constraints.LinearConstraints" title="modformPro.linear_constraints.LinearConstraints"><code class="xref py py-class docutils literal"><span class="pre">LinearConstraints</span></code></a></p>
+<blockquote class="last">
+<div><p>Set of linear constraints.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="modformPro.linear_programming_solver.LinearProgrammingSolver.linear_constraints">
+<code class="descname">linear_constraints</code><a class="headerlink" href="#modformPro.linear_programming_solver.LinearProgrammingSolver.linear_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<p>This is an instance of <a class="reference internal" href="#modformPro.linear_constraints.LinearConstraints" title="modformPro.linear_constraints.LinearConstraints"><code class="xref py py-class docutils literal"><span class="pre">LinearConstraints</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.linear_programming_solver.LinearProgrammingSolver.linear_programming_solver">
+<code class="descname">linear_programming_solver</code><span class="sig-paren">(</span><em>objective_function_PuLP</em>, <em>cmd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/linear_programming_solver.html#LinearProgrammingSolver.linear_programming_solver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.linear_programming_solver.LinearProgrammingSolver.linear_programming_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This method solves a linear program given list of LP constraints, objective function and command (LpMaximize or LpMinimize).</li>
+<li>It returns LpProblem object containing variables, constraints and solution to the linear problem.</li>
+<li>Note that LP constraints and objective function must be according to <code class="xref py py-class docutils literal"><span class="pre">puLP</span></code> format.
+- LP constraint string: <code class="docutils literal"><span class="pre">lhs</span> <span class="pre">=</span> <span class="pre">rhs</span></code>
+- PuLP constraint:  <code class="docutils literal"><span class="pre">pulp.LpConstraint(lhs,</span> <span class="pre">rhs)</span></code>
+- Objective function should in terms of LP variables in puLP format, e.g., transforming a variable &#8216;v&#8217; &#8211; <code class="docutils literal"><span class="pre">pulp.LpVariable(v,</span> <span class="pre">lowBound=0)</span></code></li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>objective_function_PuLP</strong> : Affine expression of <code class="xref py py-class docutils literal"><span class="pre">LpVariable</span></code> objects</p>
+<blockquote>
+<div><p>Objective function for a linear programming problem</p>
+</div></blockquote>
+<p><strong>cmd</strong> : LpMaximize (or -1); LpMinimize (or 1)</p>
+<blockquote class="last">
+<div><p>Commands maximization or minimization of the objective funtion in a linear programming problem</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modformPro.mainsolver">
+<span id="modformpro-mainsolver-module"></span><h2>modformPro.mainsolver module<a class="headerlink" href="#module-modformPro.mainsolver" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modformPro.mainsolver.MainSolver">
+<em class="property">class </em><code class="descclassname">modformPro.mainsolver.</code><code class="descname">MainSolver</code><span class="sig-paren">(</span><em>specifications</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/mainsolver.html#MainSolver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.mainsolver.MainSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="modformPro.mainsolver.MainSolver.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/mainsolver.html#MainSolver.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.mainsolver.MainSolver.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>This function sets the program running either in simulation mode or real data mode.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.mainsolver.MainSolver.run_real_data_mode">
+<code class="descname">run_real_data_mode</code><span class="sig-paren">(</span><em>protein_seq</em>, <em>D_sites_modtypes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/mainsolver.html#MainSolver.run_real_data_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.mainsolver.MainSolver.run_real_data_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method
+This function compute bounds for real data and calls relevant print output functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>protein_seq</strong> : str</p>
+<blockquote>
+<div><p>Amino-acid sequence of the protein under investigation</p>
+</div></blockquote>
+<p><strong>D_sites_modtypes</strong> : defaultdict(list)</p>
+<blockquote class="last">
+<div><p>Python dictionary mapping aa residues to python list of modification types on the residues.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.mainsolver.MainSolver.run_simulated_mode">
+<code class="descname">run_simulated_mode</code><span class="sig-paren">(</span><em>protein_seq</em>, <em>D_sites_modtypes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/mainsolver.html#MainSolver.run_simulated_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.mainsolver.MainSolver.run_simulated_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>This function performs simulation, compute bounds for a given peak area measurment noise and number of samples and calls relevant print output functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>protein_seq</strong> : str</p>
+<blockquote>
+<div><p>Protein amino-acid sequence string.</p>
+</div></blockquote>
+<p><strong>D_sites_modtypes</strong> : defaultdict</p>
+<blockquote class="last">
+<div><p>Python dictionary having aa residues mapped to list of modifications on respective residues.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modformPro.modform">
+<span id="modformpro-modform-module"></span><h2>modformPro.modform module<a class="headerlink" href="#module-modformPro.modform" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modformPro.modform.Modform">
+<em class="property">class </em><code class="descclassname">modformPro.modform.</code><code class="descname">Modform</code><span class="sig-paren">(</span><em>var_name</em>, <em>D_protein_sites_modifications=None</em>, <em>percentage_abundance=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/modform.html#Modform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.modform.Modform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class defines modform, its variable name, representation and other methods to operate on the data-structures of this class.</p>
+<p>Demo representations:</p>
+<p><code class="docutils literal"><span class="pre">a1:</span>&#160; <span class="pre">[('0',</span> <span class="pre">'UNMOD')]</span></code></p>
+<p><code class="docutils literal"><span class="pre">a11:</span> <span class="pre">[('T11',</span> <span class="pre">'P'),</span> <span class="pre">('S30',</span> <span class="pre">'P'),</span> <span class="pre">('S55',</span> <span class="pre">'Ac')]</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>var_name</strong> : str</p>
+<blockquote>
+<div><p>Modform variable name</p>
+</div></blockquote>
+<p><strong>D_protein_sites_modifications</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary storing aa residues mapped to modifications on the residues.</p>
+</div></blockquote>
+<p><strong>percentage_abundance</strong> : str or float</p>
+<blockquote class="last">
+<div><p>Percentage abundance of this modform</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="modformPro.modform.Modform.D_protein_sites_modifications">
+<code class="descname">D_protein_sites_modifications</code><a class="headerlink" href="#modformPro.modform.Modform.D_protein_sites_modifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<p>Python dictionary with aa residues mapped to a list of possible modifications on the residues</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.modform.Modform.PuLP_var">
+<code class="descname">PuLP_var</code><a class="headerlink" href="#modformPro.modform.Modform.PuLP_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<ul class="simple">
+<li>modform variable in PuLP format</li>
+<li>E.g., <code class="docutils literal"><span class="pre">LpVariable('a1')</span></code></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.modform.Modform.get_modifications_frequency_map">
+<code class="descname">get_modifications_frequency_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/modform.html#Modform.get_modifications_frequency_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.modform.Modform.get_modifications_frequency_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul>
+<li><p class="first">It returns a dictionary of modifications and their frequency in the modform OR &#8216;UNMOD&#8217; in case of unmodified modform</p>
+</li>
+<li><p class="first">E.g.,</p>
+<p>For <code class="docutils literal"><span class="pre">a1:</span> <span class="pre">['0':'UNMOD']</span></code>, the method returns <code class="docutils literal"><span class="pre">{'UNMOD':'0'}</span></code>. 
+For <code class="docutils literal"><span class="pre">a11:</span> <span class="pre">[('S11','P'),('S30','P'),('S55','Ac')]</span></code>, the method returns, <code class="docutils literal"><span class="pre">{'P':</span> <span class="pre">'2',</span> <span class="pre">'Ac':</span> <span class="pre">'1'}</span></code></p>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.modform.Modform.percentage_abundance">
+<code class="descname">percentage_abundance</code><a class="headerlink" href="#modformPro.modform.Modform.percentage_abundance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<p>Percentage abundance of a modform</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.modform.Modform.var_name">
+<code class="descname">var_name</code><a class="headerlink" href="#modformPro.modform.Modform.var_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<p>Variable name for the modform</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.modform.Modform.whether_modified_peptide_present_in_modform">
+<code class="descname">whether_modified_peptide_present_in_modform</code><span class="sig-paren">(</span><em>N_loc</em>, <em>C_loc</em>, <em>D_peptide_mod_frequency=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/modform.html#Modform.whether_modified_peptide_present_in_modform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.modform.Modform.whether_modified_peptide_present_in_modform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>Boolean method return True or False</li>
+<li>peptide range is defined by N_loc, C_loc</li>
+<li>modification state of peptide: D_peptide_mod_frequency</li>
+<li>UNMOD modform can only generate UNMOD peptides</li>
+<li>UNMOD peptides could also come from other modforms too</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>N_loc</strong> : str or int</p>
+<blockquote>
+<div><p>Position of the first residue of a peptide in the protein sequence</p>
+</div></blockquote>
+<p><strong>C_loc</strong> : str or int</p>
+<blockquote class="last">
+<div><p>Position of the last residue of a peptide in the protein sequence</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modformPro.modform_region_estimator">
+<span id="modformpro-modform-region-estimator-module"></span><h2>modformPro.modform_region_estimator module<a class="headerlink" href="#module-modformPro.modform_region_estimator" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modformPro.modform_region_estimator.ModformRegionEstimator">
+<em class="property">class </em><code class="descclassname">modformPro.modform_region_estimator.</code><code class="descname">ModformRegionEstimator</code><span class="sig-paren">(</span><em>linear_constraints</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/modform_region_estimator.html#ModformRegionEstimator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.modform_region_estimator.ModformRegionEstimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Computes modform region bounds given a set of 
+linear constraints.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>linear_constraints</strong> : <a class="reference internal" href="#modformPro.linear_constraints.LinearConstraints" title="modformPro.linear_constraints.LinearConstraints"><code class="xref py py-class docutils literal"><span class="pre">LinearConstraints</span></code></a></p>
+<blockquote class="last">
+<div><p>Set of linear constraints.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="modformPro.modform_region_estimator.ModformRegionEstimator.compute_bounds">
+<code class="descname">compute_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/modform_region_estimator.html#ModformRegionEstimator.compute_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.modform_region_estimator.ModformRegionEstimator.compute_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>Compute bounds for each modform variable by maximizing and minimizing the variables in the linear program.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>Before getting feasible linear constraints, force all the modform variable in a liner constraint to be zero if rhs=0</li>
+</ul>
+<p>E.g., <code class="docutils literal"><span class="pre">a13</span> <span class="pre">+</span> <span class="pre">a16</span> <span class="pre">+</span> <span class="pre">a18</span> <span class="pre">=</span> <span class="pre">0</span></code> =&gt; <code class="docutils literal"><span class="pre">a13=a16=a18=0</span></code>; <code class="docutils literal"><span class="pre">set</span> <span class="pre">upBound=0</span></code>
+After doing that these variables wont play any role in fixing the infeasibility and finding the bounds subsequently</p>
+<ul class="simple">
+<li>Create <a class="reference internal" href="#modformPro.linear_programming_solver.LinearProgrammingSolver" title="modformPro.linear_programming_solver.LinearProgrammingSolver"><code class="xref py py-class docutils literal"><span class="pre">LinearProgrammingSolver</span></code></a> object for feasible linear constraints</li>
+<li>For each variable in the canonical ordered list run linear programming to minimize and maximize each modform variable</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.modform_region_estimator.ModformRegionEstimator.linear_constraints">
+<code class="descname">linear_constraints</code><a class="headerlink" href="#modformPro.modform_region_estimator.ModformRegionEstimator.linear_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modformPro.modform_space">
+<span id="modformpro-modform-space-module"></span><h2>modformPro.modform_space module<a class="headerlink" href="#module-modformPro.modform_space" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modformPro.modform_space.ModformSpace">
+<em class="property">class </em><code class="descclassname">modformPro.modform_space.</code><code class="descname">ModformSpace</code><span class="sig-paren">(</span><em>specifications=None</em>, <em>L_isomeric_modforms_modes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/modform_space.html#ModformSpace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.modform_space.ModformSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class defines a modform space, i.e., set of modform objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>specifications</strong> : <a class="reference internal" href="#modformPro.specifications.ModformProSpecifications" title="modformPro.specifications.ModformProSpecifications"><code class="xref py py-class docutils literal"><span class="pre">ModformProSpecifications</span></code></a>, optional</p>
+<blockquote>
+<div><ul class="simple">
+<li>Instance of ModformProSpecifications object</li>
+<li>Contains information about the option set by the user in the specification file</li>
+</ul>
+</div></blockquote>
+<p><strong>L_isomeric_modforms_modes</strong> : list, optional</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>Python list of python dictionaries having modification types mapped to its frequency.</li>
+<li>E.g.,  <code class="docutils literal"><span class="pre">L</span> <span class="pre">=</span> <span class="pre">[{'UNMOD':</span> <span class="pre">'0'},</span> <span class="pre">{'P':</span> <span class="pre">'1'},</span> <span class="pre">{'Ac':</span> <span class="pre">'1',</span> <span class="pre">'P':</span> <span class="pre">'2'}]</span></code>
+There are three isomeric modform modes in the list - unmodified, singly phosphorylated modforms and the last is referring to the modforms that are singly acetylated and doubly phosphorylated.</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="modformPro.modform_space.ModformSpace.D_PuLP_variables">
+<code class="descname">D_PuLP_variables</code><a class="headerlink" href="#modformPro.modform_space.ModformSpace.D_PuLP_variables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<ul class="simple">
+<li>Python dictionary having modform variables (string format) being mapped to their respective <code class="xref py py-class docutils literal"><span class="pre">pulp</span></code> objects.</li>
+<li>Note that modform variables in PuLP format are needed to perform linear programming computations with pulp library.</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.modform_space.ModformSpace.D_variables_modforms">
+<code class="descname">D_variables_modforms</code><a class="headerlink" href="#modformPro.modform_space.ModformSpace.D_variables_modforms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<p>Python dictionary with modform variables (string format) being mapped to their respective <a class="reference internal" href="#modformPro.modform.Modform" title="modformPro.modform.Modform"><code class="xref py py-class docutils literal"><span class="pre">Modform</span></code></a> objects.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.modform_space.ModformSpace.D_variables_nmolecules">
+<code class="descname">D_variables_nmolecules</code><a class="headerlink" href="#modformPro.modform_space.ModformSpace.D_variables_nmolecules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<ul class="simple">
+<li>Python dictionary is populated only during simulated data mode. Infact modform_space object is created while simulating modform distribution.</li>
+<li>This has modform variables (in string format) being mapped to the number of molecules assigned to each modform variable.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.modform_space.ModformSpace.generate_modform_space">
+<code class="descname">generate_modform_space</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/modform_space.html#ModformSpace.generate_modform_space"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.modform_space.ModformSpace.generate_modform_space" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>It defines the modform space (without specifying the percentage abundance of the modforms) and populate the instance object attributes <code class="docutils literal"><span class="pre">D_variables_modforms</span></code>, <code class="docutils literal"><span class="pre">D_PuLP_variables</span></code>.</li>
+<li>If <code class="docutils literal"><span class="pre">n_sites_full_modform_space</span></code> option is set to be <code class="docutils literal"><span class="pre">True</span></code> then all the possible modforms are generated for n_sites and modification types.</li>
+<li>This space will be restricted complying with the intact mass spectrometry data or user provides modes (for data simulation) if the option n_sites_full_modform_space is set to be False.</li>
+<li>This method is called during simulation of modform distribution and also needed to write linear constraints from peak area calculations.</li>
+</ul>
+<p class="rubric">Notes</p>
+<p>If the user option <code class="docutils literal"><span class="pre">N_SITES_FULL_MODFORM_SPACE</span></code> in the specification file is set to be <code class="docutils literal"><span class="pre">True</span></code> then full modform space is generated complying with the number of sites and their respective modification types. 
+If the above user option is set to be False, then it will generate a modform space based on the isomeric modform modes either derived from intact mass spectrometry data or in case of &#8220;simulation&#8221; data mode, the modes would be specified in the <code class="docutils literal"><span class="pre">MODES</span></code> field of the specification file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.modform_space.ModformSpace.get_dictionary_of_variables_molecules">
+<code class="descname">get_dictionary_of_variables_molecules</code><span class="sig-paren">(</span><em>D_variables_modforms</em>, <em>state='principal'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/modform_space.html#ModformSpace.get_dictionary_of_variables_molecules"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.modform_space.ModformSpace.get_dictionary_of_variables_molecules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>It assigns number of molecules to a given set of modform variables and returns a python dictionary of the same.</li>
+<li>This method is only called in a member method of the class <a class="reference internal" href="#modformPro.data_simulator.DataSimulator" title="modformPro.data_simulator.DataSimulator"><code class="xref py py-class docutils literal"><span class="pre">DataSimulator</span></code></a>.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>D_variables_modforms</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary of modforms variables (string format) mapped to the modform objects.</p>
+</div></blockquote>
+<p><strong>state</strong> : str, &#8220;principal&#8221; (default) or &#8220;subordinate&#8221; or &#8220;null&#8221;</p>
+<blockquote>
+<div><p>They determine number of molecules assigned to the modforms. 
+&#8220;Null&#8221; assigns 0 molecules to the modforms.
+Default is &#8220;principal&#8221;.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>D_variables_nmolecules</strong> : dict</p>
+<blockquote class="last">
+<div><p>Python dictionary having modform variables names (str) mapped to the number of molecules assigned.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">modform</span> <span class="k">import</span> <span class="n">Modform</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">modform_space</span> <span class="k">import</span> <span class="n">ModformSpace</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span><span class="p">[</span><span class="s1">&#39;a1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;0&#39;</span><span class="p">:</span> <span class="s1">&#39;UNMOD&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span><span class="p">[</span><span class="s1">&#39;a2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;a2&#39;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;S20&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span><span class="p">[</span><span class="s1">&#39;a3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;a3&#39;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;S15&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_variables_modforms</span><span class="p">[</span><span class="s1">&#39;a4&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Modform</span><span class="p">(</span><span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;a4&#39;</span><span class="p">,</span> <span class="n">D_protein_sites_modifications</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;S15&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;S20&#39;</span><span class="p">:</span> <span class="s1">&#39;P&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mform_space</span> <span class="o">=</span> <span class="n">ModformSpace</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_nmolecules_principal</span> <span class="o">=</span> <span class="n">mform_space</span><span class="o">.</span><span class="n">get_dictionary_of_variables_molecules</span><span class="p">(</span><span class="n">D_variables_modforms</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s2">&quot;principal&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">D_nmolecules_principal</span>
+<span class="go">{&#39;a1&#39;: 1000, &#39;a3&#39;: 250, &#39;a2&#39;: 100, &#39;a4&#39;: 100}</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_nmolecules_subordinate</span><span class="o">=</span> <span class="n">mform_space</span><span class="o">.</span><span class="n">get_dictionary_of_variables_molecules</span><span class="p">(</span><span class="n">D_variables_modforms</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s2">&quot;subordinate&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">D_nmolecules_subordinate</span>
+<span class="go">{&#39;a1&#39;: 250, &#39;a3&#39;: 100, &#39;a2&#39;: 100, &#39;a4&#39;: 100}</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D_nmolecules_null</span> <span class="o">=</span> <span class="n">mform_space</span><span class="o">.</span><span class="n">get_dictionary_of_variables_molecules</span><span class="p">(</span><span class="n">D_variables_modforms</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s2">&quot;null&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">D_nmolecules_null</span>
+<span class="go">{&#39;a1&#39;: 0, &#39;a3&#39;: 0, &#39;a2&#39;: 0, &#39;a4&#39;: 0}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.modform_space.ModformSpace.get_isomeric_modforms">
+<code class="descname">get_isomeric_modforms</code><span class="sig-paren">(</span><em>D_protein_mod_frequency</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/modform_space.html#ModformSpace.get_isomeric_modforms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.modform_space.ModformSpace.get_isomeric_modforms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>It returns two python dictionaries having isomeric modforms variables (string format) mapped to modform objects and their PuLP counterparts.</li>
+<li>These isomeric modforms are subset of the entire modform space.</li>
+<li>The subset is chosen based on the isomeric modform mode which is defined by the dictionary D_protein_mod_frequency.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>D_protein_mod_frequency: dict</strong></p>
+<blockquote>
+<div><p>Python dictionary having modifications mapped to their frequency.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dict, dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.modform_space.ModformSpace.get_list_of_modification_frequency_map">
+<code class="descname">get_list_of_modification_frequency_map</code><span class="sig-paren">(</span><em>total_mod_frequency</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/modform_space.html#ModformSpace.get_list_of_modification_frequency_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.modform_space.ModformSpace.get_list_of_modification_frequency_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>This is a subordinate method, i.e. called inside this class method.</li>
+<li>For a given total modification frequency, this function returns list of modifications to frequency map, L_D_protein_mod_frequency.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>total_mod_frequeny:  int</strong></p>
+<blockquote>
+<div><p>Total frequency of modifications or total number of sites being modified.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>L_D_protein_mod_frequency</strong> : list</p>
+<blockquote class="last">
+<div><p>Python list of python dictionary having modifications to their frequency.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">D_sites_modtypes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;15&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;P&#39;</span><span class="p">],</span> <span class="s1">&#39;20&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;P&#39;</span><span class="p">],</span> <span class="s1">&#39;55&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;Ac&#39;</span><span class="p">]}</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mform_space</span> <span class="o">=</span> <span class="n">ModformSpace</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">total_mod_frequency</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L_D_protein_mod_frequency</span> <span class="o">=</span> <span class="n">mform_space</span><span class="o">.</span><span class="n">get_list_of_modification_frequency_map</span><span class="p">(</span><span class="n">total_mod_frequency</span><span class="p">)</span>
+<span class="go">[{&#39;UNMOD&#39;:&#39;0&#39;}]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">total_mod_frequency</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="go">[{&#39;Ac&#39;: &#39;1&#39;}, {&#39;P&#39;: &#39;1&#39;}]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">total_mod_frequency</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="go">[{&#39;P&#39;: &#39;1&#39;, &#39;Ac&#39;: &#39;1&#39;}, {&#39;P&#39;: &#39;2&#39;}]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">total_mod_frequency</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="go">[{&#39;P&#39;: &#39;2&#39;, &#39;Ac&#39;: &#39;1&#39;}]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modformPro.ms_measurments_extractor">
+<span id="modformpro-ms-measurments-extractor-module"></span><h2>modformPro.ms_measurments_extractor module<a class="headerlink" href="#module-modformPro.ms_measurments_extractor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modformPro.ms_measurments_extractor.MSMeasurementsExtractor">
+<em class="property">class </em><code class="descclassname">modformPro.ms_measurments_extractor.</code><code class="descname">MSMeasurementsExtractor</code><a class="reference internal" href="_modules/modformPro/ms_measurments_extractor.html#MSMeasurementsExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.ms_measurments_extractor.MSMeasurementsExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class extracts measurement values (peak areas) from TDMS, BUMS and MRM data.</p>
+<dl class="attribute">
+<dt id="modformPro.ms_measurments_extractor.MSMeasurementsExtractor.D_peptide_isomeric_peak_areas">
+<code class="descname">D_peptide_isomeric_peak_areas</code><a class="headerlink" href="#modformPro.ms_measurments_extractor.MSMeasurementsExtractor.D_peptide_isomeric_peak_areas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<ul class="simple">
+<li>Python dictionary having peptide mapped to its isomeris states and their respective percentage peak areas</li>
+<li>This is populated by a member method</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Demonstrative example of D_peptide_isomeric_peak_areas</span>
+<span class="go">D = {&#39;15-25&#39;: [({&#39;UNMOD&#39;: &#39;0&#39;}, &#39;25&#39;), ({&#39;P&#39;: &#39;1&#39;}, &#39;50&#39;), ({&#39;P&#39;: &#39;2&#39;}, &#39;25&#39;)], &#39;50-60&#39;: [({&#39;UNMOD&#39;: &#39;0&#39;}, &#39;50&#39;), ({&#39;Ac&#39;: &#39;1&#39;, &#39;P&#39;: &#39;1&#39;}, &#39;30&#39;), ({&#39;P&#39;: &#39;2&#39;}, &#39;20&#39;)]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modformPro.ms_measurments_extractor.MSMeasurementsExtractor.L_isomeric_modforms_peak_areas">
+<code class="descname">L_isomeric_modforms_peak_areas</code><a class="headerlink" href="#modformPro.ms_measurments_extractor.MSMeasurementsExtractor.L_isomeric_modforms_peak_areas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance attribute</p>
+<ul class="simple">
+<li>Python list of isomeric modforms and their percentage peak areas</li>
+<li>This is populated by a member method</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Demonstrative example of L_isomeric_modforms_peak_areas</span>
+<span class="go">[({&#39;UNMOD&#39;: &#39;0&#39;}, &#39;20&#39;), ({&#39;P&#39;: &#39;1&#39;}, &#39;15&#39;), ({&#39;Ac&#39;: &#39;1&#39;, &#39;P&#39;: &#39;2&#39;}, &#39;25&#39;), ({&#39;P&#39;: &#39;3&#39;}, &#39;10&#39;), ({&#39;Ac&#39;: &#39;1&#39;, &#39;P&#39;: &#39;4&#39;}, &#39;30&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.ms_measurments_extractor.MSMeasurementsExtractor.get_dictionary_of_peptides_and_isomeric_peak_areas">
+<code class="descname">get_dictionary_of_peptides_and_isomeric_peak_areas</code><span class="sig-paren">(</span><em>fout_peptides_isomeric_peak_areas</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/ms_measurments_extractor.html#MSMeasurementsExtractor.get_dictionary_of_peptides_and_isomeric_peak_areas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.ms_measurments_extractor.MSMeasurementsExtractor.get_dictionary_of_peptides_and_isomeric_peak_areas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>It populates the instance attribute, D_peptide_isomeric_peak_areas</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Demonstrative example of D_peptide_isomeric_peak_areas</span>
+<span class="go">D = {&#39;15-25&#39;: [({&#39;UNMOD&#39;: &#39;0&#39;}, &#39;25&#39;), ({&#39;P&#39;: &#39;1&#39;}, &#39;50&#39;), ({&#39;P&#39;: &#39;2&#39;}, &#39;25&#39;)], &#39;50-60&#39;: [({&#39;UNMOD&#39;: &#39;0&#39;}, &#39;50&#39;), ({&#39;Ac&#39;: &#39;1&#39;, &#39;P&#39;: &#39;1&#39;}, &#39;30&#39;), ({&#39;P&#39;: &#39;2&#39;}, &#39;20&#39;)]}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fout_peptides_isomeric_peak_areas</strong> : str</p>
+<blockquote class="last">
+<div><p>File containing peptides, their isomeric states and respective percentage peak areas. This data typically comes from BUMS/MRM measurments.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.ms_measurments_extractor.MSMeasurementsExtractor.get_list_of_isomeric_modforms_peak_areas">
+<code class="descname">get_list_of_isomeric_modforms_peak_areas</code><span class="sig-paren">(</span><em>fout_isomeric_modforms_peak_areas</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/ms_measurments_extractor.html#MSMeasurementsExtractor.get_list_of_isomeric_modforms_peak_areas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.ms_measurments_extractor.MSMeasurementsExtractor.get_list_of_isomeric_modforms_peak_areas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<ul class="simple">
+<li>It populates the instance attribute, <code class="docutils literal"><span class="pre">L_isomeric_modforms_peak_areas</span></code></li>
+<li>Note that the final list is sorted based on total frequency for isobaric modforms</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Demonstrative example of  L_isomeric_modforms_peak_areas</span>
+<span class="go">[({&#39;UNMOD&#39;: &#39;0&#39;}, &#39;20&#39;), ({&#39;P&#39;: &#39;1&#39;}, &#39;15&#39;), ({&#39;Ac&#39;: &#39;1&#39;, &#39;P&#39;: &#39;2&#39;}, &#39;25&#39;), ({&#39;P&#39;: &#39;3&#39;}, &#39;10&#39;), ({&#39;Ac&#39;: &#39;1&#39;, &#39;P&#39;: &#39;4&#39;}, &#39;30&#39;)]``</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fout_isomeric_modforms_peak_areas</strong> : str</p>
+<blockquote>
+<div><p>File containing percentage peak areas of isomeric modforms. This data typically comes from TDMS measurments.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>L_isomeric_modforms_peak_areas</strong> : list</p>
+<blockquote class="last">
+<div><p>python list of isomeric modforms and their percentage areas. This data is typically known from intact MS measurements.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modformPro.specifications">
+<span id="modformpro-specifications-module"></span><h2>modformPro.specifications module<a class="headerlink" href="#module-modformPro.specifications" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modformPro.specifications.ModformProSpecifications">
+<em class="property">class </em><code class="descclassname">modformPro.specifications.</code><code class="descname">ModformProSpecifications</code><a class="reference internal" href="_modules/modformPro/specifications.html#ModformProSpecifications"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.specifications.ModformProSpecifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class contains specifications for modformPro package.</p>
+<dl class="method">
+<dt id="modformPro.specifications.ModformProSpecifications.read_specifications_from_file">
+<code class="descname">read_specifications_from_file</code><span class="sig-paren">(</span><em>fname_spec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/specifications.html#ModformProSpecifications.read_specifications_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.specifications.ModformProSpecifications.read_specifications_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fname_spec</strong> : str</p>
+<blockquote class="last">
+<div><p>file name containing specification fields.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Parses the file line by line and stores the value of the fields in the respective member attributes.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modformPro.statistics_and_plot">
+<span id="modformpro-statistics-and-plot-module"></span><h2>modformPro.statistics_and_plot module<a class="headerlink" href="#module-modformPro.statistics_and_plot" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modformPro.statistics_and_plot.StatisticsAndPlot">
+<em class="property">class </em><code class="descclassname">modformPro.statistics_and_plot.</code><code class="descname">StatisticsAndPlot</code><a class="reference internal" href="_modules/modformPro/statistics_and_plot.html#StatisticsAndPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.statistics_and_plot.StatisticsAndPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class provides methods to compute statistics and for plotting.</p>
+<dl class="method">
+<dt id="modformPro.statistics_and_plot.StatisticsAndPlot.get_dictionary_of_mean_and_standard_deviation_of_bounds">
+<code class="descname">get_dictionary_of_mean_and_standard_deviation_of_bounds</code><span class="sig-paren">(</span><em>list_dictionary_variables_bounds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/statistics_and_plot.html#StatisticsAndPlot.get_dictionary_of_mean_and_standard_deviation_of_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.statistics_and_plot.StatisticsAndPlot.get_dictionary_of_mean_and_standard_deviation_of_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns mean and standard deviation of lower bounds OR upper bounds when measurments are done multiple times. For simulated data, this amounts to sample multiple noise values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.statistics_and_plot.StatisticsAndPlot.get_sensitivity_performance_statistics_over_all_samples">
+<code class="descname">get_sensitivity_performance_statistics_over_all_samples</code><span class="sig-paren">(</span><em>L_D_lower_bounds</em>, <em>L_D_upper_bounds</em>, <em>D_vars_simulated_abundances</em>, <em>Output_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/statistics_and_plot.html#StatisticsAndPlot.get_sensitivity_performance_statistics_over_all_samples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.statistics_and_plot.StatisticsAndPlot.get_sensitivity_performance_statistics_over_all_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function provides statistics on true hits for simulated data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.statistics_and_plot.StatisticsAndPlot.get_sensitivity_statistics_for_one_sample">
+<code class="descname">get_sensitivity_statistics_for_one_sample</code><span class="sig-paren">(</span><em>D_lower_bounds</em>, <em>D_upper_bounds</em>, <em>D_variables_simulated_values</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/statistics_and_plot.html#StatisticsAndPlot.get_sensitivity_statistics_for_one_sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.statistics_and_plot.StatisticsAndPlot.get_sensitivity_statistics_for_one_sample" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="modformPro.statistics_and_plot.StatisticsAndPlot.get_statistics_on_bounds">
+<code class="descname">get_statistics_on_bounds</code><span class="sig-paren">(</span><em>D_lower_bounds</em>, <em>D_upper_bounds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/statistics_and_plot.html#StatisticsAndPlot.get_statistics_on_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.statistics_and_plot.StatisticsAndPlot.get_statistics_on_bounds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="modformPro.statistics_and_plot.StatisticsAndPlot.plot_bars">
+<code class="descname">plot_bars</code><span class="sig-paren">(</span><em>D_lower_bounds</em>, <em>D_upper_bounds</em>, <em>Output_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/statistics_and_plot.html#StatisticsAndPlot.plot_bars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.statistics_and_plot.StatisticsAndPlot.plot_bars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance method</p>
+<p>Plot bars showing lower and upper bounds of percentage concentration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>D_lower_bounds</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary containing modform <code class="xref py py-class docutils literal"><span class="pre">pulp</span></code> variables mapped to their lower bounds.</p>
+</div></blockquote>
+<p><strong>D_upper_bounds</strong> : dict</p>
+<blockquote>
+<div><p>Python dictionary containing modform <code class="xref py py-class docutils literal"><span class="pre">pulp</span></code> variables mapped to their upper bounds.</p>
+</div></blockquote>
+<p><strong>Output_dir</strong> : str</p>
+<blockquote class="last">
+<div><p>Output directory name. Default is <code class="docutils literal"><span class="pre">Output</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.statistics_and_plot.StatisticsAndPlot.plot_bars_for_simulated_data">
+<code class="descname">plot_bars_for_simulated_data</code><span class="sig-paren">(</span><em>D_mean_lower_bounds</em>, <em>D_mean_upper_bounds</em>, <em>D_stdev_lower_bounds</em>, <em>D_stdev_upper_bounds</em>, <em>D_variables_simulated_values=None</em>, <em>Output_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/statistics_and_plot.html#StatisticsAndPlot.plot_bars_for_simulated_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.statistics_and_plot.StatisticsAndPlot.plot_bars_for_simulated_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ref: <a class="reference external" href="https://matplotlib.org/api/pyplot_api.html">https://matplotlib.org/api/pyplot_api.html</a></p>
+<p># a stacked bar plot with errorbars
+N = 5
+menMeans = (20, 35, 30, 35, 27)
+womenMeans = (25, 32, 34, 20, 25)
+menStd = (2, 3, 4, 1, 2)
+womenStd = (3, 5, 2, 3, 3)
+ind = np.arange(N) # the x locations for the groups
+width = 0.35       # the width of the bars: can also be len(x) sequence</p>
+<p>p1 = plt.bar(ind, menMeans, width, color=&#8217;#d62728&#8217;, yerr=menStd)
+p2 = plt.bar(ind, womenMeans, width, bottom=menMeans, yerr=womenStd)</p>
+<p>plt.ylabel(&#8216;Scores&#8217;)
+plt.title(&#8216;Scores by group and gender&#8217;)
+plt.xticks(ind, (&#8216;G1&#8217;, &#8216;G2&#8217;, &#8216;G3&#8217;, &#8216;G4&#8217;, &#8216;G5&#8217;))
+plt.yticks(np.arange(0, 81, 10))
+plt.legend((p1[0], p2[0]), (&#8216;Men&#8217;, &#8216;Women&#8217;))</p>
+<p>plt.show()</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modformPro.statistics_and_plot.StatisticsAndPlot.plot_simulated_values">
+<code class="descname">plot_simulated_values</code><span class="sig-paren">(</span><em>D_variables_simulated_values</em>, <em>Output_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/modformPro/statistics_and_plot.html#StatisticsAndPlot.plot_simulated_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#modformPro.statistics_and_plot.StatisticsAndPlot.plot_simulated_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ref: <a class="reference external" href="https://matplotlib.org/api/pyplot_api.html">https://matplotlib.org/api/pyplot_api.html</a></p>
+<p># a stacked bar plot with errorbars
+N = 5
+menMeans = (20, 35, 30, 35, 27)
+womenMeans = (25, 32, 34, 20, 25)
+menStd = (2, 3, 4, 1, 2)
+womenStd = (3, 5, 2, 3, 3)
+ind = np.arange(N) # the x locations for the groups
+width = 0.35       # the width of the bars: can also be len(x) sequence</p>
+<p>p1 = plt.bar(ind, menMeans, width, color=&#8217;#d62728&#8217;, yerr=menStd)
+p2 = plt.bar(ind, womenMeans, width, bottom=menMeans, yerr=womenStd)</p>
+<p>plt.ylabel(&#8216;Scores&#8217;)
+plt.title(&#8216;Scores by group and gender&#8217;)
+plt.xticks(ind, (&#8216;G1&#8217;, &#8216;G2&#8217;, &#8216;G3&#8217;, &#8216;G4&#8217;, &#8216;G5&#8217;))
+plt.yticks(np.arange(0, 81, 10))
+plt.legend((p1[0], p2[0]), (&#8216;Men&#8217;, &#8216;Women&#8217;))</p>
+<p>plt.show()</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modformPro">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-modformPro" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Deepesh Agarwal &amp; Jeremy Gunawardena.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

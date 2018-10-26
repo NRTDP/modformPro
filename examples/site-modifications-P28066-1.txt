@@ -1,0 +1,17 @@
+# Proteasome subunit alpha type-5
+# UNIPROT Accession number -- P28066-1
+
+NSITESBEGIN
+5
+NSITESEND
+
+#Ac: M1
+#P: S16, T55, S56, S63
+
+MODSITESBEGIN
+M1: Ac
+S16: P
+S55: P
+S56: P
+S63: P
+MODSITESEND
