@@ -1,4 +1,4 @@
 # modformPro
-A software application to estimate modform region of proteins containing multiple modification sites
+A software application for using mass-spectrometry data to estimate high-dimensional modform regions of proteins containing multiple types and sites of modification
 
 Please visit our documentation [here](https://nrtdp.github.io/modformPro/).
